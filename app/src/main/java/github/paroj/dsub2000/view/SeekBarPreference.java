@@ -27,15 +27,16 @@ import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.SeekBar;
+import com.google.android.material.slider.Slider;
 import android.widget.TextView;
 
 import github.paroj.dsub2000.R;
+import github.paroj.dsub2000.util.Sliders;
 
 /**
- * SeekBar preference to set the shake force threshold.
+ * Slider preference to set the shake force threshold.
  */
-public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
+public class SeekBarPreference extends DialogPreference implements Slider.OnChangeListener {
 	private static final String TAG = SeekBarPreference.class.getSimpleName();
 	/**
 	 * The current value.
@@ -112,14 +113,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		mValueText = (TextView)view.findViewById(R.id.value);
 		mValueText.setText(getSummary(mValue));
 
-		SeekBar seekBar = (SeekBar)view.findViewById(R.id.seek_bar);
-		seekBar.setMax(mMax - mMin);
+		Slider seekBar = (Slider)view.findViewById(R.id.seek_bar);
+		Sliders.setMax(seekBar, mMax - mMin);
+		seekBar.setStepSize(1);
 		try {
-			seekBar.setProgress(Integer.parseInt(mValue));
+			Sliders.setProgress(seekBar, Integer.parseInt(mValue));
 		} catch(Exception e) {
-			seekBar.setProgress(0);
+			Sliders.setProgress(seekBar, 0);
 		}
-		seekBar.setOnSeekBarChangeListener(this);
+		seekBar.addOnChangeListener(this);
 
 		return view;
 	}
@@ -134,21 +136,11 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	}
 
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+	public void onValueChange(Slider slider, float value, boolean fromUser)
 	{
 		if (fromUser) {
-			mValue = String.valueOf(progress);
+			mValue = String.valueOf(Math.round(value));
 			mValueText.setText(getSummary(mValue));
 		}
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar)
-	{
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar)
-	{
 	}
 }

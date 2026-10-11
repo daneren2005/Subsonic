@@ -2,8 +2,8 @@ package github.paroj.dsub2000.util;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
+import com.google.android.material.slider.Slider;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuCustomItem;
 
@@ -13,7 +13,7 @@ import com.shehabic.droppy.DroppyMenuCustomItem;
 public class DroppySpeedControl extends DroppyMenuCustomItem {
 
     private Context context;
-    private SeekBar seekBar;
+    private Slider seekBar;
     private DroppyClickCallbackInterface updateBarCallback;
     public DroppySpeedControl(int customResourceId) {
         super(customResourceId);
@@ -45,7 +45,7 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
     public void updateSeekBar(float playbackSpeed){
         TextView tv = (TextView)seekBar.getTag();
         tv.setText(Float.toString(playbackSpeed));
-        seekBar.setProgress((int)(playbackSpeed*10)-5);
+        Sliders.setProgress(seekBar, Math.round(playbackSpeed*10)-5);
     }
 
     public DroppySpeedControl setOnSeekBarChangeListener(Context context, final DroppyClickCallbackInterface callback, int seekBarByID, int textViewByID, float playbackSpeed) {
@@ -53,29 +53,16 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
         render(context);
         final TextView textBox = (TextView) renderedView.findViewById(textViewByID);
         textBox.setText(Float.toString(playbackSpeed));
-        SeekBar seekBar = ((SeekBar) renderedView.findViewById(seekBarByID));
+        Slider seekBar = ((Slider) renderedView.findViewById(seekBarByID));
         this.seekBar = seekBar;
         seekBar.setTag(textBox);
-        seekBar.setProgress((int)(playbackSpeed*10)-5);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    textBox.setText(new Float((progress + 5) / 10.0).toString());
-                    seekBar.setProgress(progress);
-                    callback.call(seekBar,seekBar.getId());
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+        Sliders.setProgress(seekBar, Math.round(playbackSpeed*10)-5);
+        seekBar.addOnChangeListener((slider, value, fromUser) -> {
+            if (fromUser) {
+                textBox.setText(Float.toString((Math.round(value) + 5) / 10f));
+                callback.call(slider, slider.getId());
             }
         });
-        seekBar.setProgress((int)((playbackSpeed/10.0) - 5));
         return this;
     }
 }

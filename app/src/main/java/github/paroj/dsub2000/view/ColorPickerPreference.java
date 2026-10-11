@@ -9,21 +9,22 @@ import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
+import com.google.android.material.slider.Slider;
 
 import androidx.core.graphics.ColorUtils;
 
 import github.paroj.dsub2000.R;
 import github.paroj.dsub2000.util.Constants;
 import github.paroj.dsub2000.util.DrawableTint;
+import github.paroj.dsub2000.util.Sliders;
 import github.paroj.dsub2000.util.ThemeUtil;
 import github.paroj.dsub2000.util.Util;
 
 public class ColorPickerPreference extends DialogPreference {
     private static final String TAG = ColorPickerPreference.class.getSimpleName();
-    private SeekBar seekHue;
-    private SeekBar seekSat;
-    private SeekBar seekLight;
+    private Slider seekHue;
+    private Slider seekSat;
+    private Slider seekLight;
     private View preview;
     private float hue, sat, light; // 0..359 / 0..1 / 0..1
     private int mValue;
@@ -73,9 +74,9 @@ public class ColorPickerPreference extends DialogPreference {
         preview = view.findViewById(R.id.colorPreview);
         Button buttonReset = view.findViewById(R.id.button_reset);
 
-        seekHue.setProgress((int) hue);
-        seekSat.setProgress((int) (sat * 100));
-        seekLight.setProgress((int) (light * 100));
+        Sliders.setProgress(seekHue, (int) hue);
+        Sliders.setProgress(seekSat, (int) (sat * 100));
+        Sliders.setProgress(seekLight, (int) (light * 100));
 
         final Runnable updatePreview = new Runnable() {
             @Override
@@ -86,51 +87,16 @@ public class ColorPickerPreference extends DialogPreference {
             }
         };
 
-        seekHue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updatePreview.run();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        seekSat.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updatePreview.run();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        seekLight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updatePreview.run();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+        seekHue.addOnChangeListener((slider, value, fromUser) -> updatePreview.run());
+        seekSat.addOnChangeListener((slider, value, fromUser) -> updatePreview.run());
+        seekLight.addOnChangeListener((slider, value, fromUser) -> updatePreview.run());
 
         buttonReset.setOnClickListener(v -> {
             mValue = getThemeDefaultColor();
             updateHSLFromInt(mValue);
-            seekHue.setProgress((int) hue);
-            seekSat.setProgress((int) (sat * 100));
-            seekLight.setProgress((int) (light * 100));
+            Sliders.setProgress(seekHue, (int) hue);
+            Sliders.setProgress(seekSat, (int) (sat * 100));
+            Sliders.setProgress(seekLight, (int) (light * 100));
             isColorReset = true;
         });
 
@@ -153,9 +119,9 @@ public class ColorPickerPreference extends DialogPreference {
     }
 
     private void setColor() {
-        float hue = seekHue.getProgress();
-        float sat = seekSat.getProgress() / 100f;
-        float light = seekLight.getProgress() / 100f;
+        float hue = Sliders.getProgress(seekHue);
+        float sat = Sliders.getProgress(seekSat) / 100f;
+        float light = Sliders.getProgress(seekLight) / 100f;
         float[] hsl = new float[]{hue, sat, light};
         mValue = ColorUtils.HSLToColor(hsl);
         GradientDrawable bg = (GradientDrawable) preview.getBackground();

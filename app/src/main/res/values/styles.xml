@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<style name="Widget.DSub2000.Slider" parent="Widget.Material3.Slider">
+		<item name="labelBehavior">gone</item>
+		<item name="tickVisible">false</item>
+	</style>
 	<style name="BasicButton">
 		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
 	</style>

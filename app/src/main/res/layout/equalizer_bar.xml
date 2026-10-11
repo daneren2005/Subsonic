@@ -24,7 +24,7 @@
 		android:layout_toRightOf="@+id/equalizer.frequency"
 		android:textColor="?android:textColorSecondary"/>
 
-	<SeekBar
+	<com.google.android.material.slider.Slider
 		android:id="@+id/equalizer.bar"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"

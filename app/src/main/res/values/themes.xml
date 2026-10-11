@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="Theme.DSub2000.Light.Base" parent="Theme.Material3.Light">
+		<item name="sliderStyle">@style/Widget.DSub2000.Slider</item>
 		<item name="element_color">@color/lightElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -94,6 +95,7 @@
 		<item name="drawerHeaderBackground">@drawable/drawer_header_light</item>
         <item name="android:navigationBarColor">@android:color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
+		<item name="sliderStyle">@style/Widget.DSub2000.Slider</item>
     </style>
 	<style name="Theme.DSub2000.Dark.Base" parent="Theme.Material3.Dark">
 		<item name="element_color">@color/darkElement</item>

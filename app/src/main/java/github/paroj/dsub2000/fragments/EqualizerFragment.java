@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
+import com.google.android.material.slider.Slider;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -42,6 +42,7 @@ import github.paroj.dsub2000.audiofx.EqualizerController;
 import github.paroj.dsub2000.audiofx.LoudnessEnhancerController;
 import github.paroj.dsub2000.service.DownloadService;
 import github.paroj.dsub2000.util.Constants;
+import github.paroj.dsub2000.util.Sliders;
 import github.paroj.dsub2000.util.Util;
 
 /**
@@ -52,9 +53,9 @@ public class EqualizerFragment extends SubsonicFragment {
 
 	private static final int MENU_GROUP_PRESET = 100;
 
-	private final Map<Short, SeekBar> bars = new HashMap<Short, SeekBar>();
-	private SeekBar bassBar;
-	private SeekBar loudnessBar;
+	private final Map<Short, Slider> bars = new HashMap<Short, Slider>();
+	private Slider bassBar;
+	private Slider loudnessBar;
 	private EqualizerController equalizerController;
 	private Equalizer equalizer;
 	private BassBoost bass;
@@ -197,21 +198,21 @@ public class EqualizerFragment extends SubsonicFragment {
 			boolean isEnabled = equalizer.getEnabled();
 			short minEQLevel = equalizer.getBandLevelRange()[0];
 			short maxEQLevel = equalizer.getBandLevelRange()[1];
-			for (Map.Entry<Short, SeekBar> entry : bars.entrySet()) {
+			for (Map.Entry<Short, Slider> entry : bars.entrySet()) {
 				short band = entry.getKey();
-				SeekBar bar = entry.getValue();
+				Slider bar = entry.getValue();
 				bar.setEnabled(isEnabled);
 				if (band >= (short) 0) {
 					short setLevel;
 					if (changedEnabled) {
 						setLevel = (short) (equalizer.getBandLevel(band) - masterLevel);
 						if (isEnabled) {
-							bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+							Sliders.setProgress(bar, equalizer.getBandLevel(band) - minEQLevel);
 						} else {
-							bar.setProgress(-minEQLevel);
+							Sliders.setProgress(bar, -minEQLevel);
 						}
 					} else {
-						bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+						Sliders.setProgress(bar, equalizer.getBandLevel(band) - minEQLevel);
 						setLevel = (short) (equalizer.getBandLevel(band) + masterLevel);
 					}
 					if (setLevel < minEQLevel) {
@@ -221,7 +222,7 @@ public class EqualizerFragment extends SubsonicFragment {
 					}
 					equalizer.setBandLevel(band, setLevel);
 				} else if (!isEnabled) {
-					bar.setProgress(-minEQLevel);
+					Sliders.setProgress(bar, -minEQLevel);
 				}
 			}
 
@@ -231,10 +232,10 @@ public class EqualizerFragment extends SubsonicFragment {
 			}
 			if (changedEnabled && !isEnabled) {
 				bass.setStrength((short) 0);
-				bassBar.setProgress(0);
+				Sliders.setProgress(bassBar, 0);
 				if (loudnessBar != null) {
 					loudnessEnhancer.setGain(0);
-					loudnessBar.setProgress(0);
+					Sliders.setProgress(loudnessBar, 0);
 				}
 			}
 
@@ -267,40 +268,29 @@ public class EqualizerFragment extends SubsonicFragment {
 			View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
 			TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
 			final TextView levelTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-			SeekBar bar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+			Slider bar = (Slider) bandBar.findViewById(R.id.equalizer_bar);
 
 			freqTextView.setText((equalizer.getCenterFreq(band) / 1000) + " Hz");
 
 			bars.put(band, bar);
-			bar.setMax(maxEQLevel - minEQLevel);
+			Sliders.setMax(bar, maxEQLevel - minEQLevel);
 			short level = equalizer.getBandLevel(band);
 			if(equalizer.getEnabled()) {
 				level = (short) (level - masterLevel);
 			}
-			bar.setProgress(level - minEQLevel);
+			Sliders.setProgress(bar, level - minEQLevel);
 			bar.setEnabled(equalizer.getEnabled());
 			updateLevelText(levelTextView, level);
 
-			bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-				@Override
-				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-					try {
-						short level = (short) (progress + minEQLevel);
-						if (fromUser) {
-							equalizer.setBandLevel(band, (short) (level + masterLevel));
-						}
-						updateLevelText(levelTextView, level);
-					} catch(Exception e) {
-						Log.e(TAG, "Failed to change equalizer", e);
+			bar.addOnChangeListener((slider, value, fromUser) -> {
+				try {
+					short bandLevel = (short) (Math.round(value) + minEQLevel);
+					if (fromUser) {
+						equalizer.setBandLevel(band, (short) (bandLevel + masterLevel));
 					}
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-				}
-
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
+					updateLevelText(levelTextView, bandLevel);
+				} catch(Exception e) {
+					Log.e(TAG, "Failed to change equalizer", e);
 				}
 			});
 			layout.addView(bandBar);
@@ -312,7 +302,7 @@ public class EqualizerFragment extends SubsonicFragment {
 		View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
 		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
 		final TextView bassTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-		bassBar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+		bassBar = (Slider) bandBar.findViewById(R.id.equalizer_bar);
 
 		freqTextView.setText(R.string.equalizer_bass_booster);
 		bassBar.setEnabled(equalizer.getEnabled());
@@ -321,37 +311,25 @@ public class EqualizerFragment extends SubsonicFragment {
 			bassLevel = bass.getRoundedStrength();
 		}
 		bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, bassLevel));
-		bassBar.setMax(1000);
-		bassBar.setProgress(bassLevel);
-		bassBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				try {
-					bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, progress));
-					if (fromUser) {
-						if (progress > 0) {
-							if (!bass.getEnabled()) {
-								bass.setEnabled(true);
-							}
-							bass.setStrength((short) progress);
-						} else if (progress == 0 && bass.getEnabled()) {
-							bass.setStrength((short) progress);
-							bass.setEnabled(false);
+		Sliders.setMax(bassBar, 1000);
+		Sliders.setProgress(bassBar, bassLevel);
+		bassBar.addOnChangeListener((slider, value, fromUser) -> {
+			int progress = Math.round(value);
+			try {
+				bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, progress));
+				if (fromUser) {
+					if (progress > 0) {
+						if (!bass.getEnabled()) {
+							bass.setEnabled(true);
 						}
+						bass.setStrength((short) progress);
+					} else if (progress == 0 && bass.getEnabled()) {
+						bass.setStrength((short) progress);
+						bass.setEnabled(false);
 					}
-				} catch(Exception e) {
-					Log.w(TAG, "Error on changing bass: ", e);
 				}
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-
+			} catch(Exception e) {
+				Log.w(TAG, "Error on changing bass: ", e);
 			}
 		});
 		specialLayout.addView(bandBar);
@@ -361,7 +339,7 @@ public class EqualizerFragment extends SubsonicFragment {
 			bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
 			freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
 			final TextView loudnessTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-			loudnessBar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+			loudnessBar = (Slider) bandBar.findViewById(R.id.equalizer_bar);
 
 			freqTextView.setText(R.string.equalizer_voice_booster);
 			loudnessBar.setEnabled(equalizer.getEnabled());
@@ -369,38 +347,27 @@ public class EqualizerFragment extends SubsonicFragment {
 			if(loudnessEnhancer.isEnabled()) {
 				loudnessLevel = (int) loudnessEnhancer.getGain();
 			}
-			loudnessBar.setProgress(loudnessLevel / 100);
+			Sliders.setMax(loudnessBar, 15);
+			loudnessBar.setStepSize(1);
+			Sliders.setProgress(loudnessBar, loudnessLevel / 100);
 			loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, loudnessLevel / 100));
-			loudnessBar.setMax(15);
-			loudnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-				@Override
-				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-					try {
-						loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, progress));
-						if(fromUser) {
-							if(progress > 0) {
-								if(!loudnessEnhancer.isEnabled()) {
-									loudnessEnhancer.enable();
-								}
-								loudnessEnhancer.setGain(progress * 100);
-							} else if(progress == 0 && loudnessEnhancer.isEnabled()) {
-								loudnessEnhancer.setGain(progress * 100);
-								loudnessEnhancer.disable();
+			loudnessBar.addOnChangeListener((slider, value, fromUser) -> {
+				int progress = Math.round(value);
+				try {
+					loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, progress));
+					if(fromUser) {
+						if(progress > 0) {
+							if(!loudnessEnhancer.isEnabled()) {
+								loudnessEnhancer.enable();
 							}
+							loudnessEnhancer.setGain(progress * 100);
+						} else if(progress == 0 && loudnessEnhancer.isEnabled()) {
+							loudnessEnhancer.setGain(progress * 100);
+							loudnessEnhancer.disable();
 						}
-					} catch(Exception e) {
-						Log.w(TAG, "Error on changing loudness: ", e);
 					}
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-
-				}
-
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
-
+				} catch(Exception e) {
+					Log.w(TAG, "Error on changing loudness: ", e);
 				}
 			});
 			specialLayout.addView(bandBar);
@@ -411,43 +378,33 @@ public class EqualizerFragment extends SubsonicFragment {
 		View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
 		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
 		final TextView levelTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-		SeekBar bar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+		Slider bar = (Slider) bandBar.findViewById(R.id.equalizer_bar);
 
 		freqTextView.setText("Master");
 
 		bars.put((short)-1, bar);
-		bar.setMax(maxEQLevel - minEQLevel);
-		bar.setProgress(masterLevel - minEQLevel);
+		Sliders.setMax(bar, maxEQLevel - minEQLevel);
+		Sliders.setProgress(bar, masterLevel - minEQLevel);
 		bar.setEnabled(equalizer.getEnabled());
 		updateLevelText(levelTextView, masterLevel);
 
-		bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				try {
-					masterLevel = (short) (progress + minEQLevel);
-					if (fromUser) {
-						SharedPreferences prefs = Util.getPreferences(context);
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
-						editor.commit();
-						for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
-							short level = (short) ((bars.get(i).getProgress() + minEQLevel) + masterLevel);
-							equalizer.setBandLevel(i, level);
-						}
+		bar.addOnChangeListener((slider, value, fromUser) -> {
+			int progress = Math.round(value);
+			try {
+				masterLevel = (short) (progress + minEQLevel);
+				if (fromUser) {
+					SharedPreferences prefs = Util.getPreferences(context);
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
+					editor.commit();
+					for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
+						short level = (short) ((Sliders.getProgress(bars.get(i)) + minEQLevel) + masterLevel);
+						equalizer.setBandLevel(i, level);
 					}
-					updateLevelText(levelTextView, masterLevel);
-				} catch(Exception e) {
-					Log.e(TAG, "Failed to change equalizer", e);
 				}
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
+				updateLevelText(levelTextView, masterLevel);
+			} catch(Exception e) {
+				Log.e(TAG, "Failed to change equalizer", e);
 			}
 		});
 		layout.addView(bandBar);
