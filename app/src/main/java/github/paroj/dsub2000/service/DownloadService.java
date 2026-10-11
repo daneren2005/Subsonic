@@ -2094,8 +2094,8 @@ public class DownloadService extends MediaLibraryService {
 			} else {
 				updateRemotePlaylist();
 			}
-			revision++;
-			onSongsChanged();
+			// Only the session is told: a full listener refresh would reset the list while the user is still dragging.
+			if (mRemoteControl != null) mRemoteControl.updatePlaylist(downloadList);
 		}
 	}
 
