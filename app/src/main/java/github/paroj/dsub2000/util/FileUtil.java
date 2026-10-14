@@ -121,6 +121,22 @@ public class FileUtil {
         return getSongFile(context, song, null);
     }
     public static File getSongFile(Context context, MusicDirectory.Entry song, String stage) {
+		// Offline entries store their original absolute filesystem path as their ID.
+		// Prefer that path instead of reconstructing a filename from metadata.
+		if (Util.isOffline(context)
+				&& stage == null
+				&& song.getId() != null) {
+
+			File original = new File(song.getId());
+			File musicRoot = getMusicDirectory(context);
+
+			if (original.isFile()
+					&& original.toPath().normalize()
+						.startsWith(musicRoot.toPath().normalize())) {
+				return original;
+			}
+		}
+
         File dir = getAlbumDirectory(context, song);
 
         Integer trackNumber = song.getTrack();

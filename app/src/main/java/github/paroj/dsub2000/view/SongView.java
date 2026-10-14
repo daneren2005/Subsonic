@@ -152,6 +152,20 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		String title = song.getTitle();
+			if ((title == null || title.isEmpty()) && song.getId() != null) {
+					if (song.getId().startsWith("/")) {
+							File file = new File(song.getId());
+							if (file.exists()) {
+									String name = file.getName();
+									int dotIndex = name.lastIndexOf('.');
+									if (dotIndex != -1) {
+											name = name.substring(0, dotIndex);
+									}
+									title = name;
+							}
+					}
+			}
+
 		Integer track = song.getTrack();
 		if(song.getCustomOrder() != null) {
 			track = song.getCustomOrder();
