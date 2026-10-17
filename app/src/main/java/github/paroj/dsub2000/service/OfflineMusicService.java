@@ -143,11 +143,11 @@ public class OfflineMusicService implements MusicService {
             return name;
         }
 
-        if (name.endsWith(".partial") || name.contains(".partial.") || name.equals(Constants.ALBUM_ART_FILE)) {
+        if (FileUtil.isPartialFile(name) || name.equals(Constants.ALBUM_ART_FILE)) {
             return null;
         }
 
-        name = name.replace(".complete", "");
+        name = FileUtil.stripStage(name);
         return FileUtil.getBaseName(name);
     }
 
@@ -195,7 +195,7 @@ public class OfflineMusicService implements MusicService {
             entry.setTitle(name);
         }
 
-		entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));
+		entry.setSuffix(FileUtil.getExtension(FileUtil.stripStage(file.getName())));
 
 		File albumArt = FileUtil.getAlbumArtFile(context, entry);
 		if (albumArt.exists()) {
@@ -395,7 +395,7 @@ public class OfflineMusicService implements MusicService {
 							String line = buffer.readLine();
 							while( (line = buffer.readLine()) != null ){
 								// No matter what, end file can't have .complete in it
-								line = line.replace(".complete", "");
+								line = FileUtil.stripStage(line);
 								File entryFile = new File(line);
 
 								// Don't add file to playlist if it doesn't exist as cached or pinned!
@@ -475,7 +475,7 @@ public class OfflineMusicService implements MusicService {
 			
 			while( (line = buffer.readLine()) != null ){
 				// No matter what, end file can't have .complete in it
-				line = line.replace(".complete", "");
+				line = FileUtil.stripStage(line);
 				File entryFile = new File(line);
 				
 				// Don't add file to playlist if it doesn't exist as cached or pinned!
@@ -554,7 +554,7 @@ public class OfflineMusicService implements MusicService {
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		
 		if(id.indexOf(cacheLocn) != -1) {
-			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(id.replace(".complete", ""));
+			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(FileUtil.stripStage(id));
 			if(cachedSongId != null) {
 				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
 				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);
