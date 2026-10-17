@@ -28,7 +28,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import com.google.android.material.slider.Slider;
@@ -89,7 +89,7 @@ public class EqualizerFragment extends SubsonicFragment {
 			}
 		});
 
-		CheckBox enabledCheckBox = (CheckBox) rootView.findViewById(R.id.equalizer_enabled);
+		MaterialSwitch enabledCheckBox = (MaterialSwitch) rootView.findViewById(R.id.equalizer_enabled);
 		enabledCheckBox.setChecked(equalizer.getEnabled());
 		enabledCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override

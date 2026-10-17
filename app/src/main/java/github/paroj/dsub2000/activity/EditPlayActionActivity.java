@@ -29,7 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -48,10 +48,10 @@ import github.paroj.dsub2000.util.LoadingTask;
 import github.paroj.dsub2000.util.Util;
 
 public class EditPlayActionActivity extends SubsonicActivity {
-	private CheckBox shuffleCheckbox;
-	private CheckBox startYearCheckbox;
+	private MaterialSwitch shuffleCheckbox;
+	private MaterialSwitch startYearCheckbox;
 	private EditText startYearBox;
-	private CheckBox endYearCheckbox;
+	private MaterialSwitch endYearCheckbox;
 	private EditText endYearBox;
 	private Button genreButton;
 	private Spinner offlineSpinner;
@@ -66,7 +66,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		final Activity context = this;
 		doNothing = context.getResources().getString(R.string.tasker_edit_do_nothing);
 
-		shuffleCheckbox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
+		shuffleCheckbox = (MaterialSwitch) findViewById(R.id.edit_shuffle_checkbox);
 		shuffleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
@@ -76,7 +76,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 			}
 		});
 
-		startYearCheckbox = (CheckBox) findViewById(R.id.edit_start_year_checkbox);
+		startYearCheckbox = (MaterialSwitch) findViewById(R.id.edit_start_year_checkbox);
 		startYearBox = (EditText) findViewById(R.id.edit_start_year);
 		// Disable/enable number box if checked
 		startYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -86,7 +86,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 			}
 		});
 		
-		endYearCheckbox = (CheckBox) findViewById(R.id.edit_end_year_checkbox);
+		endYearCheckbox = (MaterialSwitch) findViewById(R.id.edit_end_year_checkbox);
 		endYearBox = (EditText) findViewById(R.id.edit_end_year);
 		endYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override

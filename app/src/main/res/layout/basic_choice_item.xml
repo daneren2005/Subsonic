@@ -17,11 +17,10 @@
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textColor="?android:textColorPrimary" />
 
-	<CheckBox
+	<com.google.android.material.materialswitch.MaterialSwitch
 		android:id="@+id/item_checkbox"
 		style="@style/MoreButton"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:layout_gravity="right|center_vertical"
-		android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+		android:layout_gravity="right|center_vertical" />
 </LinearLayout>

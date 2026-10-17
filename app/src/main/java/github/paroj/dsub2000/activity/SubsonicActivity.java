@@ -66,7 +66,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -1192,7 +1192,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		View checkBoxView = this.getLayoutInflater().inflate(R.layout.sync_dialog, null);
-		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
+		final MaterialSwitch checkBox = (MaterialSwitch)checkBoxView.findViewById(R.id.sync_default);
 
 		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
 		builder.setIcon(android.R.drawable.ic_dialog_info)

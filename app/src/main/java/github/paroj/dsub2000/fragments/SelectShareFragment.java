@@ -23,7 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -140,7 +140,7 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.update_share, null);
 		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_share_name);
 		final DatePicker expireBox = (DatePicker)dialogView.findViewById(R.id.get_share_expire);
-		final CheckBox noExpiresBox = (CheckBox)dialogView.findViewById(R.id.get_share_no_expire);
+		final MaterialSwitch noExpiresBox = (MaterialSwitch)dialogView.findViewById(R.id.get_share_no_expire);
 
 		nameBox.setText(share.getDescription());
 		Date expires = share.getExpires();
