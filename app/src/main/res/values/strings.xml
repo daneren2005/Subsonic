@@ -271,6 +271,11 @@
 	<string name="song_details.downloading">Downloading</string>
 
     <string name="lyrics.nomatch">No lyrics found</string>
+    <string name="lyrics.select_version">Lyrics version</string>
+    <string name="lyrics.version_format">%1$s (%2$s)</string>
+    <string name="lyrics.synced">synced</string>
+    <string name="lyrics.unsynced">plain</string>
+    <string name="lyrics.unknown_language">Unknown language</string>
 
     <string name="error.label">Error</string>
 
@@ -715,6 +720,8 @@
 	<string name="settings.tap_cover_for_playlist_summary">Open the current playlist when clicking on the album art</string>
 	<string name="settings.combine_thumbs_up_down">Combine rating buttons</string>
 	<string name="settings.combine_thumbs_up_down_summary">Merge the thumbs up and thumbs down buttons into one single button that opens a rating dialog</string>
+	<string name="settings.lyrics_follow_queue">Lyrics follow the queue</string>
+	<string name="settings.lyrics_follow_queue_summary">When the track changes, switch to the new song\'s lyrics instead of keeping the ones that are open</string>
 
     <string name="color_picker.title">Select a Color</string>
     <string name="color_picker.hue">Hue</string>

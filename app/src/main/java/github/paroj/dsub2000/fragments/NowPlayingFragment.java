@@ -690,16 +690,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				Util.startActivityWithoutTransition(context, intent);
 				return true;
-			case R.id.menu_lyrics: {
-				SubsonicFragment fragment = new LyricsFragment();
-				Bundle args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_ARTIST, song.getSong().getArtist());
-				args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
-				fragment.setArguments(args);
-
-				replaceFragment(fragment);
-				return true;
-			}
 			case R.id.menu_remove_all:
 				Util.confirmDialog(context, R.string.download_menu_remove_all, "", new DialogInterface.OnClickListener() {
 					@Override

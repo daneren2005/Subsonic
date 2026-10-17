@@ -40,6 +40,7 @@ import github.paroj.dsub2000.domain.PodcastChannel;
 import github.paroj.dsub2000.domain.SearchCritera;
 import github.paroj.dsub2000.domain.SearchResult;
 import github.paroj.dsub2000.domain.Share;
+import github.paroj.dsub2000.domain.StructuredLyrics;
 import github.paroj.dsub2000.domain.User;
 import github.paroj.dsub2000.util.SilentBackgroundTask;
 import github.paroj.dsub2000.util.ProgressListener;
@@ -86,6 +87,14 @@ public interface MusicService {
 	void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception;
 
     Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception;
+
+    /**
+     * Lyrics for a song from the OpenSubsonic getLyricsBySongId endpoint, which
+     * unlike getLyrics is keyed by song id and can return timestamped lines.
+     * Servers without the songLyrics extension will fail this call, so callers
+     * are expected to fall back to {@link #getLyrics}.
+     */
+    List<StructuredLyrics> getLyricsBySongId(String id, Context context, ProgressListener progressListener) throws Exception;
 
     void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception;
 

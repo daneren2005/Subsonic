@@ -55,6 +55,7 @@ import github.paroj.dsub2000.service.parser.IndexesParser;
 import github.paroj.dsub2000.service.parser.InternetRadioStationParser;
 import github.paroj.dsub2000.service.parser.JukeboxStatusParser;
 import github.paroj.dsub2000.service.parser.LicenseParser;
+import github.paroj.dsub2000.service.parser.LyricsListParser;
 import github.paroj.dsub2000.service.parser.LyricsParser;
 import github.paroj.dsub2000.service.parser.MusicDirectoryParser;
 import github.paroj.dsub2000.service.parser.MusicFoldersParser;
@@ -622,6 +623,16 @@ public class RESTMusicService implements MusicService {
         Reader reader = getReader(context, progressListener, "getLyrics", Arrays.asList("artist", "title"), Arrays.<Object>asList(artist, title));
         try {
             return new LyricsParser(context, getInstance(context)).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+    }
+
+    @Override
+    public List<StructuredLyrics> getLyricsBySongId(String id, Context context, ProgressListener progressListener) throws Exception {
+        Reader reader = getReader(context, progressListener, "getLyricsBySongId", "id", id);
+        try {
+            return new LyricsListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }

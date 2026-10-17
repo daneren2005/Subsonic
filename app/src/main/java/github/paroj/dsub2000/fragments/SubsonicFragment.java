@@ -488,6 +488,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.menu_rate:
 				UpdateHelper.setRating(context, entry);
 				break;
+			case R.id.menu_lyrics:
+				showLyrics(entry);
+				break;
 			default:
 				return false;
 		}
@@ -1283,6 +1286,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 		dialog.show();
+	}
+
+	public void showLyrics(final Entry song) {
+		if(song == null) {
+			return;
+		}
+
+		SubsonicFragment fragment = new LyricsFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ID, song.getId());
+		args.putString(Constants.INTENT_EXTRA_NAME_ARTIST, song.getArtist());
+		args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getTitle());
+		fragment.setArguments(args);
+
+		replaceFragment(fragment);
 	}
 
 	public void displaySongInfo(final Entry song) {

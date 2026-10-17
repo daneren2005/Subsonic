@@ -43,6 +43,7 @@ import github.paroj.dsub2000.domain.PlayerQueue;
 import github.paroj.dsub2000.domain.PodcastEpisode;
 import github.paroj.dsub2000.domain.RemoteStatus;
 import github.paroj.dsub2000.domain.Lyrics;
+import github.paroj.dsub2000.domain.StructuredLyrics;
 import github.paroj.dsub2000.domain.MusicDirectory;
 import github.paroj.dsub2000.domain.MusicFolder;
 import github.paroj.dsub2000.domain.Playlist;
@@ -518,6 +519,11 @@ public class CachedMusicService implements MusicService {
     @Override
     public Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception {
         return musicService.getLyrics(artist, title, context, progressListener);
+    }
+
+    @Override
+    public List<StructuredLyrics> getLyricsBySongId(String id, Context context, ProgressListener progressListener) throws Exception {
+        return musicService.getLyricsBySongId(id, context, progressListener);
     }
 
     @Override

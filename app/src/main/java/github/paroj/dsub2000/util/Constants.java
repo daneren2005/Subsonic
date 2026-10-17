@@ -119,6 +119,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SHUFFLE_END_YEAR = "endYear";
 	public static final String PREFERENCES_KEY_SHUFFLE_GENRE = "genre";
 	public static final String PREFERENCES_KEY_KEEP_SCREEN_ON = "keepScreenOn";
+	public static final String PREFERENCES_KEY_LYRICS_FOLLOW_QUEUE = "lyricsFollowQueue";
 	public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";

@@ -87,6 +87,12 @@
             android:key="combineThumbsUpDown"
             android:defaultValue="false"/>
 
+        <CheckBoxPreference
+            android:title="@string/settings.lyrics_follow_queue"
+            android:summary="@string/settings.lyrics_follow_queue_summary"
+            android:key="lyricsFollowQueue"
+            android:defaultValue="true"/>
+
 	</PreferenceCategory>
 
 	<PreferenceCategory
