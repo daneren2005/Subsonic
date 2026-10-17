@@ -1218,7 +1218,7 @@ public class DownloadService extends MediaLibraryService {
 				remoteController.changePosition(position / 1000);
 			} else {
 				if(proxy != null && currentPlaying.isCompleteFileAvailable()) {
-					doPlay(currentPlaying, position, playerState == STARTED);
+					doPlay(currentPlaying, position, playerState == STARTED, true);
 					return;
 				}
 
@@ -1884,11 +1884,11 @@ public class DownloadService extends MediaLibraryService {
 				next(false, start);
 			}
 		} else {
-			doPlay(currentPlaying, position, start);
+			doPlay(currentPlaying, position, start, false);
 		}
 	}
 
-	private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
+	private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start, final boolean fromSeek) {
 		if (downloadFile != currentPlaying || remoteState != LOCAL) return;
 		try {
 			String dataSource;
@@ -1943,7 +1943,7 @@ public class DownloadService extends MediaLibraryService {
 				}
 			}
 
-			setPlayerState(PREPARING);
+			if (!fromSeek) setPlayerState(PREPARING);
 
 			cachedPosition = position;
 			mediaPlayer.prepare(downloadFile, dataSource, position, playWhenReady || autoPlayStart,
@@ -1972,7 +1972,9 @@ public class DownloadService extends MediaLibraryService {
 		if (state == Player.STATE_ENDED) {
 			onSongCompleted();
 		} else if (state == Player.STATE_BUFFERING) {
-			if (playerState != PREPARING) setPlayerState(PREPARING);
+			// A seek never downgrades the reported state: report PREPARING only for
+			// cold starts, not for transient re-buffers of established playback.
+			if (playerState != PREPARING && playerState != STARTED && playerState != PAUSED && playerState != PAUSED_TEMP) setPlayerState(PREPARING);
 		} else if (state == Player.STATE_READY) {
 			// The service-level playWhenReady flag distinguishes a temporary pause from a user pause.
 			PlayerState updated = playWhenReadyNow ? STARTED : playWhenReady ? PAUSED_TEMP : PAUSED;
@@ -2959,7 +2961,7 @@ public class DownloadService extends MediaLibraryService {
 				}
 			}
 			synchronized (DownloadService.this) {
-				if (!isCancelled()) doPlay(downloadFile, position, start);
+				if (!isCancelled()) doPlay(downloadFile, position, start, false);
 			}
 
 			return null;
