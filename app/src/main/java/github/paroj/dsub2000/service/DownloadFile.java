@@ -317,32 +317,21 @@ public class DownloadFile implements BufferFile {
 	public void setPlaying(boolean isPlaying) {
 		try {
 			if(saveWhenDone && !isPlaying) {
-				Util.renameFile(completeFile, saveFile);
-				renameInStore(completeFile, saveFile);
+				promote(completeFile, saveFile);
 				saveWhenDone = false;
 			} else if(completeWhenDone && !isPlaying) {
-				if(save) {
-					deleteFromStore();
-					Util.renameFile(partialFile, saveFile);
-                    saveToStore();
-				} else {
-					deleteFromStore();
-					Util.renameFile(partialFile, completeFile);
-					saveToStore();
-				}
+				promote(partialFile, save ? saveFile : completeFile);
 				completeWhenDone = false;
 			}
 		} catch(IOException ex) {
-			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile, ex);
+			Log.w(TAG, "Failed to rename file for " + song, ex);
 		}
 		
 		this.isPlaying = isPlaying;
 	}
 	public void renamePartial() {
 		try {
-			deleteFromStore();
-			Util.renameFile(partialFile, completeFile);
-			saveToStore();
+			promote(partialFile, completeFile);
 		} catch(IOException ex) {
 			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile, ex);
 		}
@@ -374,6 +363,16 @@ public class DownloadFile implements BufferFile {
 			mediaStoreService.renameInMediaStore(start, end);
 		} catch(Exception e) {
 			Log.w(TAG, "Failed to rename in store", e);
+		}
+	}
+	private void promote(File from, File to) throws IOException {
+		if(from.equals(completeFile)) {
+			Util.renameFile(from, to);
+			renameInStore(from, to);
+		} else {
+			deleteFromStore();
+			Util.renameFile(from, to);
+			saveToStore();
 		}
 	}
 
@@ -442,8 +441,7 @@ public class DownloadFile implements BufferFile {
 						if(isPlaying) {
 							saveWhenDone = true;
 						} else {
-							Util.renameFile(completeFile, saveFile);
-							renameInStore(completeFile, saveFile);
+							promote(completeFile, saveFile);
 						}
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
@@ -496,13 +494,7 @@ public class DownloadFile implements BufferFile {
 				if(isPlaying) {
 					completeWhenDone = true;
 				} else {
-					deleteFromStore();
-					if(save) {
-						Util.renameFile(partialFile, saveFile);
-					} else {
-						Util.renameFile(partialFile, completeFile);
-					}
-					DownloadFile.this.saveToStore();
+					promote(partialFile, save ? saveFile : completeFile);
 				}
 
             } catch(InterruptedException x) {
