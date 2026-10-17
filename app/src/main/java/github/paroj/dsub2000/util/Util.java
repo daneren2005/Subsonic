@@ -562,7 +562,7 @@ public final class Util {
 		if(name.startsWith("/")) {
 			name = name.substring(1);
 		}
-		name = name.replace(".complete", "").replace(".partial", "");
+		name = FileUtil.stripStage(name);
 		int index = name.lastIndexOf(".");
 		name = index == -1 ? name : name.substring(0, index);
 		String[] details = name.split("/");
@@ -604,7 +604,7 @@ public final class Util {
 
 			if(entry.getArtist() != null) {
 				String title = file.getName();
-				title = title.replace(".complete", "").replace(".partial", "");
+				title = FileUtil.stripStage(title);
 				int index = title.lastIndexOf(".");
 				title = index == -1 ? title : title.substring(0, index);
 				title = title.substring(title.indexOf('-') + 1);

@@ -101,7 +101,7 @@ public class CacheCleaner {
         for (File file : files) {
 			if(!deletePartials && bytesDeleted > bytesToDelete) break;
 
-            if (bytesToDelete > bytesDeleted || (deletePartials && (file.getName().endsWith(".partial") || file.getName().contains(".partial.")))) {
+            if (bytesToDelete > bytesDeleted || (deletePartials && FileUtil.isPartialFile(file.getName()))) {
                 if (!undeletable.contains(file) && !file.getName().equals(Constants.ALBUM_ART_FILE)) {
                     long size = file.length();
                     if (Util.delete(file)) {
@@ -118,7 +118,7 @@ public class CacheCleaner {
     private void findCandidatesForDeletion(File file, List<File> files, List<File> pinned, List<File> dirs) {
         if (file.isFile()) {
             String name = file.getName();
-            boolean isCacheFile = name.endsWith(".partial") || name.contains(".partial.") || name.endsWith(".complete") || name.contains(".complete.");
+            boolean isCacheFile = FileUtil.isPartialFile(name) || FileUtil.isCompleteFile(name);
             if (isCacheFile) {
                 files.add(file);
             } else {

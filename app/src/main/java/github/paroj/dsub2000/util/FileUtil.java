@@ -220,6 +220,42 @@ public class FileUtil {
         return fileName + "." + extension;
     }
 
+    /**
+     * Returns whether the given file name denotes a partially downloaded file
+     * ("name.partial.ext" or legacy "name.partial").
+     */
+    public static boolean isPartialFile(String name) {
+        return name.endsWith(".partial") || name.contains(".partial.");
+    }
+
+    /**
+     * Returns whether the given file name denotes a song which is fully
+     * downloaded but not yet pinned ("name.complete.ext" or legacy "name.complete").
+     */
+    public static boolean isCompleteFile(String name) {
+        return name.endsWith(".complete") || name.contains(".complete.");
+    }
+
+    /**
+     * Removes the download stage marker (".partial" or ".complete") from the
+     * given file name, yielding the name of the finalized file. V1 file names
+     * append the marker as a bare suffix ("song.complete"), V2 insert it before
+     * the extension ("song.complete.mp3").
+     */
+    public static String stripStage(String name) {
+        for (String stage : new String[] {".complete", ".partial"}) {
+            if (name.endsWith(stage)) {
+                name = name.substring(0, name.length() - stage.length());
+            } else {
+                int index = name.lastIndexOf(stage + ".");
+                if (index != -1) {
+                    name = name.substring(0, index) + name.substring(index + stage.length());
+                }
+            }
+        }
+        return name;
+    }
+
     private static String getSongFileNameExtension(Context context, MusicDirectory.Entry song) {
         if(song.isVideo()) {
             String videoPlayerType = Util.getVideoPlayerType(context);
@@ -665,7 +701,7 @@ public class FileUtil {
 
 	public static void unpinSong(Context context, File saveFile) {
 		// Don't try to unpin a song which isn't actually pinned
-		if(saveFile.getName().contains(".complete")) {
+		if(isCompleteFile(saveFile.getName())) {
 			return;
 		}
 
@@ -864,7 +900,7 @@ public class FileUtil {
 		
 		if(file.isFile()) {
 			if(isMediaFile(file)) {
-				if(file.getAbsolutePath().indexOf(".complete") == -1) {
+				if(!isCompleteFile(file.getName())) {
 					permanent++;
 				}
 				return new Long[] {1L, permanent, file.length()};
