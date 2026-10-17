@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.8.0" versioncode="219" releasedate="10/10/2026">
-		<change>Port to Media3</change>
+	<release version="5.8.0-rc1" versioncode="220" releasedate="17/10/2026">
+		<change>Add synced lyrics via OpenSubsonic, with an option for lyrics to follow the queue</change>
+		<change>Add entire-library caching</change>
+		<change>Add optional USB DAC routing for high-res playback</change>
+		<change>Add reverse sort for podcast episode lists</change>
+		<change>New ExoPlayer-based playback core, replacing MediaPlayer 1</change>
+		<change>Fade audio smoothly on focus loss/gain instead of ducking abruptly</change>
 		<change>Update theme to Material 3</change>
+		<change>Fix Ogg/Opus internet radios now work correctly and streaming/seek behaviour is improved</change>
+		<change>Fix playback hanging when many tracks are queued for download</change>
+		<change>Fix playback of offline non-server files and local files with special characters</change>
+		<change>Fix renaming of media store entries when unpinning a song</change>
 	</release>
 	<release version="5.7.5" versioncode="218" releasedate="10/10/2026">
 		<change>Filter out outdated TLS protocols</change>

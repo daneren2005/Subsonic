@@ -7,8 +7,8 @@ android {
 		applicationId "github.paroj.dsub2000"
 		minSdkVersion 24
 		targetSdkVersion 36
-		versionCode 219
-		versionName '5.8.0'
+		versionCode 220
+		versionName '5.8.0-rc1'
 		setProperty("archivesBaseName", "DSub2000_$versionName")
         resourceConfigurations += ['de', 'es', 'fr', 'hu', 'nl', 'pt-rPT', 'ru', 'sv', 'zh']
 		resValue 'string', 'account_type.subsonic', applicationId + ".subsonic"
