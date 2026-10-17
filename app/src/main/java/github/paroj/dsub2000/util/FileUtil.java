@@ -349,18 +349,7 @@ public class FileUtil {
 
     public static Bitmap getAlbumArtBitmap(Context context, MusicDirectory.Entry entry, int size) {
         File albumArtFile = getAlbumArtFile(context, entry);
-        if (albumArtFile.exists()) {
-			final BitmapFactory.Options opt = new BitmapFactory.Options();
-			opt.inJustDecodeBounds = true;
-			BitmapFactory.decodeFile(albumArtFile.getPath(), opt);
-			opt.inPurgeable = true;
-			opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
-			opt.inJustDecodeBounds = false;
-
-			Bitmap bitmap = BitmapFactory.decodeFile(albumArtFile.getPath(), opt);
-			return bitmap == null ? null : getScaledBitmap(bitmap, size);
-        }
-        return null;
+        return getSampledBitmap(albumArtFile, size);
     }
 
 	public static File getAvatarDirectory(Context context) {
@@ -376,18 +365,7 @@ public class FileUtil {
 
 	public static Bitmap getAvatarBitmap(Context context, String username, int size) {
 		File avatarFile = getAvatarFile(context, username);
-		if (avatarFile.exists()) {
-			final BitmapFactory.Options opt = new BitmapFactory.Options();
-			opt.inJustDecodeBounds = true;
-			BitmapFactory.decodeFile(avatarFile.getPath(), opt);
-			opt.inPurgeable = true;
-			opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
-			opt.inJustDecodeBounds = false;
-
-			Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getPath(), opt);
-			return bitmap == null ? null : getScaledBitmap(bitmap, size, false);
-		}
-		return null;
+		return getSampledBitmap(avatarFile, size, false);
 	}
 
 	public static File getMiscDirectory(Context context) {
@@ -402,19 +380,8 @@ public class FileUtil {
 	}
 
 	public static Bitmap getMiscBitmap(Context context, String url, int size) {
-		File avatarFile = getMiscFile(context, url);
-		if (avatarFile.exists()) {
-			final BitmapFactory.Options opt = new BitmapFactory.Options();
-			opt.inJustDecodeBounds = true;
-			BitmapFactory.decodeFile(avatarFile.getPath(), opt);
-			opt.inPurgeable = true;
-			opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
-			opt.inJustDecodeBounds = false;
-
-			Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getPath(), opt);
-			return bitmap == null ? null : getScaledBitmap(bitmap, size, false);
-		}
-		return null;
+		File miscFile = getMiscFile(context, url);
+		return getSampledBitmap(miscFile, size, false);
 	}
 
 	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
@@ -433,6 +400,24 @@ public class FileUtil {
 		} else {
 			return getScaledBitmap(bitmap, size, allowUnscaled);
 		}
+	}
+	public static Bitmap getSampledBitmap(File file, int size) {
+		return getSampledBitmap(file, size, true);
+	}
+	public static Bitmap getSampledBitmap(File file, int size, boolean allowUnscaled) {
+		if (!file.exists()) {
+			return null;
+		}
+
+		final BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(file.getPath(), opt);
+		opt.inPurgeable = true;
+		opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
+		opt.inJustDecodeBounds = false;
+
+		Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), opt);
+		return bitmap == null ? null : getScaledBitmap(bitmap, size, allowUnscaled);
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
 		return getScaledBitmap(bitmap, size, true);
