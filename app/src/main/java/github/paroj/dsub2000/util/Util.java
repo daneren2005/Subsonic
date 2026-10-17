@@ -704,7 +704,7 @@ public final class Util {
 
 	public static void renameFile(File from, File to) throws IOException {
 		if(!from.renameTo(to)) {
-			Log.i(TAG, "Failed to rename " + from + " to " + to);
+			throw new IOException("Failed to rename " + from + " to " + to);
 		}
 	}
 
