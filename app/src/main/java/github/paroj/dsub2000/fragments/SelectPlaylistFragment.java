@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.EditText;
 
 import github.paroj.dsub2000.R;
@@ -285,7 +285,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.update_playlist, null);
 		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_playlist_name);
 		final EditText commentBox = (EditText)dialogView.findViewById(R.id.get_playlist_comment);
-		final CheckBox publicBox = (CheckBox)dialogView.findViewById(R.id.get_playlist_public);
+		final MaterialSwitch publicBox = (MaterialSwitch)dialogView.findViewById(R.id.get_playlist_public);
 
 		nameBox.setText(playlist.getName());
 		commentBox.setText(playlist.getComment());

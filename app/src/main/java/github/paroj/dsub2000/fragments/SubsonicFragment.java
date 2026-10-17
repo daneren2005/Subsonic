@@ -53,7 +53,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.EditText;
 import android.widget.TextView;
 import github.paroj.dsub2000.R;
@@ -1135,7 +1135,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void createNewPlaylist(final List<Entry> songs, final boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
-		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
+		final MaterialSwitch overwriteCheckBox = (MaterialSwitch) layout.findViewById(R.id.save_playlist_overwrite);
 
 		if(getSuggestion) {
 			DownloadService downloadService = getDownloadService();

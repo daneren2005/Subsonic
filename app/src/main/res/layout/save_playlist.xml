@@ -13,7 +13,7 @@
 			android:inputType="text"
 			android:singleLine="true"/>
 
-	<CheckBox
+	<com.google.android.material.materialswitch.MaterialSwitch
 			android:id="@+id/save_playlist_overwrite"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"

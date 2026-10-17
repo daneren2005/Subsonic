@@ -18,7 +18,7 @@ package github.paroj.dsub2000.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.CompoundButton;
 
 import java.util.List;
@@ -79,7 +79,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.item_checkbox);
+		MaterialSwitch checkBox = (MaterialSwitch) view.findViewById(R.id.item_checkbox);
 
 		String display;
 		if ("albums".equals(header)) {

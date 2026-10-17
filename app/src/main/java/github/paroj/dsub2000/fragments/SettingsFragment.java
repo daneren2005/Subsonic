@@ -29,7 +29,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -67,6 +66,7 @@ import github.paroj.dsub2000.view.CacheLocationPreference;
 import github.paroj.dsub2000.view.ColorPickerPreference;
 import github.paroj.dsub2000.view.ErrorDialog;
 import github.paroj.dsub2000.view.EditPasswordPreference;
+import github.paroj.dsub2000.view.MaterialSwitchPreference;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
@@ -74,7 +74,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
 	private boolean testingConnection;
 	private ListPreference theme;
-    private CheckBoxPreference colorActionBar;
+    private MaterialSwitchPreference colorActionBar;
     private ColorPickerPreference actionBarColor;
     private ColorPickerPreference actionBarColorNowPlaying;
 	private ListPreference maxBitrateWifi;
@@ -93,13 +93,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference songPressAction;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
-	private CheckBoxPreference syncEnabled;
-	private CheckBoxPreference syncWifi;
-	private CheckBoxPreference syncNotification;
-	private CheckBoxPreference syncStarred;
-	private CheckBoxPreference syncMostRecent;
-	private CheckBoxPreference syncLibrary;
-	private CheckBoxPreference replayGain;
+	private MaterialSwitchPreference syncEnabled;
+	private MaterialSwitchPreference syncWifi;
+	private MaterialSwitchPreference syncNotification;
+	private MaterialSwitchPreference syncStarred;
+	private MaterialSwitchPreference syncMostRecent;
+	private MaterialSwitchPreference syncLibrary;
+	private MaterialSwitchPreference replayGain;
 	private ListPreference replayGainType;
 	private Preference replayGainBump;
 	private Preference replayGainUntagged;
@@ -116,7 +116,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		CheckBoxPreference mediaButtons = (CheckBoxPreference) findPreference("mediaButtons");
+		MaterialSwitchPreference mediaButtons = (MaterialSwitchPreference) findPreference("mediaButtons");
 		if (mediaButtons != null) {
 			PreferenceCategory otherCategory = (PreferenceCategory) findPreference("otherSettings");
 			otherCategory.removePreference(mediaButtons);
@@ -277,19 +277,19 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
-		syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
-		syncWifi = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
-		syncNotification = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
-		syncStarred = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
-		syncMostRecent = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
-		syncLibrary = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_LIBRARY);
-		replayGain = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
+		syncEnabled = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
+		syncWifi = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
+		syncNotification = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
+		syncStarred = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
+		syncMostRecent = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
+		syncLibrary = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_LIBRARY);
+		replayGain = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
 		replayGainType = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE);
 		replayGainBump = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
 		replayGainUntagged = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		cacheSize = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
 		openToTab = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_OPEN_TO_TAB);
-        colorActionBar = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR);
+        colorActionBar = (MaterialSwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR);
         actionBarColor = (ColorPickerPreference) this.findPreference(Constants.PREFERENCES_KEY_ACTION_BAR_COLOR);
         actionBarColorNowPlaying = (ColorPickerPreference) this.findPreference(Constants.PREFERENCES_KEY_ACTION_BAR_NOW_PLAYING_COLOR);
 
@@ -388,8 +388,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			}
 		}
 
-		CheckBoxPreference chromecastAvailabilityPreference =
-				(CheckBoxPreference) findPreference("castChromecastAvailability");
+		MaterialSwitchPreference chromecastAvailabilityPreference =
+				(MaterialSwitchPreference) findPreference("castChromecastAvailability");
 		if (chromecastAvailabilityPreference != null) {
 			chromecastAvailabilityPreference.setChecked(GoogleCompat.castAvailable());
 		}
@@ -620,26 +620,26 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
 
-		final CheckBoxPreference serverTagPreference = new CheckBoxPreference(context);
+		final MaterialSwitchPreference serverTagPreference = new MaterialSwitchPreference(context);
 		serverTagPreference.setKey(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance);
 		serverTagPreference.setChecked(Util.isTagBrowsing(context, instance));
 		serverTagPreference.setSummary(R.string.settings_browse_by_tags_summary);
 		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
 		serverPasswordPreference.setDialogTitle(R.string.settings_server_password);
 
-		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(context);
+		final MaterialSwitchPreference serverSyncPreference = new MaterialSwitchPreference(context);
 		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
 		serverSyncPreference.setChecked(Util.isSyncEnabled(context, instance));
 		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
 		serverSyncPreference.setTitle(R.string.settings_server_sync);
 
-		final CheckBoxPreference serverAuthHeaderPreference = new CheckBoxPreference(context);
+		final MaterialSwitchPreference serverAuthHeaderPreference = new MaterialSwitchPreference(context);
 		serverAuthHeaderPreference.setKey(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance);
 		serverAuthHeaderPreference.setChecked(Util.isAuthHeaderEnabled(context, instance));
 		serverAuthHeaderPreference.setSummary(R.string.settings_server_authheaders_summary);
 		serverAuthHeaderPreference.setTitle(R.string.settings_server_authheaders);
 
-		final CheckBoxPreference serverAllowInsecurePreference = new CheckBoxPreference(context);
+		final MaterialSwitchPreference serverAllowInsecurePreference = new MaterialSwitchPreference(context);
 		serverAllowInsecurePreference.setKey(Constants.PREFERENCES_KEY_SERVER_ALLOW_INSECURE + instance);
 		serverAllowInsecurePreference.setChecked(Util.isAllowInsecureEnabled(context, instance));
 		serverAllowInsecurePreference.setSummary(R.string.settings_server_allowinsecure_summary);

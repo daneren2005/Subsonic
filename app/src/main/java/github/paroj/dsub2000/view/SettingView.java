@@ -17,7 +17,7 @@ package github.paroj.dsub2000.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.widget.CheckBox;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -29,7 +29,7 @@ import static github.paroj.dsub2000.domain.User.Setting;
 
 public class SettingView extends UpdateView2<Setting, Boolean> {
 	private final TextView titleView;
-	private final CheckBox checkBox;
+	private final MaterialSwitch checkBox;
 
 	public SettingView(Context context) {
 		super(context, false);
@@ -37,7 +37,7 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
 		LayoutInflater.from(context).inflate(R.layout.basic_choice_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
-		checkBox = (CheckBox) findViewById(R.id.item_checkbox);
+		checkBox = (MaterialSwitch) findViewById(R.id.item_checkbox);
 		checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
