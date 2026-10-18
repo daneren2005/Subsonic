@@ -97,6 +97,11 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/actionbarBackgroundColor</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_light</item>
+		<!-- The platform preference framework builds framework AlertDialogs, which use
+		     this attr. MaterialComponents points it at the Material 2 overlay; the M3
+		     overlay keeps our colour roles, as it is applied on top of the activity theme. -->
+		<item name="android:alertDialogTheme">@style/ThemeOverlay.Material3.Dialog.Alert.Framework</item>
+		<item name="android:preferenceCategoryStyle">@style/Preference.DSub2000.Category</item>
     </style>
 	<style name="Theme.DSub2000.Dark.Base" parent="Theme.Material3.Dark">
 		<item name="sliderStyle">@style/Widget.DSub2000.Slider</item>
@@ -194,6 +199,8 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/actionbarBackgroundColor</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_dark</item>
+		<item name="android:alertDialogTheme">@style/ThemeOverlay.Material3.Dialog.Alert.Framework</item>
+		<item name="android:preferenceCategoryStyle">@style/Preference.DSub2000.Category</item>
     </style>
 	<style name="Theme.DSub2000.Light" parent="Theme.DSub2000.Light.Base">
 	</style>

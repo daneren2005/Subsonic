@@ -5,6 +5,21 @@
 		<item name="tickVisible">false</item>
 	</style>
 
+	<!-- Narrow text button, so several fit in one row on small screens. -->
+	<style name="Widget.DSub2000.Button.Compact" parent="Widget.Material3.Button.TextButton">
+		<item name="android:minWidth">0dp</item>
+		<item name="android:insetLeft">0dp</item>
+		<item name="android:insetRight">0dp</item>
+	</style>
+
+	<!-- Material 3 header for the platform preference framework; applied through
+	     android:preferenceCategoryStyle in themes.xml. The framework's
+	     Preference.Material.Category style is private, so the layout item is repeated. -->
+	<style name="Preference.DSub2000.Category" parent="">
+		<item name="android:layout">@layout/preference_category_m3</item>
+		<item name="android:selectable">false</item>
+	</style>
+
 	<style name="TextAppearance.DSub2000.BarTitle" parent="TextAppearance.Material3.TitleLarge">
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
 	</style>
