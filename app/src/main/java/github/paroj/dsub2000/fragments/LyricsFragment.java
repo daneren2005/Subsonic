@@ -34,11 +34,12 @@ import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -502,7 +503,7 @@ public final class LyricsFragment extends SubsonicFragment implements DownloadSe
 			labels[i] = versionLabel(lyricsVersions.get(i));
 		}
 
-		new AlertDialog.Builder(context)
+		new MaterialAlertDialogBuilder(context)
 			.setTitle(R.string.lyrics_select_version)
 			.setSingleChoiceItems(labels, selectedVersion, new DialogInterface.OnClickListener() {
 				@Override
