@@ -554,6 +554,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		final View swipeTarget = findViewById(R.id.slide_up_swipe_target);
 		final View nowPlayingContainer = findViewById(R.id.now_playing_fragment_container);
 		final View fragmentContainer = findViewById(R.id.fragment_container);
+		// The large screen layouts wrap the two panes in a container, which carries the top margin.
+		final View fragmentWrapper = findViewById(R.id.fragment_container_wrapper);
+		final View fragmentMarginView = fragmentWrapper != null ? fragmentWrapper : fragmentContainer;
 		final View drawer = findViewById(R.id.left_drawer);
 		final View panel = findViewById(R.id.slide_up_panel);
 		final View header = drawerHeader;
@@ -565,7 +568,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		final int nowPlayingToolbarPaddingTop = nowPlayingToolbar == null ? 0 : nowPlayingToolbar.getPaddingTop();
 		final int swipeTargetPaddingBottom = swipeTarget == null ? 0 : swipeTarget.getPaddingBottom();
 		final int nowPlayingContainerPaddingBottom = nowPlayingContainer == null ? 0 : nowPlayingContainer.getPaddingBottom();
-		final int fragmentContainerMarginTop = fragmentContainer == null ? 0 : ((ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams()).topMargin;
+		final int fragmentContainerMarginTop = fragmentMarginView == null ? 0 : ((ViewGroup.MarginLayoutParams) fragmentMarginView.getLayoutParams()).topMargin;
 		final int drawerPaddingBottom = drawer == null ? 0 : drawer.getPaddingBottom();
 		final int headerHeight = header == null ? 0 : header.getLayoutParams().height;
 		final int headerPaddingTop = header == null ? 0 : header.getPaddingTop();
@@ -590,9 +593,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 			if(fragmentContainerMarginTop > 0) {
 				// The content is placed below the toolbar with a margin, which has to follow it.
-				ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
+				ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentMarginView.getLayoutParams();
 				params.topMargin = fragmentContainerMarginTop + bars.top;
-				fragmentContainer.setLayoutParams(params);
+				fragmentMarginView.setLayoutParams(params);
 			}
 			if(swipeTarget != null) {
 				// The bar itself stays coloured below the buttons, so only its content is lifted.
