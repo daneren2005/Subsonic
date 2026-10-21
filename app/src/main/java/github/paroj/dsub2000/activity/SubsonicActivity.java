@@ -28,6 +28,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -541,7 +542,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	/**
 	 * The window is drawn edge to edge, so the system bar insets have to be applied to the views which
 	 * should not end up below the bars. The toolbars keep the status bar area painted with the action
-	 * bar colour, while the now playing bar keeps the navigation bar area coloured.
+	 * bar colour, while the now playing bar keeps the navigation bar area coloured. The same applies to
+	 * the bars on the sides, which show up in landscape and next to a display cutout.
 	 */
 	private void applyEdgeToEdgeInsets() {
 		if(fullScreen) {
@@ -553,10 +555,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		final View nowPlayingToolbar = findViewById(R.id.now_playing_toolbar);
 		final View swipeTarget = findViewById(R.id.slide_up_swipe_target);
 		final View nowPlayingContainer = findViewById(R.id.now_playing_fragment_container);
-		final View fragmentContainer = findViewById(R.id.fragment_container);
-		// The large screen layouts wrap the two panes in a container, which carries the top margin.
-		final View fragmentWrapper = findViewById(R.id.fragment_container_wrapper);
-		final View fragmentMarginView = fragmentWrapper != null ? fragmentWrapper : fragmentContainer;
+		final View contentRoot = findViewById(R.id.fragment_container_wrapper);
+		final View contentContainer = contentRoot != null ? contentRoot : findViewById(R.id.fragment_container);
 		final View drawer = findViewById(R.id.left_drawer);
 		final View panel = findViewById(R.id.slide_up_panel);
 		final View header = drawerHeader;
@@ -564,65 +564,76 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		final int panelHeight = panel instanceof SlidingUpPanelLayout ? ((SlidingUpPanelLayout) panel).getPanelHeight() : 0;
 		final int mainToolbarHeight = mainToolbar == null ? 0 : mainToolbar.getLayoutParams().height;
 		final int nowPlayingToolbarHeight = nowPlayingToolbar == null ? 0 : nowPlayingToolbar.getLayoutParams().height;
-		final int mainToolbarPaddingTop = mainToolbar == null ? 0 : mainToolbar.getPaddingTop();
-		final int nowPlayingToolbarPaddingTop = nowPlayingToolbar == null ? 0 : nowPlayingToolbar.getPaddingTop();
-		final int swipeTargetPaddingBottom = swipeTarget == null ? 0 : swipeTarget.getPaddingBottom();
-		final int nowPlayingContainerPaddingBottom = nowPlayingContainer == null ? 0 : nowPlayingContainer.getPaddingBottom();
-		final int fragmentContainerMarginTop = fragmentMarginView == null ? 0 : ((ViewGroup.MarginLayoutParams) fragmentMarginView.getLayoutParams()).topMargin;
-		final int drawerPaddingBottom = drawer == null ? 0 : drawer.getPaddingBottom();
 		final int headerHeight = header == null ? 0 : header.getLayoutParams().height;
-		final int headerPaddingTop = header == null ? 0 : header.getPaddingTop();
-		final int rootPaddingBottom = rootView == null ? 0 : rootView.getPaddingBottom();
+		// The content is placed below the toolbar with a margin, which has to follow the toolbar height.
+		final ViewGroup.MarginLayoutParams contentParams = contentContainer == null ? null : (ViewGroup.MarginLayoutParams) contentContainer.getLayoutParams();
+		final int contentMarginTop = contentParams == null ? 0 : contentParams.topMargin;
+
+		final Rect mainToolbarPadding = paddingOf(mainToolbar);
+		final Rect nowPlayingToolbarPadding = paddingOf(nowPlayingToolbar);
+		final Rect swipeTargetPadding = paddingOf(swipeTarget);
+		final Rect nowPlayingContainerPadding = paddingOf(nowPlayingContainer);
+		final Rect contentPadding = paddingOf(contentContainer);
+		final Rect headerPadding = paddingOf(header);
+		final Rect drawerPadding = paddingOf(drawer);
+		final Rect rootPadding = paddingOf(rootView);
 
 		ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, windowInsets) -> {
 			Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
 
-			// The toolbars grow by the status bar height so that their background paints it, while the
-			// padding keeps the title and the icons below it.
+			// The toolbars grow by the status bar inset so that their background paints it, while the
+			// padding keeps the title and the icons clear of the bars and of the display cutout.
 			if(mainToolbar != null) {
 				ViewGroup.LayoutParams params = mainToolbar.getLayoutParams();
 				params.height = mainToolbarHeight + bars.top;
-				mainToolbar.setPadding(mainToolbar.getPaddingLeft(), mainToolbarPaddingTop + bars.top, mainToolbar.getPaddingRight(), mainToolbar.getPaddingBottom());
+				mainToolbar.setPadding(mainToolbarPadding.left + bars.left, mainToolbarPadding.top + bars.top, mainToolbarPadding.right + bars.right, mainToolbarPadding.bottom);
 				mainToolbar.setLayoutParams(params);
 			}
 			if(nowPlayingToolbar != null) {
+				// The swipe target it sits in already keeps it clear of the bars on the sides.
 				ViewGroup.LayoutParams params = nowPlayingToolbar.getLayoutParams();
 				params.height = nowPlayingToolbarHeight + bars.top;
-				nowPlayingToolbar.setPadding(nowPlayingToolbar.getPaddingLeft(), nowPlayingToolbarPaddingTop + bars.top, nowPlayingToolbar.getPaddingRight(), nowPlayingToolbar.getPaddingBottom());
+				nowPlayingToolbar.setPadding(nowPlayingToolbarPadding.left, nowPlayingToolbarPadding.top + bars.top, nowPlayingToolbarPadding.right, nowPlayingToolbarPadding.bottom);
 				nowPlayingToolbar.setLayoutParams(params);
 			}
-			if(fragmentContainerMarginTop > 0) {
-				// The content is placed below the toolbar with a margin, which has to follow it.
-				ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentMarginView.getLayoutParams();
-				params.topMargin = fragmentContainerMarginTop + bars.top;
-				fragmentMarginView.setLayoutParams(params);
+			if(contentContainer != null) {
+				contentContainer.setPadding(contentPadding.left + bars.left, contentPadding.top, contentPadding.right + bars.right, contentPadding.bottom);
+				if(contentMarginTop > 0) {
+					contentParams.topMargin = contentMarginTop + bars.top;
+					contentContainer.setLayoutParams(contentParams);
+				}
 			}
 			if(swipeTarget != null) {
-				// The bar itself stays coloured below the buttons, so only its content is lifted.
-				swipeTarget.setPadding(swipeTarget.getPaddingLeft(), swipeTarget.getPaddingTop(), swipeTarget.getPaddingRight(), swipeTargetPaddingBottom + bars.bottom);
+				// The bar itself stays coloured below and beside the buttons, so only its content is lifted.
+				swipeTarget.setPadding(swipeTargetPadding.left + bars.left, swipeTargetPadding.top, swipeTargetPadding.right + bars.right, swipeTargetPadding.bottom + bars.bottom);
 				if(panel instanceof SlidingUpPanelLayout) {
 					((SlidingUpPanelLayout) panel).setPanelHeight(panelHeight + bars.bottom);
 				}
 			} else if(rootView != null) {
 				// Screens without a now playing bar keep all of their content clear of the navigation bar.
-				rootView.setPadding(rootView.getPaddingLeft(), rootView.getPaddingTop(), rootView.getPaddingRight(), rootPaddingBottom + bars.bottom);
+				rootView.setPadding(rootPadding.left, rootPadding.top, rootPadding.right, rootPadding.bottom + bars.bottom);
 			}
 			if(nowPlayingContainer != null) {
-				nowPlayingContainer.setPadding(nowPlayingContainer.getPaddingLeft(), nowPlayingContainer.getPaddingTop(), nowPlayingContainer.getPaddingRight(), nowPlayingContainerPaddingBottom + bars.bottom);
+				nowPlayingContainer.setPadding(nowPlayingContainerPadding.left + bars.left, nowPlayingContainerPadding.top, nowPlayingContainerPadding.right + bars.right, nowPlayingContainerPadding.bottom + bars.bottom);
 			}
 			if(header != null) {
 				// The drawer header is painted behind the status bar, so it grows and its content moves below it.
 				ViewGroup.LayoutParams params = header.getLayoutParams();
 				params.height = headerHeight + bars.top;
-				header.setPadding(header.getPaddingLeft(), headerPaddingTop + bars.top, header.getPaddingRight(), header.getPaddingBottom());
+				header.setPadding(headerPadding.left + bars.left, headerPadding.top + bars.top, headerPadding.right + bars.right, headerPadding.bottom);
 				header.setLayoutParams(params);
 			}
 			if(drawer != null) {
-				drawer.setPadding(drawer.getPaddingLeft(), drawer.getPaddingTop(), drawer.getPaddingRight(), drawerPaddingBottom + bars.bottom);
+				drawer.setPadding(drawerPadding.left + bars.left, drawerPadding.top, drawerPadding.right + bars.right, drawerPadding.bottom + bars.bottom);
 			}
 
 			return windowInsets;
 		});
+	}
+
+	/** The padding a view has before the window insets are applied to it. */
+	private static Rect paddingOf(View view) {
+		return view == null ? null : new Rect(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), view.getPaddingBottom());
 	}
 
 	@Override
