@@ -331,6 +331,7 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
 
     @Override public void onSongChanged(DownloadFile file, int index, boolean seek) { refresh(); }
     @Override public void onSongsChanged(List<DownloadFile> files, DownloadFile file, int index, boolean seek) { refresh(); }
+    @Override public boolean wantsProgressUpdates() { return false; }
     @Override public void onSongProgress(DownloadFile file, int position, Integer duration, boolean seekable) {
         // Positions are exposed through the live PositionSupplier in getState();
         // rebuilding the whole queue once per second is not necessary.

@@ -1599,8 +1599,10 @@ public class DownloadService extends MediaLibraryService {
 	}
 
 	public void setPlayerStateCompleted() {
-		// Acquire a temporary wakelock
-		acquireWakelock();
+		if (Util.isScrobblingEnabled(this)) {
+			// The scrobble request is dispatched asynchronously after this method returns.
+			acquireWakelock();
+		}
 
 		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
 		this.playerState = PlayerState.COMPLETED;
@@ -2869,6 +2871,9 @@ public class DownloadService extends MediaLibraryService {
 		final int queueSize = size();
 
 		for (final OnSongChangedListener listener : onSongChangedListeners) {
+			if (!listener.wantsProgressUpdates()) {
+				continue;
+			}
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -3015,6 +3020,14 @@ public class DownloadService extends MediaLibraryService {
 	}
 
 	public interface OnSongChangedListener {
+		/**
+		 * Whether this listener needs the per-second position updates. Non-UI listeners
+		 * such as the Media3 session can use their own position supplier and return false.
+		 */
+		default boolean wantsProgressUpdates() {
+			return true;
+		}
+
 		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
 		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
 		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
