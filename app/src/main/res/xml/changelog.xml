@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
 	<release version="5.8.0-rc1" versioncode="220" releasedate="17/10/2026">
+		<change>Improve battery life by releasing Wi-Fi and UPnP locks when idle and stopping unnecessary background polling</change>
 		<change>Add synced lyrics via OpenSubsonic, with an option for lyrics to follow the queue</change>
 		<change>Add entire-library caching</change>
 		<change>Add optional USB DAC routing for high-res playback</change>
