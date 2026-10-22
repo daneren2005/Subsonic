@@ -810,6 +810,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 	private void onResumeHandlers() {
+		if (executorService != null) {
+			executorService.shutdownNow();
+		}
 		executorService = Executors.newSingleThreadScheduledExecutor();
 		setControlsVisible(true);
 
@@ -835,7 +838,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void run() {
 				if (primaryFragment) {
 					DownloadService downloadService = getDownloadService();
-					downloadService.startRemoteScan();
 					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
 				}
 				updateRepeatButton();
@@ -853,9 +855,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(executorService != null) {
 			DownloadService downloadService = getDownloadService();
 			if (downloadService != null) {
-				downloadService.stopRemoteScan();
 				downloadService.removeOnSongChangeListener(this);
 			}
+			if (hideControlsFuture != null) {
+				hideControlsFuture.cancel(false);
+				hideControlsFuture = null;
+			}
+			executorService.shutdownNow();
+			executorService = null;
 			playlistFlipper.setDisplayedChild(0);
 		}
 	}
@@ -895,6 +902,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private void scheduleHideControls() {
 		if (hideControlsFuture != null) {
 			hideControlsFuture.cancel(false);
+		}
+		if (executorService == null || executorService.isShutdown()) {
+			return;
 		}
 
 		final Handler handler = new Handler();

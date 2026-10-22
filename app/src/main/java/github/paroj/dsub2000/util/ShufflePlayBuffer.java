@@ -61,14 +61,12 @@ public class ShufflePlayBuffer {
 	public ShufflePlayBuffer(DownloadService context) {
 		this.context = context;
 
-		executorService = Executors.newSingleThreadScheduledExecutor();
 		runnable = new Runnable() {
 			@Override
 			public void run() {
 				refill();
 			}
 		};
-		executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
 		
 		// Calculate out the capacity and refill threshold based on the user's random size preference
 		int shuffleListSize = Math.max(1, Integer.parseInt(Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20")));
@@ -106,13 +104,18 @@ public class ShufflePlayBuffer {
 	}
 
 	public void shutdown() {
-		executorService.shutdown();
-		Util.getPreferences(context).unregisterOnSharedPreferenceChangeListener(listener);
+		if (executorService != null) {
+			executorService.shutdown();
+		}
+		if (listener != null) {
+			Util.getPreferences(context).unregisterOnSharedPreferenceChangeListener(listener);
+			listener = null;
+		}
 	}
 
 	private void restart() {
 		synchronized(buffer) {
-			if(buffer.size() <= refillThreshold && lastCount != 0 && executorService.isShutdown()) {
+			if(buffer.size() <= refillThreshold && lastCount != 0 && (executorService == null || executorService.isShutdown())) {
 				executorService = Executors.newSingleThreadScheduledExecutor();
 				executorService.scheduleWithFixedDelay(runnable, 0, 10, TimeUnit.SECONDS);
 			}

@@ -75,14 +75,6 @@ final class LocalPlayback {
                 if (current != null) listener.onError(current.file, error);
             }
         });
-        handler.post(new Runnable() {
-            @Override public void run() {
-                if (!released) {
-                    updateSnapshot();
-                    handler.postDelayed(this, 100);
-                }
-            }
-        });
     }
 
     void prepare(DownloadFile file, String uri, int position, boolean playing, float gain, float speed) {
@@ -126,16 +118,16 @@ final class LocalPlayback {
         });
     }
 
-    void play() { execute(player::play); }
-    void pause() { execute(player::pause); }
-    void stop() { execute(player::stop); }
+    void play() { execute(() -> { player.play(); updateSnapshot(); }); }
+    void pause() { execute(() -> { player.pause(); updateSnapshot(); }); }
+    void stop() { execute(() -> { player.stop(); updateSnapshot(); }); }
     void seekTo(int position) {
         // Publish the target now so a read right after the call sees it.
         Snapshot old = snapshot;
         snapshot = new Snapshot(position, old.duration, old.playing, old.speed);
         execute(() -> { player.seekTo(position); updateSnapshot(); });
     }
-    void setSpeed(float speed) { execute(() -> player.setPlaybackSpeed(speed)); }
+    void setSpeed(float speed) { execute(() -> { player.setPlaybackSpeed(speed); updateSnapshot(); }); }
     void setPreferredDevice(AudioDeviceInfo device) { execute(() -> player.setPreferredAudioDevice(device)); }
     int getAudioSessionId() { return audioSessionId; }
     int getDuration() { return snapshot.duration; }
