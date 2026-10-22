@@ -94,7 +94,9 @@ public class ArtistRadioBuffer {
 	}
 
 	public void shutdown() {
-		executorService.shutdown();
+		if (executorService != null) {
+			executorService.shutdown();
+		}
 	}
 
 	private void restart() {

@@ -35,7 +35,6 @@ import android.util.Log;
 
 import org.eclipse.jetty.util.log.Logger;
 import org.jupnp.android.AndroidUpnpService;
-import org.jupnp.android.AndroidUpnpServiceImpl;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.Device;
@@ -56,6 +55,7 @@ import java.util.Map;
 import github.paroj.dsub2000.domain.DLNADevice;
 import github.paroj.dsub2000.domain.RemoteControlState;
 import github.paroj.dsub2000.service.DLNAController;
+import github.paroj.dsub2000.service.DSubUpnpService;
 import github.paroj.dsub2000.service.DownloadService;
 import github.paroj.dsub2000.service.RemoteController;
 
@@ -150,7 +150,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			}
 		};
 
-		if(!context.getApplicationContext().bindService(new Intent(context, AndroidUpnpServiceImpl.class), dlnaServiceConnection, Context.BIND_AUTO_CREATE)) {
+		if(!context.getApplicationContext().bindService(new Intent(context, DSubUpnpService.class), dlnaServiceConnection, Context.BIND_AUTO_CREATE)) {
 			Log.e(TAG, "Failed to bind to DLNA service");
 		}
 	}

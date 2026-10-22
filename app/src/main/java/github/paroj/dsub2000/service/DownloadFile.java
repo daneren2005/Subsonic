@@ -155,13 +155,23 @@ public class DownloadFile implements BufferFile {
 	}
 
     public synchronized void download() {
+    	download(false);
+    }
+    /**
+     * Starts downloading in the background.
+     *
+     * @param highPerformanceWifi whether this download is backing active playback and should
+     *                            prevent Wi-Fi power saving while it runs. Background caching
+     *                            and sync downloads do not need a high-performance lock.
+     */
+    public synchronized void download(boolean highPerformanceWifi) {
     	rateLimit = false;
-        preDownload();
+        preDownload(highPerformanceWifi);
         downloadTask.execute();
     }
     public synchronized void downloadNow(MusicService musicService) {
     	rateLimit = true;
-    	preDownload();
+    	preDownload(false);
 		downloadTask.setMusicService(musicService);
 		try {
 			downloadTask.doInBackground();
@@ -169,7 +179,7 @@ public class DownloadFile implements BufferFile {
 			// This should never be reached
 		}
     }
-    private void preDownload() {
+    private void preDownload(boolean highPerformanceWifi) {
 		SongDBHandler.getHandler(context).addSong(this);  // Add every locally available
 		// song to db so we can use their serverId for offline scrobbling
     	FileUtil.createDirectoryForParent(saveFile);
@@ -177,7 +187,7 @@ public class DownloadFile implements BufferFile {
 		if(!partialFile.exists()) {
 			bitRate = getActualBitrate();
 		}
-		downloadTask = new DownloadTask(context);
+		downloadTask = new DownloadTask(context, highPerformanceWifi);
     }
 
     public synchronized void cancelDownload() {
@@ -242,7 +252,7 @@ public class DownloadFile implements BufferFile {
 	@Override
 	public synchronized void onResume() {
 		if(!isWorkDone() && !isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
-			download();
+			download(true);
 		}
 	}
 
@@ -409,9 +419,11 @@ public class DownloadFile implements BufferFile {
 
     private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
+		private final boolean highPerformanceWifi;
 
-		public DownloadTask(Context context) {
+		public DownloadTask(Context context, boolean highPerformanceWifi) {
 			super(context);
+			this.highPerformanceWifi = highPerformanceWifi;
 		}
 
         @Override
@@ -428,7 +440,7 @@ public class DownloadFile implements BufferFile {
                     wakeLock.acquire();
                 }
 				
-				wifiLock = Util.createWifiLock(context, toString());
+				wifiLock = Util.createWifiLock(context, toString(), highPerformanceWifi);
 				wifiLock.acquire();
 
                 if (saveFile.exists()) {

@@ -57,8 +57,18 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	}
 
 	public void destroy() {
+		stopScan();
 		for(MediaRouteProvider provider: providers) {
 			router.removeProvider(provider);
+		}
+		providers.clear();
+		onlineProviders.clear();
+		if (dlnaProvider != null) {
+			// Removing the provider is not enough: the UPnP service is bound with
+			// BIND_AUTO_CREATE and would otherwise keep its multicast/high-performance
+			// Wi-Fi locks for the lifetime of the process.
+			dlnaProvider.destroy();
+			dlnaProvider = null;
 		}
 	}
 

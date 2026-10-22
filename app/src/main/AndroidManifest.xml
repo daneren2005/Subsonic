@@ -112,7 +112,7 @@
 			</intent-filter>
 		</service>
 
-		<service android:name="org.jupnp.android.AndroidUpnpServiceImpl"
+		<service android:name="github.paroj.dsub2000.service.DSubUpnpService"
 			     android:foregroundServiceType="mediaPlayback|dataSync"/>
 		<service
 			android:name="github.paroj.dsub2000.service.sync.AuthenticatorService"

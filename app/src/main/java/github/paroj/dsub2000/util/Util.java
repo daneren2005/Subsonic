@@ -1523,8 +1523,13 @@ public final class Util {
 	}
 	
 	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
+		return createWifiLock(context, tag, true);
+	}
+
+	public static WifiManager.WifiLock createWifiLock(Context context, String tag, boolean highPerformance) {
 		WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		return wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, tag);
+		int mode = highPerformance ? WifiManager.WIFI_MODE_FULL_HIGH_PERF : WifiManager.WIFI_MODE_FULL;
+		return wm.createWifiLock(mode, tag);
 	}
 
 	public static Random getRandom() {

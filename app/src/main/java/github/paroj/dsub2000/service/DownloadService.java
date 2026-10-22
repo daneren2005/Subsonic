@@ -348,6 +348,10 @@ public class DownloadService extends MediaLibraryService {
 		mediaPlayer.release();
 		mediaPlayerLooper.quit();
 		shufflePlayBuffer.shutdown();
+		artistRadioBuffer.shutdown();
+		if (wifiLock != null && wifiLock.isHeld()) {
+			wifiLock.release();
+		}
 		effectsController.release();
 		if (mRemoteControl != null) {
 			mRemoteControl.unregister(this);
@@ -1568,15 +1572,7 @@ public class DownloadService extends MediaLibraryService {
 		}
 
 
-		if(remoteState != LOCAL) {
-			if(playerState == STARTED) {
-				if (!wifiLock.isHeld()) {
-					wifiLock.acquire();
-				}
-			} else if(playerState == PAUSED && wifiLock.isHeld()) {
-				wifiLock.release();
-			}
-		}
+		updateWifiLock();
 
 		if(remoteController != null && remoteController.isNextSupported()) {
 			if(playerState == PREPARING || playerState == IDLE) {
@@ -1587,12 +1583,28 @@ public class DownloadService extends MediaLibraryService {
 		onStateUpdate();
 	}
 
+	private void updateWifiLock() {
+		// A Wi-Fi lock is only needed while audio is actually playing through a
+		// remote renderer. In particular, release it when playback completes so
+		// it does not keep the Wi-Fi radio awake indefinitely.
+		if (wifiLock == null) {
+			return;
+		}
+		boolean needed = remoteState != LOCAL && playerState == STARTED;
+		if (needed && !wifiLock.isHeld()) {
+			wifiLock.acquire();
+		} else if (!needed && wifiLock.isHeld()) {
+			wifiLock.release();
+		}
+	}
+
 	public void setPlayerStateCompleted() {
 		// Acquire a temporary wakelock
 		acquireWakelock();
 
 		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
 		this.playerState = PlayerState.COMPLETED;
+		updateWifiLock();
 		if(positionCache != null) {
 			positionCache.stop();
 			positionCache = null;
@@ -1768,19 +1780,10 @@ public class DownloadService extends MediaLibraryService {
 				remoteController = (RemoteController) ref;
 				break;
 			case LOCAL: default:
-				if(wifiLock.isHeld()) {
-					wifiLock.release();
-				}
 				break;
 		}
 
-		if(remoteState != LOCAL) {
-			if(!wifiLock.isHeld()) {
-				wifiLock.acquire();
-			}
-		} else if(wifiLock.isHeld()) {
-			wifiLock.release();
-		}
+		updateWifiLock();
 
 		if(remoteController != null) {
 			remoteController.create(isPlaying, position / 1000);
@@ -2211,7 +2214,7 @@ public class DownloadService extends MediaLibraryService {
 			}
 
 			currentDownloading = currentPlaying;
-			currentDownloading.download();
+			currentDownloading.download(true);
 			cleanupCandidates.add(currentDownloading);
 		}
 
