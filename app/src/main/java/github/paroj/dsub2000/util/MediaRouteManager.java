@@ -15,7 +15,8 @@
 
 package github.paroj.dsub2000.util;
 
-import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteSelector;
 import androidx.mediarouter.media.MediaRouter;
@@ -37,6 +38,7 @@ import static androidx.mediarouter.media.MediaRouter.RouteInfo;
  */
 public class MediaRouteManager extends MediaRouter.Callback {
 	private static final String TAG = MediaRouteManager.class.getSimpleName();
+	private static final long DLNA_PROVIDER_IDLE_TIMEOUT_MS = 30_000L;
 	private static boolean castAvailable = false;
 
 	private DownloadService downloadService;
@@ -45,6 +47,15 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
 	private List<MediaRouteProvider> onlineProviders = new ArrayList<MediaRouteProvider>();
 	private DLNARouteProvider dlnaProvider;
+	private final Handler handler = new Handler(Looper.getMainLooper());
+	private final Runnable releaseIdleDlnaProvider = new Runnable() {
+		@Override
+		public void run() {
+			if (dlnaProvider != null && !downloadService.isDlnaActive()) {
+				removeDLNAProvider();
+			}
+		}
+	};
 
 	public MediaRouteManager(DownloadService downloadService) {
 		this.downloadService = downloadService;
@@ -58,6 +69,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 
 	public void destroy() {
 		stopScan();
+		handler.removeCallbacks(releaseIdleDlnaProvider);
 		for(MediaRouteProvider provider: providers) {
 			router.removeProvider(provider);
 		}
@@ -65,8 +77,8 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		onlineProviders.clear();
 		if (dlnaProvider != null) {
 			// Removing the provider is not enough: the UPnP service is bound with
-			// BIND_AUTO_CREATE and would otherwise keep its multicast/high-performance
-			// Wi-Fi locks for the lifetime of the process.
+			// BIND_AUTO_CREATE and would otherwise keep its multicast/Wi-Fi locks
+			// for the lifetime of the process.
 			dlnaProvider.destroy();
 			dlnaProvider = null;
 		}
@@ -74,6 +86,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 
 	@Override
 	public void onRouteSelected(MediaRouter router, RouteInfo info) {
+		cancelDlnaProviderRelease();
 		if(castAvailable) {
 			RemoteController controller = GoogleCompat.getController(downloadService, info);
 			if(controller != null) {
@@ -92,6 +105,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 
 		downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+		scheduleDlnaProviderRelease();
 	}
 
 	public void setDefaultRoute() {
@@ -99,10 +113,12 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	}
 
 	public void startScan() {
+		ensureDlnaProvider();
 		router.addCallback(selector, this, MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
 	}
 	public void stopScan() {
 		router.removeCallback(this);
+		scheduleDlnaProviderRelease();
 	}
 
 	public MediaRouteSelector getSelector() {
@@ -151,10 +167,6 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		if(!Util.isOffline(downloadService)) {
 			addOnlineProviders();
 		}
-
-		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, false)) {
-			addDLNAProvider();
-		}
 	}
 	public void buildSelector() {
 		MediaRouteSelector.Builder builder = new MediaRouteSelector.Builder();
@@ -168,6 +180,26 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		selector = builder.build();
 	}
 
+	public void ensureDlnaProvider() {
+		if(!Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, false)) {
+			return;
+		}
+		cancelDlnaProviderRelease();
+		addDLNAProvider();
+	}
+
+	public void scheduleDlnaProviderRelease() {
+		if(dlnaProvider == null) {
+			return;
+		}
+		handler.removeCallbacks(releaseIdleDlnaProvider);
+		handler.postDelayed(releaseIdleDlnaProvider, DLNA_PROVIDER_IDLE_TIMEOUT_MS);
+	}
+
+	public void cancelDlnaProviderRelease() {
+		handler.removeCallbacks(releaseIdleDlnaProvider);
+	}
+
 	public void addDLNAProvider() {
 		if(dlnaProvider == null) {
 			dlnaProvider = new DLNARouteProvider(downloadService);
@@ -176,6 +208,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 	}
 	public void removeDLNAProvider() {
+		cancelDlnaProviderRelease();
 		if(dlnaProvider != null) {
 			router.removeProvider(dlnaProvider);
 			providers.remove(dlnaProvider);

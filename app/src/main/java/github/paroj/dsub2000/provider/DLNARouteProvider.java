@@ -196,11 +196,16 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	@Override
 	public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
 		if (request != null && request.isActiveScan()) {
+			downloadService.getMediaRouter().cancelDlnaProviderRelease();
 			if(dlnaService != null) {
 				dlnaService.getControlPoint().search();
 			} else {
 				searchOnConnect = true;
 			}
+		} else {
+			// Keep the UPnP stack around briefly so a route chosen from the
+			// closing dialog can still start playback, then release its locks.
+			downloadService.getMediaRouter().scheduleDlnaProviderRelease();
 		}
 	}
 
@@ -341,6 +346,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		@Override
 		public void onRelease() {
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+			downloadService.getMediaRouter().scheduleDlnaProviderRelease();
 			controller = null;
 		}
 
@@ -353,6 +359,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		@Override
 		public void onUnselect() {
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+			downloadService.getMediaRouter().scheduleDlnaProviderRelease();
 			controller = null;
 		}
 

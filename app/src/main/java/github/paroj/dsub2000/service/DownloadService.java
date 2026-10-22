@@ -1708,6 +1708,10 @@ public class DownloadService extends MediaLibraryService {
 	public MediaRouteSelector getRemoteSelector() {
 		return mediaRouter.getSelector();
 	}
+	/** Registers expensive remote route providers early, before the cast dialog opens. */
+	public void ensureRemoteRoutes() {
+		mediaRouter.ensureDlnaProvider();
+	}
 
 	public boolean isSeekable() {
 		if(remoteState == LOCAL) {
@@ -1721,6 +1725,10 @@ public class DownloadService extends MediaLibraryService {
 
 	public boolean isRemoteEnabled() {
 		return remoteState != LOCAL;
+	}
+
+	public boolean isDlnaActive() {
+		return remoteState == RemoteControlState.DLNA;
 	}
 
 	public RemoteController getRemoteController() {

@@ -581,6 +581,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			if(mediaRouteItem != null) {
 				MediaRouteButton mediaRouteButton = (MediaRouteButton) MenuItemCompat.getActionView(mediaRouteItem);
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
+				// DLNA discovery is expensive, so its provider is only registered
+				// when the cast dialog is actually about to be opened.
+				mediaRouteButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						downloadService.ensureRemoteRoutes();
+					}
+				});
 			}
 
 			if(downloadService.isCurrentPlayingSingle()) {

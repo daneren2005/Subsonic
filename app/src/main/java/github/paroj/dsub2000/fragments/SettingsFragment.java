@@ -225,6 +225,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				Boolean enabled = sharedPreferences.getBoolean(key, false);
 				if (enabled) {
 					mediaRouter.addDLNAProvider();
+					mediaRouter.scheduleDlnaProviderRelease();
 				} else {
 					mediaRouter.removeDLNAProvider();
 				}
