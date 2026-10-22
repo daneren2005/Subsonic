@@ -10,6 +10,7 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.SimpleBasePlayer;
+import androidx.media3.common.SimpleBasePlayer.PositionSupplier;
 import androidx.media3.common.util.UnstableApi;
 import androidx.mediarouter.media.MediaRouter;
 
@@ -139,7 +140,7 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
                     .setPlaybackSuppressionReason(state == PlayerState.PAUSED_TEMP
                             ? PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS
                             : PLAYBACK_SUPPRESSION_REASON_NONE)
-                    .setContentPositionMs(Math.max(0, service.getPlayerPosition()))
+                    .setContentPositionMs((PositionSupplier) () -> Math.max(0, service.getPlayerPosition()))
                     .setPlaybackParameters(new PlaybackParameters(service.getPlaybackSpeed()))
                     .setRepeatMode(repeatMode(service.getRepeatMode()))
                     .setSeekBackIncrementMs(interval(Constants.PREFERENCES_KEY_REWIND_INTERVAL, "10"))
@@ -330,7 +331,10 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
 
     @Override public void onSongChanged(DownloadFile file, int index, boolean seek) { refresh(); }
     @Override public void onSongsChanged(List<DownloadFile> files, DownloadFile file, int index, boolean seek) { refresh(); }
-    @Override public void onSongProgress(DownloadFile file, int position, Integer duration, boolean seekable) { refresh(); }
+    @Override public void onSongProgress(DownloadFile file, int position, Integer duration, boolean seekable) {
+        // Positions are exposed through the live PositionSupplier in getState();
+        // rebuilding the whole queue once per second is not necessary.
+    }
     @Override public void onStateUpdate(DownloadFile file, PlayerState state) { refresh(); }
     @Override public void onMetadataUpdate(MusicDirectory.Entry entry, int fields) { refresh(); }
 }

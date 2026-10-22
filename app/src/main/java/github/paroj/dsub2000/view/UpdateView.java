@@ -37,12 +37,16 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import github.paroj.dsub2000.domain.MusicDirectory;
+import github.paroj.dsub2000.domain.PlayerState;
 import github.paroj.dsub2000.R;
+import github.paroj.dsub2000.service.DownloadService;
 import github.paroj.dsub2000.util.DrawableTint;
 import github.paroj.dsub2000.util.SilentBackgroundTask;
 
 public abstract class UpdateView<T> extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();
+	private static final long UPDATE_INTERVAL_ACTIVE = 1000L;
+	private static final long UPDATE_INTERVAL_IDLE = 5000L;
 	private static final WeakHashMap<UpdateView, ?> INSTANCES = new WeakHashMap<UpdateView, Object>();
 
 	protected static Handler backgroundHandler;
@@ -182,7 +186,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 				} catch (Throwable x) {
 					Log.w(TAG, "Error when updating song views.", x);
 				}
-				uiHandler.postDelayed(updateRunnable, 1000L);
+				uiHandler.postDelayed(updateRunnable, nextUpdateInterval());
 			}
 		};
 		
@@ -199,6 +203,20 @@ public abstract class UpdateView<T> extends LinearLayout {
 				}
 			}
 		});
+	}
+
+	private static long nextUpdateInterval() {
+		DownloadService service = DownloadService.getInstance();
+		if (service == null) {
+			return UPDATE_INTERVAL_IDLE;
+		}
+
+		PlayerState state = service.getPlayerState();
+		boolean busy = state == PlayerState.STARTED
+				|| state == PlayerState.PREPARING
+				|| state == PlayerState.DOWNLOADING
+				|| !service.getBackgroundDownloads().isEmpty();
+		return busy ? UPDATE_INTERVAL_ACTIVE : UPDATE_INTERVAL_IDLE;
 	}
 
 	public static boolean hasActiveActivity() {
