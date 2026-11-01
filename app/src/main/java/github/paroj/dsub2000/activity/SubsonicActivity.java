@@ -243,7 +243,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 			@Override
 			public boolean onMenuItemSelected(@NonNull MenuItem item) {
-				if(drawerToggle != null && drawerToggle.onOptionsItemSelected(item)) {
+				if(drawerToggle != null && isDrawerToggleActive() && drawerToggle.onOptionsItemSelected(item)) {
 					return true;
 				} else if(item.getItemId() == android.R.id.home) {
 					onBackPressed();
@@ -296,6 +296,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if(drawerToggle != null) {
 			drawerToggle.syncState();
 		}
+	}
+
+	/** Whether the home button of the current action bar belongs to the drawer toggle. */
+	protected boolean isDrawerToggleActive() {
+		return true;
 	}
 
 	protected void createCustomActionBarView() {

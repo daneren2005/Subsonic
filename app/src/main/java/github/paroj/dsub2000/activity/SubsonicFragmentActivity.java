@@ -96,6 +96,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
 	private boolean isPanelClosing = false;
+	private boolean nowPlayingToolbarActive = false;
 	private NowPlayingFragment nowPlayingFragment;
 	private SubsonicFragment secondaryFragment;
 	private Toolbar mainToolbar;
@@ -227,34 +228,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				switch (newState) {
 					case COLLAPSED:
 						isPanelClosing = false;
-						if(bottomBar.getVisibility() == View.GONE) {
-							bottomBar.setVisibility(View.VISIBLE);
-							nowPlayingToolbar.setVisibility(View.GONE);
-							nowPlayingFragment.setPrimaryFragment(false);
-							setSupportActionBar(mainToolbar);
-							recreateSpinner();
-						}
+						showMainToolbar();
 						break;
 					case EXPANDED:
 						isPanelClosing = false;
-						currentFragment.stopActionMode();
-
-						// Disable custom view before switching
-						getSupportActionBar().setDisplayShowCustomEnabled(false);
-						getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-						bottomBar.setVisibility(View.GONE);
-						nowPlayingToolbar.setVisibility(View.VISIBLE);
-						setSupportActionBar(nowPlayingToolbar);
-
-						if(secondaryFragment == null) {
-							nowPlayingFragment.setPrimaryFragment(true);
-						} else {
-							secondaryFragment.setPrimaryFragment(true);
-						}
-
-						drawerToggle.setDrawerIndicatorEnabled(false);
-						getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+						showNowPlayingToolbar();
 						break;
 				}
 			}
@@ -563,7 +541,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public SubsonicFragment getCurrentFragment() {
-		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+		if(nowPlayingToolbarActive) {
 			if(secondaryFragment == null) {
 				return nowPlayingFragment;
 			} else {
@@ -610,7 +588,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public void setTitle(CharSequence title) {
-		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+		if(nowPlayingToolbarActive) {
 			getSupportActionBar().setTitle(title);
 		} else {
 			super.setTitle(title);
@@ -657,6 +635,49 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		if(drawerToggle != null) {
 			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
+	}
+
+	@Override
+	protected boolean isDrawerToggleActive() {
+		return !nowPlayingToolbarActive;
+	}
+
+	private void showNowPlayingToolbar() {
+		if(nowPlayingToolbarActive) {
+			return;
+		}
+		nowPlayingToolbarActive = true;
+		currentFragment.stopActionMode();
+
+		// The main toolbar keeps its title, spinner and drawer icon, as it is seen again during the slide back.
+		bottomBar.setVisibility(View.GONE);
+		nowPlayingToolbar.setVisibility(View.VISIBLE);
+		setSupportActionBar(nowPlayingToolbar);
+
+		if(secondaryFragment == null) {
+			nowPlayingFragment.setPrimaryFragment(true);
+		} else {
+			secondaryFragment.setPrimaryFragment(true);
+		}
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	}
+
+	private void showMainToolbar() {
+		if(!nowPlayingToolbarActive) {
+			return;
+		}
+		nowPlayingToolbarActive = false;
+		bottomBar.setVisibility(View.VISIBLE);
+		nowPlayingToolbar.setVisibility(View.GONE);
+		nowPlayingFragment.setPrimaryFragment(false);
+
+		// The new action bar does not know about the spinner of the previous one and would add a second one.
+		if(actionBarSpinner != null && actionBarSpinner.getParent() == mainToolbar) {
+			mainToolbar.removeView(actionBarSpinner);
+		}
+		setSupportActionBar(mainToolbar);
+		recreateSpinner();
 	}
 
 	@Override
@@ -951,7 +972,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	}
 
 	public Toolbar getActiveToolbar() {
-		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
+		return nowPlayingToolbarActive ? nowPlayingToolbar : mainToolbar;
 	}
 
 	@Override
