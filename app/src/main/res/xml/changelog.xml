@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.8.0-rc1" versioncode="220" releasedate="17/10/2026">
+	<release version="5.8.0" versioncode="221" releasedate="01/11/2026">
 		<change>Fix artist bios and images being requested for folders when browsing by folder structure</change>
 		<change>Improve battery life by releasing Wi-Fi and UPnP locks when idle and stopping unnecessary background polling</change>
+		<change>Resume playback after another app temporarily takes audio focus</change>
+		<change>Fix corrupt or partially written play and download queues crashing the app on startup</change>
+		<change>Never cache server error pages as media, which left songs unplayable until the cache was cleared</change>
+		<change>Only show settings that apply to the installed Android version and remove settings made obsolete by the new playback core</change>
+		<change>Remove the USB DAC routing option, which never delivered high-res audio at its native rate</change>
+		<change>Finish the Material 3 migration for dialogs, text fields, menus, switches, progress indicators and date pickers</change>
+		<change>Draw the app edge to edge with correct system bar and toolbar spacing</change>
+		<change>Keep the Now Playing content steady and fade between the bottom bar and toolbar while the panel slides</change>
+		<change>Fix UI flicker while seeking in the Now Playing view</change>
+		<change>Fix playback speed buttons not fitting on narrow screens</change>
+	</release>
+	<release version="5.8.0-rc1" versioncode="220" releasedate="17/10/2026">
 		<change>Add synced lyrics via OpenSubsonic, with an option for lyrics to follow the queue</change>
 		<change>Add entire-library caching</change>
+		<change>Add optional USB DAC routing for high-res playback</change>
 		<change>Add reverse sort for podcast episode lists</change>
 		<change>New ExoPlayer-based playback core, replacing MediaPlayer 1</change>
 		<change>Fade audio smoothly on focus loss/gain instead of ducking abruptly</change>
