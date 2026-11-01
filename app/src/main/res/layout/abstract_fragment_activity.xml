@@ -43,7 +43,7 @@
 				android:layout_height="?attr/actionBarSize"
 				android:layout_width="match_parent"
 				android:elevation="4dp"
-				android:visibility="gone"
+				android:visibility="invisible"
 				android:theme="?attr/actionbarThemeStyle"
 				app:popupTheme="?attr/actionbarPopupStyle"/>
 

@@ -220,19 +220,30 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
-
+				updateBarFade(slideOffset);
 			}
 
 			@Override
 			public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
 				switch (newState) {
+					case DRAGGING:
+						// Switch the action bar while its toolbar is still out of sight, so that the
+						// toolbars look final during the slide instead of changing at the end of it.
+						if(previousState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+							showNowPlayingToolbar();
+						} else if(previousState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+							showMainToolbar();
+						}
+						break;
 					case COLLAPSED:
 						isPanelClosing = false;
 						showMainToolbar();
+						updateBarFade(0f);
 						break;
 					case EXPANDED:
 						isPanelClosing = false;
 						showNowPlayingToolbar();
+						updateBarFade(1f);
 						break;
 				}
 			}
@@ -642,6 +653,19 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		return !nowPlayingToolbarActive;
 	}
 
+	/**
+	 * Fades through from the collapsed bar to the now playing toolbar. The bar is gone by the time the
+	 * toolbar starts to appear, so that the two titles are never shown on top of each other.
+	 */
+	private void updateBarFade(float slideOffset) {
+		float barAlpha = Math.max(0f, 1f - slideOffset * 2f);
+		float toolbarAlpha = Math.max(0f, slideOffset * 2f - 1f);
+		bottomBar.setAlpha(barAlpha);
+		bottomBar.setVisibility(barAlpha > 0f ? View.VISIBLE : View.INVISIBLE);
+		nowPlayingToolbar.setAlpha(toolbarAlpha);
+		nowPlayingToolbar.setVisibility(toolbarAlpha > 0f ? View.VISIBLE : View.INVISIBLE);
+	}
+
 	private void showNowPlayingToolbar() {
 		if(nowPlayingToolbarActive) {
 			return;
@@ -650,8 +674,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		currentFragment.stopActionMode();
 
 		// The main toolbar keeps its title, spinner and drawer icon, as it is seen again during the slide back.
-		bottomBar.setVisibility(View.GONE);
-		nowPlayingToolbar.setVisibility(View.VISIBLE);
 		setSupportActionBar(nowPlayingToolbar);
 
 		if(secondaryFragment == null) {
@@ -668,8 +690,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			return;
 		}
 		nowPlayingToolbarActive = false;
-		bottomBar.setVisibility(View.VISIBLE);
-		nowPlayingToolbar.setVisibility(View.GONE);
 		nowPlayingFragment.setPrimaryFragment(false);
 
 		// The new action bar does not know about the spinner of the previous one and would add a second one.
