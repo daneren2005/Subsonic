@@ -2174,7 +2174,7 @@ public class RESTMusicService implements MusicService {
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		int instance = getInstance(context);
-		boolean authHeader = prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance, true);
+		boolean authHeader = Util.isAuthHeaderEnabled(context, instance);
 		if(authHeader) {
 			String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 			String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
