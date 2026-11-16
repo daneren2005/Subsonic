@@ -48,6 +48,12 @@ public class ServerInfo implements Serializable {
 	 * means that the extensions have not been queried yet.
 	 */
 	private Set<String> openSubsonicExtensions;
+	/**
+	 * The server software's own version (OpenSubsonic {@code serverVersion}).
+	 * Servers can add extensions without changing the Subsonic API version,
+	 * so cached extensions are only valid for the same server version.
+	 */
+	private String serverVersion;
 	
 	public ServerInfo() {
 		type = TYPE_SUBSONIC;
@@ -83,6 +89,13 @@ public class ServerInfo implements Serializable {
 		this.openSubsonicExtensions = extensions;
 	}
 	
+	public String getServerVersion() {
+		return serverVersion;
+	}
+	public void setServerVersion(String serverVersion) {
+		this.serverVersion = serverVersion;
+	}
+
 	public boolean isStockSubsonic() {
 		return type == TYPE_SUBSONIC;
 	}
@@ -107,6 +120,7 @@ public class ServerInfo implements Serializable {
 			return false;
 		} else {
 			return this.restVersion.equals(info.restVersion)
+					&& Objects.equals(this.serverVersion, info.serverVersion)
 					&& Objects.equals(this.openSubsonicExtensions, info.openSubsonicExtensions);
 		}
 	}
@@ -238,7 +252,8 @@ public class ServerInfo implements Serializable {
 	}
 	
 	private static String getCacheName(Context context, int instance) {
-		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
+		// The layout changed, don't read caches written by older versions
+		return "server2-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
 	}
 
 	public static boolean hasArtistInfo(Context context) {

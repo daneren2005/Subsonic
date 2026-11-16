@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -178,9 +179,12 @@ public abstract class AbstractParser {
             	ServerInfo server = new ServerInfo();
             	server.setRestVersion(restVersion);
 
-            	// Preserve the discovered extensions unless the server version changed
+            	server.setServerVersion(get("serverVersion"));
+
+            	// Preserve the discovered extensions unless the server changed
             	ServerInfo previous = ServerInfo.getServerInfo(context, instance);
-            	if (previous != null && restVersion.equals(previous.getRestVersion())) {
+            	if (previous != null && restVersion.equals(previous.getRestVersion())
+            			&& Objects.equals(server.getServerVersion(), previous.getServerVersion())) {
             		server.setOpenSubsonicExtensions(previous.getOpenSubsonicExtensions());
             	}
 
