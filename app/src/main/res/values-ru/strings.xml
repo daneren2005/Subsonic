@@ -12,8 +12,8 @@
 	<string name="common.download">Скачать</string>
     <string name="common.pin">Кешировать</string>
     <string name="common.delete">Удалить</string>
-	<string name="common.star">Добавить в закладки</string>
-	<string name="common.unstar">Удалить из закладок</string>
+	<string name="common.star">Добавить в избранное</string>
+	<string name="common.unstar">Удалить из избранного</string>
 	<string name="common.info">Информация</string>
 	<string name="common.name">Название</string>
 	<string name="common.comment">Комментарий</string>
@@ -40,7 +40,7 @@
     <string name="main.albums_recent">Недавно прослушанные</string>
     <string name="main.albums_frequent">Часто прослушиваемые</string>
     <string name="main.albums_highest">Максимальный рейтинг</string>
-    <string name="main.albums_starred">Закладки</string>
+    <string name="main.albums_starred">Избранное</string>
     <string name="main.albums_random">Случайные</string>
     <string name="main.songs_random">@string/main.albums_random</string>
     <string name="main.songs_starred">@string/main.albums_starred</string>
@@ -115,8 +115,8 @@
     <string name="download.need_download">Необходимо сначала скачать видео</string>
 	<string name="download.no_streaming_player">Нет плеера для воспроизведения потока</string>
     
-	<string name="starring_content_starred">\"%s\" добавлено в закладки</string>
-	<string name="starring_content_unstarred">\"%s\" удалено из закладок</string>
+	<string name="starring_content_starred">\"%s\" добавлено в избранное</string>
+	<string name="starring_content_unstarred">\"%s\" удалено из избранного</string>
     <string name="starring_content_error">Не удалось обновить \"%s\", пожалуйста, попробуйте позже.</string>
 	
 	<string name="playlist_error">Не удалось прочитать списки воспроизведения</string>
@@ -208,7 +208,7 @@
 	<string name="settings.sleep_timer_off">Выключен</string>
 	<string name="settings.sleep_timer_on">Включен</string>
 	<string name="settings.sleep_timer_always_on">Всегда включен</string>
-	<string name="settings.temp_loss_title">Временная потеря связи</string>
+	<string name="settings.temp_loss_title">Когда другое приложение воспроизводит звук</string>
 	<string name="settings.temp_loss_pause">Всегда останавливать</string>
 	<string name="settings.temp_loss_pause_lower">Останавливать, понижать громкость, если требуется</string>
 	<string name="settings.temp_loss_lower">Всегда понижать громкость</string>
@@ -255,7 +255,7 @@
 	<string name="settings.persistent_title">Постоянное уведомление</string>
     <string name="settings.persistent_summary">Показывать уведомление даже во время паузы. Остановка воспроизведения уберет это уведомление.</string>
     <string name="settings.gapless_playback">Непрерывное воспроизведение</string>
-    <string name="settings.gapless_playback_summary">Galaxy S3 может зависать или испытывать прочие трудности с момента начала непрерывного воспроизведения. Выключите эту функцию для исправления данной проблемы.</string>
+    <string name="settings.gapless_playback_summary">Начинать следующую композицию без паузы после её загрузки. Если во время воспроизведения наблюдаются странные ошибки, попробуйте отключить эту функцию.</string>
     <string name="settings.chat_refresh">Частота обновления чата (сек)</string>
     <string name="settings.chat_enabled">Чат активен</string>
     <string name="settings.chat_enabled_summary">Показывать или нет вкладку чата</string>
@@ -284,4 +284,5 @@
         <item quantity="other">%d дней до конца пробного периода</item>
     </plurals>
 
+	<string name="settings.replay_gain_summary">Понижать громкость воспроизведения в соответствии с тегами Replay Gain композиции и альбома. Громкость песен никогда не превышает обычный максимальный уровень.</string>
 </resources>

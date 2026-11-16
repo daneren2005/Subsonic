@@ -22,12 +22,12 @@
 	<string name="common.stream_external">Streama video</string>
 	<string name="common.confirm">Konfirmera</string>
 	<string name="common.confirm_message">Vill du %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">cachen</string>
 	<string name="common.empty">Ingen data</string>
 	<string name="common.warning">Varning</string>
 	<string name="common.close">Stäng</string>
-	<string name="common.false">Ja</string>
-	<string name="common.true">Nej</string>
+	<string name="common.false">Nej</string>
+	<string name="common.true">Ja</string>
 	<string name="common.never">Aldrig</string>
 
     <string name="button_bar.home">Hem</string>
@@ -356,7 +356,7 @@
 	<string name="settings.sleep_timer_off">Av</string>
 	<string name="settings.sleep_timer_on">på</string>
 	<string name="settings.sleep_timer_always_on">Alltid på</string>
-	<string name="settings.temp_loss_title">Förlorade fokus temporärt</string>
+	<string name="settings.temp_loss_title">När en annan app spelar ljud</string>
 	<string name="settings.temp_loss_pause">Pausa alltid</string>
 	<string name="settings.temp_loss_pause_lower">Pause, sänk volymen när tillsagd</string>
 	<string name="settings.temp_loss_lower">Alltid lägre volym</string>
@@ -372,7 +372,7 @@
 	<string name="settings.persistent_title">Ihållande notifikation</string>
 	<string name="settings.persistent_summary">Visa notifikationen även när jag har pausat.  Tryck stop för att ta bort den.</string>
 	<string name="settings.gapless_playback">Spela upp utan mellanrum</string>
-	<string name="settings.gapless_playback_summary">Om du märker några konstiga buggar när du lyssnar kan det hjälpa att slå av den här.</string>
+	<string name="settings.gapless_playback_summary">Starta nästa spår utan mellanrum när det har laddats ner. Om du märker konstiga buggar vid uppspelning kan det hjälpa att stänga av detta.</string>
 	<string name="settings.chat_refresh">Hur ofta ska chat uppdateras (sekunder)</string>
 	<string name="settings.chat_enabled">Chat aktiverad</string>
 	<string name="settings.chat_enabled_summary">Om chatten ska visas i menyn till vänster</string>
@@ -435,7 +435,7 @@
 	<string name="settings.admin_enabled">Admin aktiverad</string>
 	<string name="settings.admin_enabled_summary">Om admin ska visas eller inte i menyn till vänster</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Om volymen ska skalas efter albumet eller spårets replay gain tagg</string>
+	<string name="settings.replay_gain_summary">Sänk uppspelningsvolymen enligt spårets och albumets replay gain-taggar. Låtar blir aldrig starkare än normal maxvolym.</string>
 	<string name="settings.replay_gain_type">Läs från taggar</string>
 	<string name="settings.replay_gain_type.smart">Smart upptäckande</string>
 	<string name="settings.replay_gain_type.album">Album taggar</string>
@@ -597,7 +597,6 @@
 	<string name="details.error">Felmeddelande</string>
 	<string name="details.author">Utvecklare</string>
 	<string name="details.email">Email</string>
-	<string name="details.fork">Forked från</string>
 	<string name="details.version">Version</string>
 	<string name="details.files_cached">Filer cachade</string>
 	<string name="details.files_permanent">Permanent cachade</string>

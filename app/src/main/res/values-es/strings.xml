@@ -22,7 +22,7 @@
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">la caché</string>
 	<string name="common.empty">No hay datos</string>
 	<string name="common.warning">Aviso</string>
 
@@ -78,7 +78,7 @@
 	<string name="menu.about">Acerca de</string>
 	<string name="menu.add_playlist">Añadir a lista de reproducción</string>
 	<string name="menu.remove_playlist">Borrar de lista de reproducción</string>
-	<string name="menu.deleted_playlist">Listas borradas %s</string>
+	<string name="menu.deleted_playlist">Lista de reproducción %s eliminada</string>
 	<string name="menu.deleted_playlist_error">Error al borrar la lista de reproducción %s</string>
 	<string name="menu.log">Enviar Log</string>
 	<string name="menu.set_timer">Ajustar temporizador</string>
@@ -147,7 +147,7 @@
 	<string name="select_podcasts.server_delete">Borrar en el servidor</string>
 	<string name="select_podcasts.downloading">Descargando %s en el servidor</string>
 	<string name="select_podcasts.refreshing">El servidor está comprobando nuevos podcasts ahora</string>
-	<string name="select_podcasts.deleted">Podcasts eliminados %s</string>
+	<string name="select_podcasts.deleted">Podcast %s eliminado</string>
 	<string name="select_podcasts.deleted_error">Error al elimintar el podcast %s</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Error al agregar podcast</string>
@@ -205,9 +205,6 @@
 	<string name="bookmark.delete">Borrar marcador</string>
 	<string name="bookmark.deleted">Borrado marcador para \"%s\"</string>
 	<string name="bookmark.deleted_error">Error al borrar el marcador para \"%s\"</string>
-	<string name="bookmark.details">Canción: %1$s
-		\nComentario: %2$s
-		\nPosición: %3$s</string>
 	<string name="bookmark.resume_title">Reanudar reproducción?</string>
 	<string name="bookmark.resume">Reanudar reproducción \'%1$s\' desde%2$s</string>
 	<string name="bookmark.action_resume">Reanudar</string>
@@ -318,10 +315,10 @@
 	<string name="settings.playlist_random_size_title">Tamaño de la lista de reproducción en aleatorio</string>
 	<string name="settings.sleep_timer_title">Temporizador</string>
 	<string name="settings.sleep_timer_duration_title">Duración del temporizador</string>
-	<string name="settings.sleep_timer_off">Encendido</string>
-	<string name="settings.sleep_timer_on">Apagado</string>
+	<string name="settings.sleep_timer_off">Apagado</string>
+	<string name="settings.sleep_timer_on">Encendido</string>
 	<string name="settings.sleep_timer_always_on">Siempre encendido</string>
-	<string name="settings.temp_loss_title">Pérdida temporal de foco</string>
+	<string name="settings.temp_loss_title">Cuando otra aplicación reproduce audio</string>
 	<string name="settings.temp_loss_pause">Pausar siempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, bajar el volumen cuando sea solicitado</string>
 	<string name="settings.temp_loss_lower">Bajar volumen siempre</string>
@@ -332,7 +329,7 @@
 	<string name="settings.persistent_title">Notificación permanente</string>
 	<string name="settings.persistent_summary">Mostrar la notificación incluso tras pausar. Pulsar botón stop para quitarlo.</string>
 	<string name="settings.gapless_playback">Reproducción sin pausas</string>
-	<string name="settings.gapless_playback_summary">El Galaxy S3 parece sufrir algunos bloqueos y funcionamentos extraños desde la introducción de la reproducción sin pausas. Desmarca esta opción para solucionar el problema.</string>
+	<string name="settings.gapless_playback_summary">Iniciar la siguiente canción sin pausa una vez terminada la descarga. Si experimentas errores extraños durante la reproducción, desactivar esta opción puede ayudar.</string>
 	<string name="settings.chat_refresh">Tiempo de actualización de chat (Segundos)</string>
 	<string name="settings.chat_enabled">Chat habilitado</string>
 	<string name="settings.chat_enabled_summary">Para mostrar o no mostrar la pestaña de chat. Reinicia la aplicación tras el cambio.</string>
@@ -375,7 +372,7 @@
 	<string name="settings.menu_options.play_last_summary">Mostrar Reproducir Anterior en menús</string>
 	<string name="settings.menu_options.star_summary">Mostrar estrella en menús</string>
 	<string name="settings.menu_options.shared_summary">Mostrar Compartir en menús</string>
-	<string name="settings.shares_enabled">Compartir habilitadoShares Enabled</string>
+	<string name="settings.shares_enabled">Compartidos habilitados</string>
 	<string name="settings.shares_enabled_summary">Mostrar o no mostrar la lista de compartidos en el menú desplegable</string>
 	<string name="settings.server_internal_address">Dirección de red interna</string>
 	<string name="settings.browse_by_tags">Explorar por tags</string>
@@ -393,10 +390,10 @@
 	<string name="settings.server_sync_summary">Activar o no la sincronización en este server</string>
 	<string name="settings.server_sync">Sincronización activada</string>
 	<string name="settings.menu_options.rate_summary">Mostrar valoración en los menús</string>
-	<string name="settings.replay_gain">Ganancia de reproducción</string>
-	<string name="settings.replay_gain_summary">Modificar la ganancia de reproducción por tags de pista o album</string>
-	<string name="settings.replay_gain_bump">Ganancia de Pre-amp en la reproducciónReplay Gain Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Canciones sin ganancia de reproducciónSongs without Replay Gain</string>
+	<string name="settings.replay_gain">Replay Gain</string>
+	<string name="settings.replay_gain_summary">Bajar el volumen de reproducción según las etiquetas de Replay Gain de pista y álbum. Las canciones nunca suenan más fuerte que el volumen máximo normal.</string>
+	<string name="settings.replay_gain_bump">Preamplificación de Replay Gain</string>
+	<string name="settings.replay_gain_untagged">Canciones sin Replay Gain</string>
 	<string name="settings.replay_gain_type">Leer desde los tags</string>
 	<string name="settings.replay_gain_type.smart">Detección inteligente</string>
 	<string name="settings.replay_gain_type.album">Tags de albums</string>

@@ -21,7 +21,7 @@
 	<string name="common.play_external">Video abspielen</string>
 	<string name="common.stream_external">Video streamen</string>
 	<string name="common.confirm">Bestätigen</string>
-	<string name="common.confirm_message">Wollen Sie %2$s %1$s?</string>
+	<string name="common.confirm_message">Möchten Sie %1$s: %2$s?</string>
 	<string name="common.confirm_message_cache">den Cache</string>
 	<string name="common.empty">Nicht gefunden</string>
 	<string name="common.warning">Warnung</string>
@@ -58,7 +58,7 @@
     <string name="main.settings">Einstellungen</string>
     <string name="main.albums_title">Album Liste</string>
 	<string name="main.albums_per_folder">Pro Ordner</string>
-    <string name="main.albums_newest">Neue Alben</string>
+    <string name="main.albums_newest">Zuletzt hinzugefügt</string>
     <string name="main.albums_recent">Vor kurzem gespielt</string>
     <string name="main.albums_frequent">Am meisten gespielt</string>
     <string name="main.albums_highest">Top bewertet</string>
@@ -87,7 +87,7 @@
 	<string name="menu.about">Über</string>
 	<string name="menu.add_playlist">Zur Wiedergabeliste hinzufügen</string>
 	<string name="menu.remove_playlist">Von Wiedergabeliste entfernen</string>
-	<string name="menu.deleted_playlist">Lösche Wiedergabeliste %s</string>
+	<string name="menu.deleted_playlist">Wiedergabeliste %s gelöscht</string>
 	<string name="menu.deleted_playlist_error">Löschen der Wiedergabeliste %s fehlgeschlagen</string>
 	<string name="menu.log">Sende Log</string>
 	<string name="menu.set_timer">Setze Timer</string>
@@ -111,7 +111,7 @@
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
-	<string name="playlist.updated_info">Aktualisiere Wiedergabeliste für %s</string>
+	<string name="playlist.updated_info">Wiedergabelisteninformationen für %s aktualisiert</string>
 	<string name="playlist.updated_info_error">Aktualisierung der Wiedergabeliste %s fehlgeschlagen</string>
 	<string name="playlist.overwrite">Wiedergabeliste überschreiben</string>
 	<string name="playlist.add_to">Zur Wiedergabeliste hinzu</string>
@@ -160,7 +160,7 @@
 	<string name="select_podcasts.server_delete">Lösche vom Server</string>
 	<string name="select_podcasts.downloading">Lade %s auf den Server herunter</string>
 	<string name="select_podcasts.refreshing">Der Server prüft auf neue Podcasts.</string>
-	<string name="select_podcasts.deleted">Lösche Podcast %s</string>
+	<string name="select_podcasts.deleted">Podcast %s gelöscht</string>
 	<string name="select_podcasts.deleted_error">Fehler beim löschen des Podcast %s</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Konnte Podcast nicht hinzufügen</string>
@@ -206,7 +206,7 @@
 	<string name="download.downloading_summary_expanded">Aktuell: %1$s
 		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
-	<string name="download.restore_play_queue">Wiedergabe fortsetzen bei</string>
+	<string name="download.restore_play_queue">dort weiterhören, wo auf einem anderen gerät aufgehört wurde, stand</string>
 
 	<string name="sync.new_podcasts">Neuer Podcast verfügbar</string>
 	<string name="sync.new_playlists">Neu in Wiedergabeliste</string>
@@ -223,15 +223,10 @@
 	<string name="removed_playlist">%1$s entfernt aus \"%2$s\"</string>
 	
 	<string name="bookmark.delete">Lösche Lesezeichen</string>
-	<string name="bookmark.delete_title">Lösche Lesezeichen für</string>
+	<string name="bookmark.delete_title">Lesezeichen löschen</string>
 	<string name="bookmark.deleted">Lesezeichen für \"%s\" gelöscht</string>
 	<string name="bookmark.deleted_error">Löschen des Lesezeichen für \"%s\" ist fehlgeschlagen</string>
 	<string name="bookmark.details_title">Lesezeichendetails</string>
-	<string name="bookmark.details">Lied: %1$s
-		\nPosition: %2$s
-		\nErzeugt: %3$s
-		\nZuletzt aktualisiert: %4$s
-		\nKommentar: %5$s</string>
 	<string name="bookmark.resume_title">Wiedergabe fortsetzen?</string>
 	<string name="bookmark.resume">\'%1$s\' fortsetzen bei %2$s</string>
 	<string name="bookmark.action_resume">Fortsetzen</string>
@@ -336,7 +331,7 @@
 	<string name="settings.sleep_timer_off">Aus</string>
 	<string name="settings.sleep_timer_on">An</string>
 	<string name="settings.sleep_timer_always_on">Immer An</string>
-	<string name="settings.temp_loss_title">Verhalten bei Benachrichtigungen</string>
+	<string name="settings.temp_loss_title">Wenn eine andere App Audio wiedergibt</string>
 	<string name="settings.temp_loss_pause">Immer pausieren</string>
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
 	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
@@ -347,7 +342,7 @@
 	<string name="settings.persistent_title">Dauerhafte Benachrichtigung</string>
 	<string name="settings.persistent_summary">Zeige die Benachrichtigung auch nach pausieren der Wiedergabe.  Zum entfernen Stop auswählen.</string>
 	<string name="settings.gapless_playback">Lückenlose Wiedergabe</string>
-	<string name="settings.gapless_playback_summary">Das Galaxy S3 scheint Probleme seit der Einführung der lückenlosen Wiedergabe zu haben. Zur Behebung schalten Sie dies ab.</string>
+	<string name="settings.gapless_playback_summary">Startet das nächste Lied ohne Unterbrechung, sobald es heruntergeladen wurde. Bei seltsamen Fehlern während der Wiedergabe kann es helfen, dies abzuschalten.</string>
 	<string name="settings.chat_refresh">Chat Aktualisierungsrate (Sekunden)</string>
 	<string name="settings.chat_enabled">Chat aktiv</string>
 	<string name="settings.chat_enabled_summary">Chat im Seitenmenü anzeigen</string>
@@ -404,14 +399,14 @@
 	<string name="settings.large_album_art_summary">Verwende große Cover zur Anzeige der Alben anstatt einer Liste</string>
 	<string name="settings.admin_enabled">Administration aktiviert</string>
 	<string name="settings.admin_enabled_summary">Administration im Seitenmenü anzeigen</string>
-	<string name="settings.replay_gain">Wiedergabeverstärkung</string>
-	<string name="settings.replay_gain_summary">Gibt an, ob die Wiedergabeverstärkung anhand von Tags erfolgen soll.</string>
+	<string name="settings.replay_gain">Replay Gain</string>
+	<string name="settings.replay_gain_summary">Verringert die Lautstärke gemäß den Replay-Gain-Tags von Titel und Album. Lieder werden nie lauter als die normale Maximallautstärke.</string>
 	<string name="settings.replay_gain_type">Anhand der Tags</string>
 	<string name="settings.replay_gain_type.smart">Automatische Erkennung</string>
 	<string name="settings.replay_gain_type.album">Album Tag</string>
 	<string name="settings.replay_gain_type.track">Track Tag</string>
-	<string name="settings.replay_gain_bump">Wiedergabevorverstärkung</string>
-	<string name="settings.replay_gain_untagged">Lieder ohne Wiedergabeverstärkung</string>
+	<string name="settings.replay_gain_bump">Replay-Gain-Vorverstärkung</string>
+	<string name="settings.replay_gain_untagged">Lieder ohne Replay-Gain-Tags</string>
 	<string name="settings.casting">Casting</string>
 	<string name="settings.casting_proxy">Nutze DSub2000 als Proxy</string>
 	<string name="settings.casting_proxy_summary">Sende alles über dieses Gerät als Proxy.  Dies umgeht Probleme mit selbstsignierten Zertifikaten.</string>
@@ -426,7 +421,7 @@
 
 	<string name="share.expires">Ablauf: %s</string>
 	<string name="share.expires_never">nie</string>
-	<string name="share.deleted">Lösche Freigabe %s</string>
+	<string name="share.deleted">Freigabe %s gelöscht</string>
 	<string name="share.deleted_error">Löschen der Freigabe %s fehlgeschlagen</string>
 	<string name="share.no_expiration">Kein Ablauf</string>
 	<string name="share.expiration">Ablauf:</string>

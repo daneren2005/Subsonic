@@ -21,7 +21,7 @@
 	<string name="common.stream_external">Stream video</string>
 	<string name="common.confirm">Bevestig</string>
 	<string name="common.confirm_message">Wil je %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">de cache</string>
 	<string name="common.empty">Geen data</string>
 	<string name="common.warning">Waarschuwing</string>
 	<string name="common.close">Sluiten</string>
@@ -115,7 +115,7 @@
     <string name="playlist.label">Speellijsten</string>
 	<string name="playlist.update_info">Update informatie</string>
 	<string name="playlist.updated_info">Update speellijst informatie voor %s</string>
-	<string name="playlist.updated_info_error">Niet gelust speellijst information for %s te updaten</string>
+	<string name="playlist.updated_info_error">Bijwerken van speellijstinformatie voor %s mislukt</string>
 	<string name="playlist.overwrite">Overschrijf bestaande playlist</string>
 	<string name="playlist.add_to">Voeg toe aan playlist</string>
 	<string name="playlist.create_new">Creëer nieuw</string>
@@ -188,7 +188,7 @@
 	<string name="download.menu_remove_played_songs">Verwijder afgespeelde nummers</string>
     <string name="download.playlist_title">Bewaar playlist</string>
     <string name="download.playlist_name">Voer de naam in van de playlist:</string>
-    <string name="download.playlist_saving">Playlist \"%s\ wordt opgeslagen"...</string>
+    <string name="download.playlist_saving">Playlist \"%s\" wordt opgeslagen...</string>
     <string name="download.playlist_done">Playlist was succesvol opgeslagen.</string>
     <string name="download.playlist_error">Niet gelukt playlist op te slaan, probeer het later nog eens.</string>
     <string name="download.repeat_off">Herhalen uit</string>
@@ -219,8 +219,8 @@
 	<string name="sync.new_albums">Nieuwe albums beschikbaar</string>
 	<string name="sync.new_starred">Nieuwe nummers met sterren beschikbaar</string>
     
-	<string name="starring_content_starred">Met sterren \"%s\"</string>
-	<string name="starring_content_unstarred">Zoner sterren \"%s\"</string>
+	<string name="starring_content_starred">Ster toegevoegd aan \"%s\"</string>
+	<string name="starring_content_unstarred">Ster verwijderd van \"%s\"</string>
     <string name="starring_content_error">Kon \"%s\" niet updaten, probeer het later nog eens.</string>
 
 	<string name="playlist.mine">Mijn playlists</string>
@@ -357,7 +357,7 @@
 	<string name="settings.sleep_timer_off">Uit</string>
 	<string name="settings.sleep_timer_on">Aan</string>
 	<string name="settings.sleep_timer_always_on">Altijd aan</string>
-	<string name="settings.temp_loss_title">Tijdelijk focus verlies</string>
+	<string name="settings.temp_loss_title">Wanneer een andere app audio afspeelt</string>
 	<string name="settings.temp_loss_pause">Altijd pauzeren</string>
 	<string name="settings.temp_loss_pause_lower">Pauze, lagere volume desgevraagd</string>
 	<string name="settings.temp_loss_lower">Altijd lagere volume</string>
@@ -373,7 +373,7 @@
 	<string name="settings.persistent_title">Permanente vermelding</string>
 	<string name="settings.persistent_summary">Toon de vermelding zelfs na pauzeren. Druk op de stopknop om de vermelding te verwijderen.</string>
 	<string name="settings.gapless_playback">Ononderbroken afspelen</string>
-	<string name="settings.gapless_playback_summary">Indien je vreemde storingen ondervindt tijdens het afspelen, kan het uitzetten van deze functie misschien helpen.</string>
+	<string name="settings.gapless_playback_summary">Start het volgende nummer zonder pauze zodra het gedownload is. Als je vreemde fouten ziet tijdens het afspelen, kan dit uitzetten helpen.</string>
 	<string name="settings.chat_refresh">Chat vernieuwingsfrequentie (sec.)</string>
 	<string name="settings.chat_enabled">Chat aanzetten</string>
 	<string name="settings.chat_enabled_summary">Al dan niet weergeven van de chatlijst in de lade</string>
@@ -389,7 +389,7 @@
 	<string name="settings.hide_widget_summary">Verberg widget na verlaten app</string>
 	<string name="settings.podcasts_enabled">Podcasts ingeschakeld</string>
 	<string name="settings.podcasts_enabled_summary">Al dan niet weergeven van de podcastlijst in de lade</string>
-	<string name="settings.bookmarks_enabled">Bladwijzers ingeschakelPlayback</string>
+	<string name="settings.bookmarks_enabled">Bladwijzers ingeschakeld</string>
 	<string name="settings.bookmarks_enabled_summary">Al dan niet weergeven van de bladwijzerlijst in de lade</string>
 	<string name="settings.shares_enabled">Shares ingeschakeld</string>
 	<string name="settings.shares_enabled_summary">Al dan niet weergeven van de shareslijst in de lade</string>
@@ -436,7 +436,7 @@
 	<string name="settings.admin_enabled">Beheer ingeschakeld</string>
 	<string name="settings.admin_enabled_summary">Al dan niet weergeven van de adminlijst in de lade</string>
 	<string name="settings.replay_gain">Normaliseren</string>
-	<string name="settings.replay_gain_summary">Aldan of niet de afspeelvolume per nummer of album normaliseren adhv (replay gain) tags</string>
+	<string name="settings.replay_gain_summary">Of het afspeelvolume per nummer of album genormaliseerd wordt aan de hand van replay gain-tags. Nummers worden nooit luider dan het normale maximumvolume.</string>
 	<string name="settings.replay_gain_type">Lees van tags</string>
 	<string name="settings.replay_gain_type.smart">Slimme detectie</string>
 	<string name="settings.replay_gain_type.album">Album tags</string>

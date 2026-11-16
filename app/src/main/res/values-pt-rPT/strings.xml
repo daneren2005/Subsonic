@@ -22,7 +22,7 @@
 	<string name="common.stream_external">Transmitir vídeo</string>
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Pretende %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">a cache</string>
 	<string name="common.empty">Sem dados</string>
 	<string name="common.warning">Aviso</string>
 	<string name="common.close">Fechar</string>
@@ -31,7 +31,7 @@
 	<string name="common.never">Nunca</string>
 
     <string name="button_bar.home">Início</string>
-    <string name="button_bar.browse">Bibilioteca</string>
+    <string name="button_bar.browse">Biblioteca</string>
 	<string name="button_bar.playlists">Listas de reprodução</string>
     <string name="button_bar.now_playing">A reproduzir agora</string>
 	<string name="button_bar.podcasts">Podcasts</string>
@@ -377,7 +377,7 @@
 	<string name="settings.sleep_timer_off">Desligado</string>
 	<string name="settings.sleep_timer_on">Ligado</string>
 	<string name="settings.sleep_timer_always_on">Sempre ligado</string>
-	<string name="settings.temp_loss_title">Perda temporária de foco</string>
+	<string name="settings.temp_loss_title">Quando outra aplicação reproduz áudio</string>
 	<string name="settings.temp_loss_pause">Pausar sempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, baixar volume quando pedido</string>
 	<string name="settings.temp_loss_lower">Baixar sempre o volume</string>
@@ -393,7 +393,7 @@
 	<string name="settings.persistent_title">Notificação persistente</string>
 	<string name="settings.persistent_summary">Mostrar a notificação mesmo depois de pausar.  Pressione o botão de parar para a remover</string>
 	<string name="settings.gapless_playback">Reprodução sem pausas</string>
-	<string name="settings.gapless_playback_summary">Se notar falhas estranhas durante a reprodução, desmarcar esta opção pode ajudar</string>
+	<string name="settings.gapless_playback_summary">Iniciar a música seguinte sem interrupção assim que terminar a transferência. Se notar falhas estranhas durante a reprodução, desativar esta opção pode ajudar.</string>
 	<string name="settings.chat_refresh">Taxa de atualização do chat (s)</string>
 	<string name="settings.chat_enabled">Ativar chat</string>
 	<string name="settings.chat_enabled_summary">Mostrar ou não a opção \"Chat\" no menu lateral</string>
@@ -463,7 +463,7 @@
 	<string name="settings.admin_enabled">Ativar administração</string>
 	<string name="settings.admin_enabled_summary">Mostrar ou não a opção \"Administração\" no menu lateral</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Escalar ou não o volume da reprodução por etiquetas \"replay gain\" nos álbuns e faixas</string>
+	<string name="settings.replay_gain_summary">Baixar o volume de reprodução de acordo com as etiquetas de replay gain da faixa e do álbum. As músicas nunca ficam mais altas do que o volume máximo normal.</string>
 	<string name="settings.replay_gain_type">Ler pelas etiquetas</string>
 	<string name="settings.replay_gain_type.smart">Deteção inteligente</string>
 	<string name="settings.replay_gain_type.album">Etiquetas nos álbuns</string>

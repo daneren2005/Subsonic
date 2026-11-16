@@ -23,7 +23,7 @@
 	<string name="common.stream_external">Videó streamelése</string>
 	<string name="common.confirm">Jóváhagyás</string>
 	<string name="common.confirm_message">Biztos benne? %1$s -> \"%2$s\"</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">gyorsítótár</string>
 	<string name="common.empty">Nem található!</string>
 	<string name="common.warning">Figyelem!</string>
 	<string name="common.close">Bezár</string>
@@ -156,7 +156,7 @@
 
 	<string name="offline.sync_dialog_title">Szinkronizálásra váró offline dalok</string>
 	<string name="offline.sync_dialog_message">%1$d offline lejátszási adat feldolgozása?
-		\n%2$d offline kedvenc feldolgozása?
+		\n%2$d offline csillagozás feldolgozása?
 	</string>
 	<string name="offline.sync_dialog_default">A választás használata alapértelmezettként</string>
 	<string name="offline.sync_success">%1$d dal sikeresen szinkronizálva</string>
@@ -385,8 +385,6 @@
 	<string name="settings.hide_media_title">Elrejtés</string>
 	<string name="settings.hide_media_summary">Zenefájlok elrejtése egyéb alkalmazások elől.</string>
 	<string name="settings.hide_media_toast">A következő alkalomtól lép életbe, amikor az Android zenefájlokat keres az eszközön.</string>
-	<string name="settings.media_button_title">Média vezérlőgombok</string>
-	<string name="settings.media_button_summary">A lejátszó irányítása a bluetooth eszköz vagy a fülhallgató vezérlőgombjaival.</string>
 	<string name="settings.screen_lit_title">Képernyő ébrentartása</string>
 	<string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt a magasabb letöltési sebesség érdekében.</string>
 	<string name="settings.playlist_title">Lejátszási listák</string>
@@ -396,7 +394,7 @@
 	<string name="settings.sleep_timer_off">Ki</string>
 	<string name="settings.sleep_timer_on">Be</string>
 	<string name="settings.sleep_timer_always_on">Mindig be</string>
-	<string name="settings.temp_loss_title">Külső esemény bekövetkeztekor</string>
+	<string name="settings.temp_loss_title">Amikor egy másik alkalmazás hangot játszik le</string>
 	<string name="settings.temp_loss_summary">Viselkedés, amikor a navigációs TTS, a hangalapú asszisztensek vagy egyéb alkalmazások hangfókuszt kérnek</string>
 	<string name="settings.temp_loss_pause">Megállítás minden esetben</string>
 	<string name="settings.temp_loss_pause_lower">Megállítás, kérésre alacsonyabb hangerő</string>
@@ -413,9 +411,7 @@
 	<string name="settings.persistent_title">Állandó kijelzés</string>
 	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a bezárás gombot a törléséhez!</string>
 	<string name="settings.gapless_playback">Egybefüggő lejátszás (Gapless)</string>
-	<string name="settings.gapless_playback_summary">Ha lefagyásokat/furcsaságokat tapasztal az egybefüggő lejátszás (Gapless) engedélyezése után, a probléma megoldásához kapcsolja ki a funkciót!</string>
-	<string name="settings.usb_dac_exclusive_title">Hang átirányítása USB DAC-ra</string>
-	<string name="settings.usb_dac_exclusive_summary">Lejátszás továbbítása csatlakoztatott USB DAC-ra, amennyiben elérhető. A beállítás a következő daltól lép érvénybe. Android 9+.</string>
+	<string name="settings.gapless_playback_summary">A következő dal hézag nélkül indul, amint befejeződött a letöltése. Ha furcsa hibákat tapasztal lejátszás közben, a kikapcsolása segíthet.</string>
 	<string name="settings.chat_refresh">Csevegés frissítési gyakorisága (mp.)</string>
 	<string name="settings.chat_enabled">Csevegés (Chat) engedélyezése</string>
 	<string name="settings.chat_enabled_summary">Csevegés (Chat) menüpont megjelenítése az elhúzható oldalsávon.</string>
@@ -499,8 +495,6 @@
 	<string name="settings.casting_proxy_summary">Streamelés az eszközön (mint egy proxyn) keresztül. Ez megoldást jelenthet néhány esetben, pl. saját aláírású tanúsítvány használatakor.</string>
 	<string name="settings.rename_duplicates">Duplikált dalok átnevezése</string>
 	<string name="settings.rename_duplicates_summary">Duplikált dalok átnevezése az eredeti fájlnévre, így megkülönböztethetővé válnak.</string>
-	<string name="settings.start_on_headphones">Elindítás fülhallgatóval</string>
-	<string name="settings.start_on_headphones_summary">Lejátszó elindítása fülhallgató csatlakoztatásakor. Ez a funkció olyan szolgáltatás használatát igényli, ami a DSub2000 elindítása nélkül tudja kontrollálni a fülhallgató csatlakoztatási eseményeket.</string>
 	<string name="settings.color_action_bar">Színes műveletsávok</string>
 	<string name="settings.color_action_bar.summary">Színes művelet- és értesítési sáv használata.</string>
 	<string name="settings.general_action_bar_color">Az általános műveletsáv színe</string>
@@ -512,8 +506,6 @@
 	<string name="settings.shuffle_by_album.false">Dalsorrend keverése az összes dalt együtt kezelve.</string>
 	<string name="settings.casting_stream_original">Eredeti stream</string>
 	<string name="settings.casting_stream_original_summary">Az eredeti fájl streamelése, ha a Cast-kompatibilis eszköz támogatja a fájltípust.</string>
-	<string name="settings.heads_up_notification">Felugró értesítések (5.0+)</string>
-	<string name="settings.heads_up_notification_summary">Lejátszási értesítések megjelenítése felugró értesítésekként (Android Lollipop+).</string>
 	<string name="settings.casting_cache">Casting közbeni gyorsítótárazás</string>
 	<string name="settings.casting_cache_summary">Az éppen lejátszott dal gyorsítótárazása a tartalomátküldés (Casting) alatt.</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA engedélyezve</string>
@@ -522,8 +514,6 @@
 	<string name="settings.casting.chromecast_available_summary">Hogy a Chromecast-támogatás engedélyezve van-e ebben a DSub2000-es verzióban.</string>
 	<string name="settings.rewind_interval">Visszatekerés időintervalluma</string>
 	<string name="settings.fastforward_interval">Gyors előretekerés időintervalluma</string>
-	<string name="settings.media_style_notification">Natív Android médiaértesítés (5.0+)</string>
-	<string name="settings.media_style_notification_summary">A lejátszással kapcsolatos értesítések megjelenítése natív médiaértesítésként (kizárólag Android Lollipop vagy újabb verziókon).</string>
 
 	<string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
