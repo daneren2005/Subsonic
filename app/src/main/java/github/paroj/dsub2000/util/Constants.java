@@ -179,6 +179,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED = "replayGainUntagged2";
 	public static final String PREFERENCES_KEY_REPLAY_GAIN_TYPE= "replayGainType";
 	public static final String PREFERENCES_KEY_ALBUMS_PER_FOLDER = "albumsPerFolder";
+	public static final String PREFERENCES_KEY_MAIN_SHOW_SONGS = "mainShowSongs";
 	public static final String PREFERENCES_KEY_CAST_PROXY = "castProxy";
 	public static final String PREFERENCES_KEY_DISABLE_EXIT_PROMPT = "disableExitPrompt";
 	public static final String PREFERENCES_KEY_RENAME_DUPLICATES = "renameDuplicates";

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import github.paroj.dsub2000.R;
 import github.paroj.dsub2000.adapter.MainAdapter;
 import github.paroj.dsub2000.adapter.SectionAdapter;
+import github.paroj.dsub2000.domain.MusicFolder;
 import github.paroj.dsub2000.domain.ServerInfo;
 import github.paroj.dsub2000.util.Constants;
 import github.paroj.dsub2000.util.FileUtil;
@@ -36,11 +37,13 @@ import github.paroj.dsub2000.view.UpdateView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.core.content.FileProvider;
 
-public class MainFragment extends SelectRecyclerFragment<Integer> {
+public class MainFragment extends SelectRecyclerFragment<Integer> implements MainAdapter.OnControlsChanged {
 	private static final String TAG = MainFragment.class.getSimpleName();
 	public static final String SONGS_LIST_PREFIX = "songs-";
 	public static final String SONGS_NEWEST = SONGS_LIST_PREFIX + "newest";
@@ -51,19 +54,94 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	public static final String SONGS_ALPHABETICAL = SONGS_LIST_PREFIX + "alphabetical";
 	public static final String SONGS_YEARS = SONGS_LIST_PREFIX + "years";
 
+	/** The folders the lists can be limited to, null while unknown or when there is nothing to choose */
+	private List<MusicFolder> musicFolders;
+	/** Lists shown on the page that the server does not support */
+	private final Set<Integer> unsupported = new HashSet<>();
+
 	public MainFragment() {
 		super();
 		pullToRefresh = false;
 		serialize = false;
 		backgroundUpdate = false;
 		alwaysFullscreen = true;
+		// The overview is laid out as tiles
+		largeAlbums = true;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		View view = super.onCreateView(inflater, container, bundle);
 		detectOpenSubsonicExtensions();
+		loadMusicFolders();
 		return view;
+	}
+
+	private void rebuildAdapter() {
+		if (recyclerView != null && objects != null) {
+			recyclerView.setAdapter(adapter = getAdapter(objects));
+		}
+	}
+
+	private void loadMusicFolders() {
+		if (Util.isOffline(context) || !ServerInfo.canAlbumListPerFolder(context)) {
+			return;
+		}
+
+		new SilentBackgroundTask<List<MusicFolder>>(context) {
+			@Override
+			protected List<MusicFolder> doInBackground() throws Throwable {
+				return MusicServiceFactory.getMusicService(context).getMusicFolders(false, context, this);
+			}
+
+			@Override
+			protected void done(List<MusicFolder> result) {
+				// Nothing to choose from with a single folder
+				musicFolders = result != null && result.size() > 1 ? result : null;
+				if (musicFolders != null) {
+					rebuildAdapter();
+				}
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Log.d(TAG, "Failed to load music folders", error);
+			}
+		}.execute();
+	}
+
+	private MusicFolder getSelectedFolder() {
+		if (musicFolders == null || !Util.getAlbumListsPerFolder(context)) {
+			return null;
+		}
+
+		String id = Util.getSelectedMusicFolderId(context);
+		for (MusicFolder folder : musicFolders) {
+			if (folder.getId().equals(id)) {
+				return folder;
+			}
+		}
+		return null;
+	}
+
+	private boolean isShowingSongs() {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MAIN_SHOW_SONGS, false);
+	}
+
+	@Override
+	public void onShowSongsChanged(boolean showSongs) {
+		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_MAIN_SHOW_SONGS, showSongs).apply();
+		rebuildAdapter();
+	}
+
+	@Override
+	public void onMusicFolderChanged(MusicFolder musicFolder) {
+		// The lists follow the folder selected for the library, so choosing one here selects it there too
+		if (musicFolder != null) {
+			Util.setSelectedMusicFolderId(context, musicFolder.getId());
+		}
+		Util.setAlbumListsPerFolder(context, musicFolder != null);
+		rebuildAdapter();
 	}
 
 	/**
@@ -87,9 +165,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 			@Override
 			protected void done(Void result) {
-				if (recyclerView != null && objects != null) {
-					recyclerView.setAdapter(adapter = getAdapter(objects));
-				}
+				rebuildAdapter();
 			}
 
 			@Override
@@ -151,54 +227,57 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		List<List<Integer>> sections = new ArrayList<>();
 		List<String> headers = new ArrayList<>();
 
+		// Album and song lists share their slots, so switching between them keeps each list in its spot
+		// and shows which lists the server does not support
+		unsupported.clear();
+		boolean showSongs = isShowingSongs();
+		sections.add(showSongs ? getSongLists() : getAlbumLists());
+		headers.add(MainAdapter.HEADER_LISTS);
+
+		return new MainAdapter(context, headers, sections, unsupported, this, showSongs, musicFolders, getSelectedFolder(), this);
+	}
+
+	private void addList(List<Integer> lists, int list, boolean supported) {
+		lists.add(list);
+		if(!supported) {
+			unsupported.add(list);
+		}
+	}
+
+	private List<Integer> getAlbumLists() {
 		List<Integer> albums = new ArrayList<>();
 		albums.add(R.string.main_albums_newest);
-		albums.add(R.string.main_albums_random);
-		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			albums.add(R.string.main_albums_alphabetical);
-		}
-		if(!Util.isTagBrowsing(context)) {
-			albums.add(R.string.main_albums_highest);
-		}
-		albums.add(R.string.main_albums_starred);
-		albums.add(R.string.main_albums_genres);
-		albums.add(R.string.main_albums_year);
 		albums.add(R.string.main_albums_recent);
 		albums.add(R.string.main_albums_frequent);
+		addList(albums, R.string.main_albums_highest, !Util.isTagBrowsing(context));
+		albums.add(R.string.main_albums_starred);
+		albums.add(R.string.main_albums_random);
+		addList(albums, R.string.main_albums_alphabetical, ServerInfo.checkServerVersion(context, "1.8"));
+		albums.add(R.string.main_albums_genres);
+		albums.add(R.string.main_albums_year);
+		return albums;
+	}
 
-		sections.add(albums);
-		headers.add("albums");
+	private List<Integer> getSongLists() {
+		boolean songLists = ServerInfo.hasOpenSubsonicExtension(context, Constants.OPENSUBSONIC_EXTENSION_SONG_LISTS);
+		boolean madsonic = !songLists && ServerInfo.isMadsonic6(context);
+		boolean madsonicPlayed = madsonic && ServerInfo.checkServerVersion(context, "2.0.1");
 
 		List<Integer> songs = new ArrayList<>();
-
-		if(ServerInfo.isMadsonic6(context)) {
-
-			songs.add(R.string.main_songs_newest);
-			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
-				songs.add(R.string.main_songs_top_played);
-			}
-			songs.add(R.string.main_songs_recent);
-			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
-				songs.add(R.string.main_songs_frequent);
-			}
-
-		} else if(ServerInfo.hasOpenSubsonicExtension(context, Constants.OPENSUBSONIC_EXTENSION_SONG_LISTS)) {
-
-			songs.add(R.string.main_songs_newest);
-			songs.add(R.string.main_songs_recent);
-			songs.add(R.string.main_songs_frequent);
-
+		addList(songs, R.string.main_songs_newest, songLists || madsonic);
+		addList(songs, R.string.main_songs_recent, songLists || madsonic);
+		addList(songs, R.string.main_songs_frequent, songLists || madsonicPlayed);
+		addList(songs, R.string.main_songs_highest, songLists);
+		songs.add(R.string.main_songs_starred);
+		addList(songs, R.string.main_songs_random, ServerInfo.checkServerVersion(context, "1.2.0"));
+		addList(songs, R.string.main_songs_alphabetical, songLists);
+		addList(songs, R.string.main_songs_genres, ServerInfo.checkServerVersion(context, "1.9"));
+		addList(songs, R.string.main_songs_year, songLists);
+		if(madsonicPlayed) {
+			// Madsonic only, there is no matching album list
+			songs.add(R.string.main_songs_top_played);
 		}
-
-		if(ServerInfo.checkServerVersion(context, "1.2.0")) {
-			songs.add(R.string.main_songs_random);
-		}
-        songs.add(R.string.main_songs_starred);
-
-		sections.add(songs);
-		headers.add("songs");
-
-		return new MainAdapter(context, headers, sections, this);
+		return songs;
 	}
 
 	@Override
@@ -211,30 +290,30 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		return R.string.common_appname;
 	}
 
-	private void showAlbumList(String type) {
-		if("genres".equals(type)) {
-			SubsonicFragment fragment = new SelectGenreFragment();
-			replaceFragment(fragment);
-		} else if("years".equals(type)) {
-			SubsonicFragment fragment = new SelectYearFragment();
-			replaceFragment(fragment);
-		} else {
-			// Clear out recently added count when viewing
-			if("newest".equals(type)) {
-				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
-				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
-				editor.commit();
-			}
-			
-			SubsonicFragment fragment = new SelectDirectoryFragment();
-			Bundle args = new Bundle();
-			args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
-			args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
-			args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
-			fragment.setArguments(args);
+	/** Shows the genres or decades, choosing one opens the list of the given type */
+	private void showChooser(SubsonicFragment fragment, String type) {
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+		fragment.setArguments(args);
+		replaceFragment(fragment);
+	}
 
-			replaceFragment(fragment);
+	private void showAlbumList(String type) {
+		// Clear out recently added count when viewing
+		if("newest".equals(type)) {
+			SharedPreferences.Editor editor = Util.getPreferences(context).edit();
+			editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
+			editor.commit();
 		}
+
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
+		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
+		fragment.setArguments(args);
+
+		replaceFragment(fragment);
 	}
 
 	private void showAboutDialog() {
@@ -386,6 +465,11 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	@Override
 	public void onItemClicked(UpdateView<Integer> updateView, Integer item) {
+		if (unsupported.contains(item)) {
+			Util.toast(context, R.string.main_not_supported);
+			return;
+		}
+
 		if (item == R.string.main_albums_newest) {
 			showAlbumList("newest");
 		} else if (item == R.string.main_albums_random) {
@@ -403,9 +487,13 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		} else if (item == R.string.main_songs_starred) {
             showAlbumList("starredsongs");
         } else if(item == R.string.main_albums_genres) {
-			showAlbumList("genres");
+			showChooser(new SelectGenreFragment(), "genres");
+		} else if(item == R.string.main_songs_genres) {
+			showChooser(new SelectGenreFragment(), "genres-songs");
 		} else if(item == R.string.main_albums_year) {
-			showAlbumList("years");
+			showChooser(new SelectYearFragment(), "years");
+		} else if(item == R.string.main_songs_year) {
+			showChooser(new SelectYearFragment(), SONGS_YEARS);
 		} else if(item == R.string.main_albums_alphabetical) {
 			showAlbumList("alphabeticalByName");
 		} else if (item == R.string.main_songs_newest) {
@@ -416,6 +504,10 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList(SONGS_RECENT);
 		} else if (item == R.string.main_songs_frequent) {
 			showAlbumList(SONGS_FREQUENT);
+		} else if (item == R.string.main_songs_highest) {
+			showAlbumList(SONGS_HIGHEST);
+		} else if (item == R.string.main_songs_alphabetical) {
+			showAlbumList(SONGS_ALPHABETICAL);
 		}
 	}
 

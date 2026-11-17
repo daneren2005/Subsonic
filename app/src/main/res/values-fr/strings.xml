@@ -54,6 +54,7 @@
 	<string name="main.online">Connecter</string>
     <string name="main.settings">Paramètres</string>
     <string name="main.albums_title">Albums</string>
+    <string name="main.not_supported">Non pris en charge par ce serveur</string>
     <string name="main.albums_newest">Ajoutés récemment</string>
     <string name="main.albums_recent">Joués récemment</string>
     <string name="main.albums_frequent">Les plus joués</string>

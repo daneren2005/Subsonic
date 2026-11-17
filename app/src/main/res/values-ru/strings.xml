@@ -36,6 +36,7 @@
 	<string name="main.online">Подключиться</string>
     <string name="main.settings">Настройки</string>
     <string name="main.albums_title">Альбомы</string>
+    <string name="main.not_supported">Не поддерживается этим сервером</string>
     <string name="main.albums_newest">Недавно добавленные</string>
     <string name="main.albums_recent">Недавно прослушанные</string>
     <string name="main.albums_frequent">Часто прослушиваемые</string>

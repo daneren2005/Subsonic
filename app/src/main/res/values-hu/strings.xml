@@ -65,7 +65,7 @@
 	<string name="main.online">Online mód</string>
 	<string name="main.settings">Beállítások</string>
 	<string name="main.albums_title">Albumok</string>
-	<string name="main.albums_per_folder">Mappánként</string>
+	<string name="main.not_supported">Ez a szerver nem támogatja</string>
 	<string name="main.albums_newest">Utoljára hozzáadott</string>
 	<string name="main.albums_recent">Utoljára lejátszott</string>
 	<string name="main.albums_frequent">Legtöbbször lejátszott</string>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Controls above the lists on the overview page -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingStart="16dp"
+	android:paddingTop="8dp"
+	android:paddingEnd="16dp">
+
+	<com.google.android.material.chip.Chip
+		android:id="@+id/main_folder"
+		style="@style/Widget.Material3.Chip.Assist"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:contentDescription="@string/select_artist.folder"
+		app:chipIcon="@drawable/ic_main_folder"
+		app:chipIconTint="?attr/colorPrimary"
+		app:closeIcon="@drawable/ic_main_drop_down"
+		app:closeIconVisible="true" />
+
+	<com.google.android.material.button.MaterialButtonToggleGroup
+		android:id="@+id/main_mode"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
+		android:layout_marginBottom="4dp"
+		app:selectionRequired="true"
+		app:singleSelection="true">
+
+		<Button
+			android:id="@+id/main_mode_albums"
+			style="?attr/materialButtonOutlinedStyle"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/search.albums" />
+
+		<Button
+			android:id="@+id/main_mode_songs"
+			style="?attr/materialButtonOutlinedStyle"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/search.songs" />
+	</com.google.android.material.button.MaterialButtonToggleGroup>
+</LinearLayout>

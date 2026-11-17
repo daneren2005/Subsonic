@@ -211,11 +211,11 @@
     <string name="main.albums_genres">流派</string>
     <string name="main.albums_highest">最高评分</string>
     <string name="main.albums_newest">最近添加</string>
-    <string name="main.albums_per_folder">按文件夹浏览</string>
     <string name="main.albums_random">随机</string>
     <string name="main.albums_recent">最近播放</string>
     <string name="main.albums_starred">收藏</string>
     <string name="main.albums_title">专辑列表</string>
+    <string name="main.not_supported">此服务器不支持</string>
     <string name="main.albums_year">年代</string>
     <string name="main.artist">艺术家</string>
     <string name="main.back_confirm">再次按退出键退出</string>

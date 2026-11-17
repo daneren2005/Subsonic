@@ -45,6 +45,7 @@
 	<string name="main.online">Modo Online</string>
     <string name="main.settings">Preferencias</string>
     <string name="main.albums_title">Discos</string>
+    <string name="main.not_supported">No compatible con este servidor</string>
     <string name="main.albums_newest">Añadidos recientemente</string>
     <string name="main.albums_recent">Reproducidos recientemente</string>
     <string name="main.albums_frequent">Más reproducidos</string>
@@ -65,7 +66,6 @@
 	]]>
    </string>
 	<string name="main.scan_complete">Escaneado del servidor completado</string>
-	<string name="main.albums_per_folder">Por carpetar</string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>

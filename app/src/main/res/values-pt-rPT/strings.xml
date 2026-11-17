@@ -62,7 +62,7 @@
 	<string name="main.online">Ficar online</string>
     <string name="main.settings">Definições</string>
     <string name="main.albums_title">Lista de álbuns</string>
-	<string name="main.albums_per_folder">Por pasta</string>
+    <string name="main.not_supported">Não suportado por este servidor</string>
     <string name="main.albums_newest">Adicionados recentemente</string>
     <string name="main.albums_recent">Reproduzidos recentemente</string>
     <string name="main.albums_frequent">Mais reproduzidos</string>

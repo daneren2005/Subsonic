@@ -62,7 +62,7 @@
 	<string name="main.online">Gå Online</string>
     <string name="main.settings">Inställningar</string>
     <string name="main.albums_title">Album Listor</string>
-	<string name="main.albums_per_folder">Per album</string>
+    <string name="main.not_supported">Stöds inte av den här servern</string>
     <string name="main.albums_newest">Nyligen tillagt</string>
     <string name="main.albums_recent">Nyligen spelat</string>
     <string name="main.albums_frequent">Mest spelat</string>

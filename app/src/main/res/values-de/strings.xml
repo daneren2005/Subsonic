@@ -57,7 +57,7 @@
 	<string name="main.online">Gehe Online</string>
     <string name="main.settings">Einstellungen</string>
     <string name="main.albums_title">Album Liste</string>
-	<string name="main.albums_per_folder">Pro Ordner</string>
+    <string name="main.not_supported">Wird von diesem Server nicht unterstützt</string>
     <string name="main.albums_newest">Zuletzt hinzugefügt</string>
     <string name="main.albums_recent">Vor kurzem gespielt</string>
     <string name="main.albums_frequent">Am meisten gespielt</string>

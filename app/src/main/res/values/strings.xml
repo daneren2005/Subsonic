@@ -65,7 +65,6 @@
 	<string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
     <string name="main.albums_title">Album Lists</string>
-	<string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>
@@ -86,6 +85,7 @@
 	<string name="main.songs_frequent">@string/main.albums_frequent</string>
 	<string name="main.songs_highest">@string/main.albums_highest</string>
 	<string name="main.songs_alphabetical">@string/main.albums_alphabetical</string>
+	<string name="main.not_supported">Not supported by this server</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 	<string name="main.scan_complete">Completed scan of Server</string>
 	<string name="main.artist">Artist</string>

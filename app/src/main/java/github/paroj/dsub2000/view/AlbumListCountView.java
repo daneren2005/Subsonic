@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import github.paroj.dsub2000.util.Util;
 public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	private final String TAG = AlbumListCountView.class.getSimpleName();
 
+	private ImageView iconView;
 	private TextView titleView;
 	private TextView countView;
 	private int startCount;
@@ -43,14 +45,15 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	public AlbumListCountView(Context context) {
 		super(context, false);
 		this.context = context;
-		LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
+		LayoutInflater.from(context).inflate(R.layout.main_tile_item, this, true);
 
+		iconView = (ImageView) findViewById(R.id.item_icon);
 		titleView = (TextView) findViewById(R.id.basic_count_name);
 		countView = (TextView) findViewById(R.id.basic_count_count);
 	}
 
 	protected void setObjectImpl(Integer albumListString, Void dummy) {
-		titleView.setText(albumListString);
+		MainTileView.bind(iconView, titleView, albumListString);
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		startCount = prefs.getInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
@@ -106,14 +109,7 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 		if(count <= 0) {
 			countView.setVisibility(View.GONE);
 		} else {
-			String displayName;
-			if(count < 10) {
-				displayName = "0" + count;
-			} else {
-				displayName = "" + count;
-			}
-
-			countView.setText(displayName);
+			countView.setText(count > 99 ? "99+" : Integer.toString(count));
 			countView.setVisibility(View.VISIBLE);
 		}
 	}

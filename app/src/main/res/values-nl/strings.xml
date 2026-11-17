@@ -60,7 +60,7 @@
 	<string name="main.online">Ga online</string>
     <string name="main.settings">Instellingen</string>
     <string name="main.albums_title">Album lijsten</string>
-	<string name="main.albums_per_folder">Per folder</string>
+    <string name="main.not_supported">Niet ondersteund door deze server</string>
     <string name="main.albums_newest">Recent toegevoegd</string>
     <string name="main.albums_recent">Recent afgespeeld</string>
     <string name="main.albums_frequent">Meest afgespeeld</string>
