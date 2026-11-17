@@ -703,6 +703,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	}
 
 	@Override
+	public View getSnackbarAnchor() {
+		// Keep the collapsed now playing bar visible, an expanded one fills the screen anyway
+		if(slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED
+				&& slideUpSwipeTarget != null && slideUpSwipeTarget.getVisibility() == View.VISIBLE) {
+			return slideUpSwipeTarget;
+		}
+		return null;
+	}
+
+	@Override
 	public void openNowPlaying() {
 		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
 	}

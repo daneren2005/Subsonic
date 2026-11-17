@@ -1448,6 +1448,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		offline.commit();
 	}
 	
+	/**
+	 * @return the view a snackbar is shown above, null to show it at the bottom of the screen
+	 */
+	public View getSnackbarAnchor() {
+		return null;
+	}
+
 	public int getDrawerItemId(String fragmentType) {
 		if(fragmentType == null) {
 			return R.id.drawer_home;

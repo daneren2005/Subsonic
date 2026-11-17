@@ -18,6 +18,9 @@
 package github.paroj.dsub2000.util;
 
 import android.app.Activity;
+import android.content.ContextWrapper;
+import com.google.android.material.snackbar.Snackbar;
+import github.paroj.dsub2000.activity.SubsonicActivity;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 
@@ -52,6 +55,9 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Lifecycle;
+import android.view.ViewTreeObserver;
 import android.view.Gravity;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -738,7 +744,63 @@ public final class Util {
         toast(context, message, true);
     }
 
+    /** How long to wait for the screen to get the focus back, e.g. from a dialog that just closed */
+    private static final long SNACKBAR_FOCUS_WAIT = 300;
+
+    /**
+     * Shows a short message: as a snackbar on the screen the user is looking at, or as a toast
+     * when there is no such screen, e.g. when called from a service, from a screen in the
+     * background or while a dialog covers the screen.
+     */
     public static void toast(Context context, String message, boolean shortDuration) {
+        Activity activity = getActivity(context);
+        if (!isInFront(activity)) {
+            showToast(context, message, shortDuration);
+        } else if (activity.hasWindowFocus()) {
+            showSnackbar(activity, message, shortDuration);
+        } else {
+            // A dialog covers the screen, or one just closed and the focus is not back yet
+            final View decor = activity.getWindow().getDecorView();
+            final ViewTreeObserver observer = decor.getViewTreeObserver();
+            final ViewTreeObserver.OnWindowFocusChangeListener[] listener = new ViewTreeObserver.OnWindowFocusChangeListener[1];
+            final Runnable fallback = () -> {
+                observer.removeOnWindowFocusChangeListener(listener[0]);
+                showToast(context, message, shortDuration);
+            };
+            listener[0] = hasFocus -> {
+                if (hasFocus) {
+                    decor.removeCallbacks(fallback);
+                    decor.post(() -> observer.removeOnWindowFocusChangeListener(listener[0]));
+                    if (isInFront(activity)) {
+                        showSnackbar(activity, message, shortDuration);
+                    }
+                }
+            };
+            observer.addOnWindowFocusChangeListener(listener[0]);
+            decor.postDelayed(fallback, SNACKBAR_FOCUS_WAIT);
+        }
+    }
+
+    private static boolean isInFront(Activity activity) {
+        return activity instanceof LifecycleOwner
+                && !activity.isFinishing() && !activity.isDestroyed()
+                && ((LifecycleOwner) activity).getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)
+                && activity.findViewById(android.R.id.content) != null;
+    }
+
+    private static void showSnackbar(Activity activity, String message, boolean shortDuration) {
+        Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), message,
+                shortDuration ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
+        if (activity instanceof SubsonicActivity) {
+            snackbar.setAnchorView(((SubsonicActivity) activity).getSnackbarAnchor());
+        }
+        // Toasts showed long messages in full, the snackbar default is two lines
+        TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+        text.setMaxLines(5);
+        snackbar.show();
+    }
+
+    private static void showToast(Context context, String message, boolean shortDuration) {
         if (toast == null) {
             toast = Toast.makeText(context, message, shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -748,7 +810,17 @@ public final class Util {
         }
         toast.show();
     }
-	
+
+	private static Activity getActivity(Context context) {
+		while (context instanceof ContextWrapper) {
+			if (context instanceof Activity) {
+				return (Activity) context;
+			}
+			context = ((ContextWrapper) context).getBaseContext();
+		}
+		return null;
+	}
+
 	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
 		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
 	}
