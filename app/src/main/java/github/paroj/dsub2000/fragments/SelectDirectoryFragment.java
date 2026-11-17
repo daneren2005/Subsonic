@@ -575,7 +575,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			setTitle(R.string.main_albums_starred);
 		} else if ("starredsongs".equals(albumListType)) {
             setTitle(R.string.main_songs_starred);
-        } else if("genres".equals(albumListType) || "years".equals(albumListType)) {
+        } else if("genres".equals(albumListType) || "years".equals(albumListType)
+				|| "genres-songs".equals(albumListType) || MainFragment.SONGS_YEARS.equals(albumListType)) {
 			setTitle(albumListExtra);
 		} else if("alphabeticalByName".equals(albumListType)) {
 			setTitle(R.string.main_albums_alphabetical);
@@ -587,6 +588,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			setTitle(R.string.main_songs_recent);
 		} else if (MainFragment.SONGS_FREQUENT.equals(albumListType)) {
 			setTitle(R.string.main_songs_frequent);
+		} else if (MainFragment.SONGS_HIGHEST.equals(albumListType)) {
+			setTitle(R.string.main_songs_highest);
+		} else if (MainFragment.SONGS_ALPHABETICAL.equals(albumListType)) {
+			setTitle(R.string.main_songs_alphabetical);
 		}
 
 		new LoadTask(true) {
@@ -612,7 +617,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
                     int listSize = Math.max(1, Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20")));
 					result = service.getRandomSongs(listSize,context, this);
 				}  else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
-					result = service.getSongList(albumListType, size, 0, context, this);
+					result = service.getSongList(albumListType, albumListExtra, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);
 				}

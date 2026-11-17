@@ -811,7 +811,7 @@ public class RESTMusicService implements MusicService {
 	}
 
     @Override
-    public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getSongList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
         List<String> names = new ArrayList<String>();
         List<Object> values = new ArrayList<Object>();
 
@@ -833,6 +833,21 @@ public class RESTMusicService implements MusicService {
                     break;
                 case MainFragment.SONGS_FREQUENT:
                     apiType = "frequent";
+                    break;
+                case MainFragment.SONGS_HIGHEST:
+                    apiType = "highest";
+                    break;
+                case MainFragment.SONGS_ALPHABETICAL:
+                    apiType = "alphabeticalByName";
+                    break;
+                case MainFragment.SONGS_YEARS:
+                    apiType = "byYear";
+                    // Newest first, like the album lists
+                    int decade = Integer.parseInt(extra);
+                    names.add("fromYear");
+                    values.add(decade + 9);
+                    names.add("toYear");
+                    values.add(decade);
                     break;
                 default:
                     throw new Exception("Song list type '" + type + "' is not supported by this server");

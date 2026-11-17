@@ -134,7 +134,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		} else if (type.equals("randomsongs")) {
 			result = service.getRandomSongs(size, context, null);
 		}else if(type.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
-			result = service.getSongList(type, size, offset, context, null);
+			result = service.getSongList(type, extra, size, offset, context, null);
 		} else {
 			result = service.getAlbumList(type, size, offset, false, context, null);
 		}

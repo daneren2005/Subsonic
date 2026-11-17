@@ -47,6 +47,9 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	public static final String SONGS_TOP_PLAYED = SONGS_LIST_PREFIX + "topPlayed";
 	public static final String SONGS_RECENT = SONGS_LIST_PREFIX + "recent";
 	public static final String SONGS_FREQUENT = SONGS_LIST_PREFIX + "frequent";
+	public static final String SONGS_HIGHEST = SONGS_LIST_PREFIX + "highest";
+	public static final String SONGS_ALPHABETICAL = SONGS_LIST_PREFIX + "alphabetical";
+	public static final String SONGS_YEARS = SONGS_LIST_PREFIX + "years";
 
 	public MainFragment() {
 		super();

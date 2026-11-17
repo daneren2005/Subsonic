@@ -58,7 +58,9 @@ public class SelectGenreFragment extends SelectRecyclerFragment<Genre> {
 	public void onItemClicked(UpdateView<Genre> updateView, Genre genre) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
-		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, "genres");
+		// Albums or songs, as chosen on the overview
+		String listType = getArguments() == null ? null : getArguments().getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
+		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, listType == null ? "genres" : listType);
 		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
 		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA, genre.getName());

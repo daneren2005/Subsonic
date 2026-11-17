@@ -109,7 +109,7 @@ public interface MusicService {
 
 	MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
-	MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getSongList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception;
 
 	MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception;
     MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception;

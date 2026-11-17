@@ -690,8 +690,8 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getSongList(type, size, offset, context, progressListener);
+	public MusicDirectory getSongList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getSongList(type, extra, size, offset, context, progressListener);
 	}
 
 	@Override

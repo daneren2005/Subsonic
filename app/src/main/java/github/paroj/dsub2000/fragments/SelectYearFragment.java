@@ -70,7 +70,9 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
 	public void onItemClicked(UpdateView<String> updateView, String decade) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
-		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, "years");
+		// Albums or songs, as chosen on the overview
+		String listType = getArguments() == null ? null : getArguments().getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
+		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, listType == null ? "years" : listType);
 		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
 		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA, decade);
