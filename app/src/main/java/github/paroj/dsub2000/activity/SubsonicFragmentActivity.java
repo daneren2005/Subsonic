@@ -69,6 +69,7 @@ import github.paroj.dsub2000.fragments.SelectInternetRadioStationFragment;
 import github.paroj.dsub2000.fragments.SelectPlaylistFragment;
 import github.paroj.dsub2000.fragments.SelectPodcastsFragment;
 import github.paroj.dsub2000.fragments.SelectShareFragment;
+import github.paroj.dsub2000.fragments.SelectVideoFragment;
 import github.paroj.dsub2000.fragments.SubsonicFragment;
 import github.paroj.dsub2000.service.DownloadFile;
 import github.paroj.dsub2000.service.DownloadService;
@@ -724,6 +725,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			return new SelectBookmarkFragment();
 		} else if("Internet Radio".equals(fragmentType)) {
 			return new SelectInternetRadioStationFragment();
+		} else if("Video".equals(fragmentType)) {
+			return new SelectVideoFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
 		} else if("Admin".equals(fragmentType)) {

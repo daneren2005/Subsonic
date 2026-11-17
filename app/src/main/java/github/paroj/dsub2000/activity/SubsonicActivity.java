@@ -421,6 +421,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 						case R.id.drawer_internet_radio_stations:
 							drawerItemSelected("Internet Radio");
 							return true;
+						case R.id.drawer_videos:
+							drawerItemSelected("Video");
+							return true;
 						case R.id.drawer_shares:
 							drawerItemSelected("Share");
 							return true;
@@ -805,6 +808,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canBookmark(this);
 		boolean internetRadioEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_INTERNET_RADIO_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canInternetRadio(this);
+		boolean videosEnabled = !Util.isOffline(this) && ServerInfo.checkServerVersion(this, "1.8");
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
@@ -836,6 +840,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 		if(!internetRadioEnabled) {
 			setDrawerItemVisible(R.id.drawer_internet_radio_stations, false);
+		}
+		if(!videosEnabled) {
+			setDrawerItemVisible(R.id.drawer_videos, false);
 		}
 		if(!sharedEnabled) {
 			setDrawerItemVisible(R.id.drawer_shares, false);
@@ -1459,6 +1466,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				return R.id.drawer_bookmarks;
 			case "Internet Radio":
 				return R.id.drawer_internet_radio_stations;
+			case "Video":
+				return R.id.drawer_videos;
 			case "Share":
 				return R.id.drawer_shares;
 			case "Chat":

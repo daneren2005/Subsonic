@@ -198,12 +198,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		sections.add(songs);
 		headers.add("songs");
 
-		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			List<Integer> videos = Arrays.asList(R.string.main_videos);
-			sections.add(videos);
-			headers.add("videos");
-		}
-
 		return new MainAdapter(context, headers, sections, this);
 	}
 
@@ -241,10 +235,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 			replaceFragment(fragment);
 		}
-	}
-	private void showVideos() {
-		SubsonicFragment fragment = new SelectVideoFragment();
-		replaceFragment(fragment);
 	}
 
 	private void showAboutDialog() {
@@ -418,8 +408,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("years");
 		} else if(item == R.string.main_albums_alphabetical) {
 			showAlbumList("alphabeticalByName");
-		} else if(item == R.string.main_videos) {
-			showVideos();
 		} else if (item == R.string.main_songs_newest) {
 			showAlbumList(SONGS_NEWEST);
 		} else if (item == R.string.main_songs_top_played) {

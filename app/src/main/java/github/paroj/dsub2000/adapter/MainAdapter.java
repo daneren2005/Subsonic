@@ -97,9 +97,6 @@ public class MainAdapter extends SectionAdapter<Integer> {
 			} else {
 				checkBox.setVisibility(View.GONE);
 			}
-		} else if("videos".equals(header)) {
-			display = context.getResources().getString(R.string.main_videos);
-			checkBox.setVisibility(View.GONE);
 		} else if("songs".equals(header)) {
 			display = context.getResources().getString(R.string.search_songs);
 			checkBox.setVisibility(View.GONE);
