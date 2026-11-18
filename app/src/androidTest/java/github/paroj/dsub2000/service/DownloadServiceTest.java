@@ -85,6 +85,31 @@ public class DownloadServiceTest {
 	}
 
 	@Test
+	public void testGetRecentDownloadsDoesNotChangePlaybackQueue() {
+		downloadService.clear();
+		downloadService.clearBackground();
+
+		List<MusicDirectory.Entry> queueSongs = createMusicSongs(2);
+		deleteCachedFiles(queueSongs);
+		downloadService.download(queueSongs, false, false, false, false, 0, 0);
+		int queueSize = downloadService.size();
+
+		List<MusicDirectory.Entry> backgroundSongs = createMusicSongs(1);
+		deleteCachedFiles(backgroundSongs);
+		downloadService.downloadBackground(backgroundSongs, true);
+		int backgroundSize = downloadService.getBackgroundDownloads().size();
+		assertEquals(1, backgroundSize);
+		try {
+			// getRecentDownloads() used to add the background downloads to the
+			// playback queue itself (via the subList view).
+			assertEquals(queueSize + backgroundSize, downloadService.getRecentDownloads().size());
+		} finally {
+			downloadService.clearBackground();
+		}
+		assertEquals(queueSize, downloadService.size());
+	}
+
+	@Test
 	public void testGetCurrentPlayingIndexWithoutPlayList() {
 		int currentPlayingIndex = activity.getDownloadService()
 				.getCurrentPlayingIndex();
