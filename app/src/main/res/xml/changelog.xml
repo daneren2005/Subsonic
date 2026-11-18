@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.8.1" versioncode="222" releasedate="18/11/2026">
+		<change>Fix APKs failing to install</change>
+		<change>New overview screen with a tile grid, an Albums/Songs switch and a folder picker; Videos moved to the side menu</change>
+		<change>Add song lists on servers with the songListsNCM extension (recently played, most played, highest rated, by year, alphabetical); capabilities are detected and refreshed when the server software changes</change>
+		<change>Show station logos in the internet radio list</change>
+		<change>Show artist credits as provided by the server, including multi-artist credits</change>
+		<change>Show messages as snackbars instead of system toasts</change>
+		<change>Fix the restore play queue prompt reappearing and queue changes being lost when playback stops</change>
+		<change>Fix "No network available" warning in offline mode</change>
+		<change>Fix TalkBack crash when drawer entries are hidden</change>
+		<change>Fix the gap below the Now Playing title with three-button navigation</change>
+		<change>Fix Chromecast, DLNA and Jukebox route selection when not scanning</change>
+		<change>Fix the Authorization header being sent when disabled, breaking servers such as Nextcloud Music</change>
+		<change>Fix crashes from duplicate entries in the play queue</change>
+		<change>Fix launch crashes caused by a foreground service timeout</change>
+		<change>Speed up queueing large playlists</change>
+	</release>
 	<release version="5.8.0" versioncode="221" releasedate="01/11/2026">
 		<change>Fix artist bios and images being requested for folders when browsing by folder structure</change>
 		<change>Improve battery life by releasing Wi-Fi and UPnP locks when idle and stopping unnecessary background polling</change>
