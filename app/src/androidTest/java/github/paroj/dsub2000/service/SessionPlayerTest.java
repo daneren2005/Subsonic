@@ -71,6 +71,23 @@ public class SessionPlayerTest {
     }
 
     @Test
+    public void duplicateQueueEntryDoesNotBreakSessionRefresh() {
+        onMain(() -> {
+            Entry song = entry("repeated");
+            DownloadFile file = new DownloadFile(service, song, false);
+            service.queue.add(file);
+            service.queue.add(file);
+            service.index = 0;
+            player.refresh();
+            assertEquals(2, player.getMediaItemCount());
+            assertEquals(0, player.getCurrentMediaItemIndex());
+            Timeline timeline = player.getCurrentTimeline();
+            assertNotEquals(timeline.getWindow(0, new Timeline.Window()).uid,
+                    timeline.getWindow(1, new Timeline.Window()).uid);
+        });
+    }
+
+    @Test
     public void transportCommandsReachExistingPlaybackPolicy() {
         onMain(() -> {
             player.setMediaItems(Arrays.asList(SessionPlayer.mediaItem(entry("first")),

@@ -18,7 +18,10 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 
 import github.paroj.dsub2000.domain.MusicDirectory;
 import github.paroj.dsub2000.domain.PlayerState;
@@ -80,6 +83,12 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
             List<MediaItemData> playlist = new ArrayList<>();
             List<DownloadFile> files = new ArrayList<>(service.getSongs());
             DownloadFile current = service.getCurrentPlaying();
+            // SimpleBasePlayer requires a unique UID per playlist entry. The queue
+            // should never contain the same DownloadFile twice, but stay defensive:
+            // a duplicate used to crash every session refresh with
+            // "Duplicate MediaItemData UID in playlist".
+            Set<DownloadFile> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+            int index = 0;
             for (DownloadFile file : files) {
                 MusicDirectory.Entry entry = file.getSong();
                 MediaItem item = mediaItem(entry);
@@ -89,12 +98,14 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
                 }
                 long duration = entry.getDuration() == null || file.isStream()
                         ? C.TIME_UNSET : entry.getDuration() * 1_000_000L;
-                playlist.add(new MediaItemData.Builder(file).setMediaItem(item)
+                Object uid = seen.add(file) ? file : Integer.valueOf(index);
+                playlist.add(new MediaItemData.Builder(uid).setMediaItem(item)
                         .setDurationUs(duration)
                         .setIsSeekable(file == current && service.isSeekable())
                         .setIsDynamic(file.isStream()).build());
+                index++;
             }
-            int index = files.indexOf(current);
+            int currentIndex = files.indexOf(current);
             PlayerState state = service.getPlayerState();
             int playbackState = STATE_IDLE;
             if (!playlist.isEmpty()) {
@@ -122,16 +133,16 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
                     commands.addAll(COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM, COMMAND_SEEK_BACK,
                             COMMAND_SEEK_FORWARD);
                 }
-                if (service.shouldFastForward() || index > 0 || service.getRepeatMode() == ALL) {
+                if (service.shouldFastForward() || currentIndex > 0 || service.getRepeatMode() == ALL) {
                     commands.add(COMMAND_SEEK_TO_PREVIOUS);
                 }
-                if (service.shouldFastForward() || index < files.size() - 1
+                if (service.shouldFastForward() || currentIndex < files.size() - 1
                         || service.getRepeatMode() == ALL) {
                     commands.add(COMMAND_SEEK_TO_NEXT);
                 }
             }
             State.Builder builder = new State.Builder().setPlaylist(playlist)
-                    .setCurrentMediaItemIndex(index < 0 ? C.INDEX_UNSET : index)
+                    .setCurrentMediaItemIndex(currentIndex < 0 ? C.INDEX_UNSET : currentIndex)
                     .setPlaybackState(playbackState)
                     .setPlayerError(service.getPlaybackError())
                     .setIsLoading(playbackState == STATE_BUFFERING)
