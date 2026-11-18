@@ -13,6 +13,10 @@ public final class Sliders {
 	public static void setMax(Slider slider, int max) {
 		slider.setValueFrom(0);
 		slider.setValueTo(Math.max(1, max));
+		// Changing the range leaves the current value where it was. Material does not reject an
+		// out-of-range value right away: it validates on the next draw and then throws, so the
+		// value has to be pulled back into the new range here.
+		setProgress(slider, getProgress(slider));
 	}
 
 	public static void setProgress(Slider slider, int progress) {
