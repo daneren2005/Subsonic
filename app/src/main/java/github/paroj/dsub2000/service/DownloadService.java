@@ -384,17 +384,25 @@ public class DownloadService extends MediaLibraryService {
 		startService(context, new Intent(context, DownloadService.class));
 	}
 	public static void startService(Context context, Intent intent) {
-		PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
-		if (Build.VERSION.SDK_INT < 26 || (powerManager != null && powerManager.isIgnoringBatteryOptimizations(intent.getPackage()))) {
+		try {
+			// Prefer a plain start. Callers in the foreground (the activities) don't need the
+			// service to become a foreground service, and startForegroundService() obliges the
+			// service to call startForeground() within a few seconds. An idle playback service
+			// doesn't do that, which caused ForegroundServiceDidNotStartInTimeException.
 			context.startService(intent);
-		} else {
+		} catch (IllegalStateException e) {
+			if (Build.VERSION.SDK_INT < 26) {
+				throw e;
+			}
+			// The caller is in the background (e.g. a broadcast receiver) and may only start
+			// a foreground service. onStartCommand() then has to post a notification promptly.
 			try {
 				context.startForegroundService(intent);
-			} catch (IllegalStateException e) {
-				if (Build.VERSION.SDK_INT >= 31 && e instanceof android.app.ForegroundServiceStartNotAllowedException) {
-					Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + e.getMessage());
+			} catch (IllegalStateException foregroundException) {
+				if (Build.VERSION.SDK_INT >= 31 && foregroundException instanceof android.app.ForegroundServiceStartNotAllowedException) {
+					Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + foregroundException.getMessage());
 				} else {
-					throw e;
+					throw foregroundException;
 				}
 			}
 		}
