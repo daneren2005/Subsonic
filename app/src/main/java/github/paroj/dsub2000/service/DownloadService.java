@@ -199,6 +199,14 @@ public class DownloadService extends MediaLibraryService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
+		// Satisfy a possible startForegroundService() request as early as possible; the rest
+		// of onCreate can take a while (playback engine, media router) and the OS only allows
+		// a few seconds for startForeground().
+		if(Build.VERSION.SDK_INT >= 26) {
+			Notifications.shutGoogleUpNotification(this);
+		}
+
 		setMediaNotificationProvider(new PlaybackNotificationProvider(this));
 
 		final SharedPreferences prefs = Util.getPreferences(this);
@@ -284,24 +292,27 @@ public class DownloadService extends MediaLibraryService {
 		shufflePlayBuffer = new ShufflePlayBuffer(this);
 		artistRadioBuffer = new ArtistRadioBuffer(this);
 		lifecycleSupport.onCreate();
-
-		if(Build.VERSION.SDK_INT >= 26) {
-			Notifications.shutGoogleUpNotification(this);
-		}
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
-		if (intent == null || Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+
+		// A start with startForegroundService() has to be answered with startForeground()
+		// within a few seconds, otherwise the OS kills the process with
+		// ForegroundServiceDidNotStartInTimeException. This service is usually started just
+		// to keep playback available while idle, so satisfy that requirement even when there
+		// is nothing to show. The playback notification itself is handled by Media3 below.
+		String action = intent == null ? null : intent.getAction();
+		if (Build.VERSION.SDK_INT >= 26 && !this.isForeground() && !"KEYCODE_MEDIA_START".equals(action)) {
+			Notifications.shutGoogleUpNotification(this);
+		}
+
+		if (intent == null || Intent.ACTION_MEDIA_BUTTON.equals(action)) {
 			return START_NOT_STICKY;
 		}
 		lifecycleSupport.onStart(intent);
 
-		String action = intent.getAction();
-		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground() && !"KEYCODE_MEDIA_START".equals(action)) {
-			Notifications.shutGoogleUpNotification(this);
-		}
 		return START_NOT_STICKY;
 	}
 
