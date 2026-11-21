@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -29,6 +33,14 @@ import java.util.Map;
  * to determine the resource length, which trips that misconfiguration. This
  * implementation deliberately omits Range and reports an unknown length, which
  * is fine for live audio streams that don't need seeking.
+ *
+ * The response headers are exposed through {@link #getResponseHeaders()}.
+ * ExoPlayer always requests {@code Icy-MetaData: 1}, so Icecast servers that
+ * support ICY metadata interleave it into the audio at the interval given by
+ * the {@code icy-metaint} response header. ExoPlayer only strips that metadata
+ * (with {@code IcyDataSource}) when it can read the header from the
+ * {@link DataSource}; without it the interleaved bytes corrupt the MP3 frames
+ * and no extractor recognizes the stream.
  *
  * Used only by {@link LocalPlayback} for stream playback (Internet radios).
  * Not intended for general-purpose use: it does not support range requests,
@@ -45,6 +57,7 @@ public class NoRangeHttpDataSource extends BaseDataSource {
     private DataSpec dataSpec;
     private HttpURLConnection connection;
     private InputStream inputStream;
+    private Map<String, List<String>> responseHeaders = Collections.emptyMap();
     private boolean opened;
 
     public NoRangeHttpDataSource() {
@@ -54,6 +67,7 @@ public class NoRangeHttpDataSource extends BaseDataSource {
     @Override
     public long open(DataSpec dataSpec) throws IOException {
         this.dataSpec = dataSpec;
+        responseHeaders = Collections.emptyMap();
         transferInitializing(dataSpec);
 
         URL currentUrl = new URL(dataSpec.uri.toString());
@@ -104,10 +118,18 @@ public class NoRangeHttpDataSource extends BaseDataSource {
             }
 
             inputStream = connection.getInputStream();
+            // ExoPlayer looks for the ICY headers (notably icy-metaint) in the
+            // response to decide whether it has to strip interleaved metadata.
+            responseHeaders = copyResponseHeaders(connection.getHeaderFields());
             opened = true;
             transferStarted(dataSpec);
             return C.LENGTH_UNSET;
         }
+    }
+
+    @Override
+    public Map<String, List<String>> getResponseHeaders() {
+        return responseHeaders;
     }
 
     @Override
@@ -142,6 +164,22 @@ public class NoRangeHttpDataSource extends BaseDataSource {
                 transferEnded();
             }
         }
+    }
+
+    private static Map<String, List<String>> copyResponseHeaders(
+            Map<String, List<String>> headers) {
+        Map<String, List<String>> copied = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            // getHeaderFields() includes the status line under a null key, which
+            // DataSource#getResponseHeaders() does not allow.
+            if (entry.getKey() == null || entry.getValue() == null) {
+                continue;
+            }
+            // HTTP header names are case-insensitive; ExoPlayer matches the ICY
+            // ones in lowercase.
+            copied.put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
+        }
+        return Collections.unmodifiableMap(copied);
     }
 
     private void disconnectQuietly() {
