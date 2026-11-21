@@ -591,6 +591,9 @@
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
+    <string name="parser.auth_mechanism_unsupported">This login method is not supported by the server. Create an API key in the server settings and enter it as the password.</string>
+    <string name="parser.auth_conflict">Conflicting login methods were sent to the server.</string>
+    <string name="parser.invalid_api_key">Invalid API key. Check or recreate the key in the server settings.</string>
     <string name="parser.artist_count">Got %d artists.</string>
 	<string name="parser.server_error">Server error: %s</string>
 	<string name="parser.scan_count">Scanned %d entries</string>

@@ -82,6 +82,15 @@ public abstract class AbstractParser {
 
 				// Throw IOException so RESTMusicService knows to retry
 				throw new IOException();
+            case 42:
+                message = context.getResources().getString(R.string.parser_auth_mechanism_unsupported);
+                break;
+            case 43:
+                message = context.getResources().getString(R.string.parser_auth_conflict);
+                break;
+            case 44:
+                message = context.getResources().getString(R.string.parser_invalid_api_key);
+                break;
             case 50:
                 message = context.getResources().getString(R.string.parser_not_authorized);
                 break;
@@ -89,6 +98,13 @@ public abstract class AbstractParser {
                 message = get("message");
                 break;
         }
+
+        // OpenSubsonic servers may point to the place where credentials are managed
+        String helpUrl = get("helpUrl");
+        if (helpUrl != null && !helpUrl.isEmpty()) {
+            message = (message == null || message.isEmpty()) ? helpUrl : message + "\n" + helpUrl;
+        }
+
         throw new SubsonicRESTException(code, message);
     }
 
