@@ -1402,12 +1402,14 @@ public class CachedMusicService implements MusicService {
 	}
 	private abstract class MusicDirectoryUpdater extends SerializeUpdater<Entry> {
 		protected MusicDirectory musicDirectory;
+		private final boolean playlist;
 
 		public MusicDirectoryUpdater(Context context, String cacheName, String id) {
-			super(context, cacheName, id, true);
+			this(context, cacheName, id, true);
 		}
 		public MusicDirectoryUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
 			super(context, cacheName, id, singleUpdate);
+			playlist = "playlist".equals(cacheName);
 		}
 
 		@Override
@@ -1422,6 +1424,17 @@ public class CachedMusicService implements MusicService {
 		public void save(ArrayList<Entry> objects) {
 			musicDirectory.replaceChildren(objects);
 			FileUtil.serialize(context, musicDirectory, cacheName);
+
+			// The offline playlist is read from its .m3u file, not from this cache
+			if(playlist && musicDirectory.getName() != null) {
+				try {
+					String serverName = Util.getServerName(context, musicService.getInstance(context));
+					File playlistFile = FileUtil.getPlaylistFile(context, serverName, musicDirectory.getName());
+					FileUtil.writePlaylistFile(context, playlistFile, musicDirectory);
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to update playlist file", e);
+				}
+			}
 		}
 	}
 	private abstract class PlaylistDirectoryUpdater {
