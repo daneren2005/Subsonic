@@ -25,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -367,34 +369,82 @@ public class FileUtil {
 		return getAlbumArtFile(context, entry);
 	}
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
+		String coverArt = entry.getCoverArt();
 		if(entry.getId().indexOf(ImageLoader.PLAYLIST_PREFIX) != -1) {
 			File dir = getAlbumArtDirectory(context);
 			return  new File(dir, Util.md5Hex(ImageLoader.PLAYLIST_PREFIX + entry.getTitle()) + ".jpeg");
 		} else if(entry.getId().indexOf(ImageLoader.PODCAST_PREFIX) != -1) {
 			File dir = getAlbumArtDirectory(context);
 			return  new File(dir, Util.md5Hex(ImageLoader.PODCAST_PREFIX + entry.getTitle()) + ".jpeg");
+		} else if (coverArt != null && new File(coverArt).isAbsolute()) {
+			// Offline entries store the location of the album art file as their cover art
+			return new File(coverArt);
+		} else if (coverArt != null && !coverArt.isEmpty()) {
+			// Servers may return a different cover art ID for every song when the art is
+			// embedded in the file. Key the cache by that ID instead of the album directory,
+			// otherwise all songs of an album would end up sharing one image.
+			String key = Util.getMostRecentActiveServer(context) + ":" + coverArt;
+			return new File(getAlbumArtDirectory(context), Util.md5Hex(key) + ".jpeg");
 		} else {
-			File albumDir = getAlbumDirectory(context, entry);
-			File artFile;
-			File albumFile = getAlbumArtFile(albumDir);
-			File hexFile = getHexAlbumArtFile(context, albumDir);
-			if (albumDir.exists()) {
-				if (hexFile.exists()) {
-					hexFile.renameTo(albumFile);
-				}
-				artFile = albumFile;
-			} else {
-				artFile = hexFile;
-			}
-			return artFile;
+			return getOfflineAlbumArtFile(context, entry);
 		}
     }
+
+	/**
+	 * The album art file kept for downloaded songs, one per album. Offline mode and
+	 * MediaStore rely on it. Use {@link #getAlbumArtFile(Context, MusicDirectory.Entry)}
+	 * for the art that is displayed while browsing online; servers with embedded art
+	 * return a different cover art ID per song, which cannot be represented here.
+	 */
+	public static File getOfflineAlbumArtFile(Context context, MusicDirectory.Entry entry) {
+		File albumDir = getAlbumDirectory(context, entry);
+		File artFile;
+		File albumFile = getAlbumArtFile(albumDir);
+		File hexFile = getHexAlbumArtFile(context, albumDir);
+		if (albumDir.exists()) {
+			if (hexFile.exists()) {
+				hexFile.renameTo(albumFile);
+			}
+			artFile = albumFile;
+		} else {
+			artFile = hexFile;
+		}
+		return artFile;
+	}
 
     public static File getAlbumArtFile(File albumDir) {
         return new File(albumDir, Constants.ALBUM_ART_FILE);
     }
 	public static File getHexAlbumArtFile(Context context, File albumDir) {
 		return new File(getAlbumArtDirectory(context), Util.md5Hex(albumDir.getPath()) + ".jpeg");
+	}
+
+	/**
+	 * Art file for a single downloaded song. Downloaded songs of a folder can share
+	 * one album art file (see {@link #getOfflineAlbumArtFile}), so keep a per song
+	 * copy for servers that embed different art in each track. Offline mode finds it
+	 * again from the song's file path.
+	 */
+	public static File getOfflineSongArtFile(Context context, File songFile) {
+		return new File(getAlbumArtDirectory(context), Util.md5Hex("song:" + songFile.getAbsolutePath()) + ".jpeg");
+	}
+
+	public static void copyFile(File from, File to) throws IOException {
+		File parent = to.getParentFile();
+		if (parent != null) {
+			ensureDirectoryExistsAndIsReadWritable(parent);
+		}
+
+		InputStream in = null;
+		OutputStream out = null;
+		try {
+			in = new FileInputStream(from);
+			out = new FileOutputStream(to);
+			Util.copy(in, out);
+		} finally {
+			Util.close(in);
+			Util.close(out);
+		}
 	}
 
     public static Bitmap getAlbumArtBitmap(Context context, MusicDirectory.Entry entry, int size) {

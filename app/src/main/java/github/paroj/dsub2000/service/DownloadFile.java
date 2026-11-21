@@ -582,9 +582,25 @@ public class DownloadFile implements BufferFile {
             try {
                 if (song.getCoverArt() != null) {
 					// Check if album art already exists, don't want to needlessly load into memory
-					File albumArtFile = FileUtil.getAlbumArtFile(context, song);
-					if(!albumArtFile.exists()) {
+					File coverArtFile = FileUtil.getAlbumArtFile(context, song);
+					if(!coverArtFile.exists()) {
 						musicService.getCoverArt(context, song, 0, null, null);
+					}
+					if(!coverArtFile.exists()) {
+						return;
+					}
+
+					// Keep the art next to the downloaded songs for offline mode and MediaStore
+					File albumArtFile = FileUtil.getOfflineAlbumArtFile(context, song);
+					if(!albumArtFile.exists()) {
+						FileUtil.copyFile(coverArtFile, albumArtFile);
+					}
+
+					// Servers with embedded art return a different image per song, which
+					// cannot be represented by the single album art file above
+					File songArtFile = FileUtil.getOfflineSongArtFile(context, saveFile);
+					if(!songArtFile.exists()) {
+						FileUtil.copyFile(coverArtFile, songArtFile);
 					}
                 }
             } catch (Exception x) {
