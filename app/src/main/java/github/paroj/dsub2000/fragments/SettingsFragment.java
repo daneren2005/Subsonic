@@ -809,7 +809,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 				previousInstance = Util.getActiveServer(context);
 				testingConnection = true;
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				// Testing a server is an explicit server operation and must work while offline
+				MusicService musicService = MusicServiceFactory.getMusicService(context, true);
 				try {
 					musicService.setInstance(instance);
 					musicService.ping(context, this);

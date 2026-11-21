@@ -31,6 +31,14 @@ public class MusicServiceFactory {
     private static final MusicService OFFLINE_MUSIC_SERVICE = new OfflineMusicService();
 
     public static MusicService getMusicService(Context context) {
-        return Util.isOffline(context) ? OFFLINE_MUSIC_SERVICE : REST_MUSIC_SERVICE;
+        return getMusicService(context, false);
+    }
+
+    /**
+     * @param forceOnline use the server service even while the app is in offline mode,
+     *                    for operations that explicitly talk to the server
+     */
+    public static MusicService getMusicService(Context context, boolean forceOnline) {
+        return !forceOnline && Util.isOffline(context) ? OFFLINE_MUSIC_SERVICE : REST_MUSIC_SERVICE;
     }
 }
