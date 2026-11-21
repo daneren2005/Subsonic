@@ -22,8 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.media.MediaRouter;
 import androidx.mediarouter.media.MediaControlIntent;
+import androidx.mediarouter.media.MediaRouter;
 import androidx.mediarouter.media.MediaRouteDescriptor;
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteProviderDescriptor;
@@ -38,6 +38,7 @@ import github.paroj.dsub2000.service.RemoteController;
 public class JukeboxRouteProvider extends MediaRouteProvider {
 	public static final String CATEGORY_JUKEBOX_ROUTE = "github.paroj.dsub2000.SERVER_JUKEBOX";
 	private RemoteController controller;
+	private int connectionState = MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED;
 	private static final int MAX_VOLUME = 10;
 
 	private DownloadService downloadService;
@@ -62,6 +63,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 		routeBuilder.addControlFilter(routeIntentFilter)
 				.setPlaybackStream(AudioManager.STREAM_MUSIC)
 				.setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
+				.setConnectionState(connectionState)
 				.setDescription("Subsonic Jukebox")
 				.setVolume(controller == null ? 5 : (int) (controller.getVolume() * 10))
 				.setVolumeMax(MAX_VOLUME)
@@ -96,20 +98,26 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 
 		@Override
 		public void onRelease() {
+			connectionState = MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED;
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 			controller = null;
+			broadcastDescriptor();
 		}
 
 		@Override
 		public void onSelect() {
+			connectionState = MediaRouter.RouteInfo.CONNECTION_STATE_CONNECTED;
 			downloadService.setRemoteEnabled(RemoteControlState.JUKEBOX_SERVER);
 			controller = downloadService.getRemoteController();
+			broadcastDescriptor();
 		}
 
 		@Override
 		public void onUnselect() {
+			connectionState = MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED;
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 			controller = null;
+			broadcastDescriptor();
 		}
 
 		@Override
