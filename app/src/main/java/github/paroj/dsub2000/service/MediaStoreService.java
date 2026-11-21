@@ -23,7 +23,6 @@ import java.io.File;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -37,7 +36,6 @@ import github.paroj.dsub2000.util.Util;
 public class MediaStoreService {
 
 	private static final String TAG = MediaStoreService.class.getSimpleName();
-	private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
 
 	private final Context context;
 
@@ -75,15 +73,6 @@ public class MediaStoreService {
 			Uri uri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
 			if(uri == null) {
 				Log.e(TAG, "URI for media store is null");
-				return;
-			}
-
-			// Look up album, and add cover art if found.
-			try (Cursor cursor = contentResolver.query(uri, new String[]{MediaStore.Audio.AudioColumns.ALBUM_ID}, null, null, null)){
-				if (cursor.moveToFirst()) {
-					int albumId = cursor.getInt(0);
-					insertAlbumArt(albumId, downloadFile);
-				}
 			}
 		} else {
 			values.put(MediaStore.Video.VideoColumns.TITLE, song.getTitle());
@@ -162,25 +151,6 @@ public class MediaStoreService {
 				new String[]{start.getAbsolutePath()});
 		if (n > 0) {
 			Log.i(TAG, "Rename media store row for " + start + " to " + end);
-		}
-	}
-
-	private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
-		ContentResolver contentResolver = context.getContentResolver();
-
-		try (Cursor cursor = contentResolver.query(Uri.withAppendedPath(ALBUM_ART_URI, String.valueOf(albumId)), null, null, null, null)) {
-			if (!cursor.moveToFirst()) {
-
-				// No album art found, add it.
-				File albumArtFile = FileUtil.getAlbumArtFile(context, downloadFile.getSong());
-				if (albumArtFile.exists()) {
-					ContentValues values = new ContentValues();
-					values.put(MediaStore.Audio.AlbumColumns.ALBUM_ID, albumId);
-					values.put(MediaStore.MediaColumns.DATA, albumArtFile.getPath());
-					contentResolver.insert(ALBUM_ART_URI, values);
-					Log.i(TAG, "Added album art: " + albumArtFile);
-				}
-			}
 		}
 	}
 
