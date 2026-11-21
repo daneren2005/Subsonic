@@ -18,7 +18,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -45,6 +47,41 @@ public class NoRangeHttpDataSourceTest {
     @Test
     public void reportsHttpFailureInsteadOfEmptySuccessfulStream() throws Exception {
         assertRequest(false, true);
+    }
+
+    @Test
+    public void exposesIcyResponseHeadersSoExoPlayerCanStripMetadata() throws Exception {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try (ServerSocket server = new ServerSocket(0, 1, InetAddress.getByName("127.0.0.1"))) {
+            server.setSoTimeout(5000);
+            Future<?> response = executor.submit(() -> {
+                try {
+                    respond(server, "/radio", "200 OK",
+                            "Icy-Name: Solar Radio\r\nicy-metaint: 1024\r\n", "radio");
+                } catch (IOException e) {
+                    throw new AssertionError(e);
+                }
+            });
+            NoRangeHttpDataSource source = new NoRangeHttpDataSource();
+            try {
+                DataSpec spec = new DataSpec.Builder()
+                        .setUri(Uri.parse("http://127.0.0.1:" + server.getLocalPort() + "/radio"))
+                        .setHttpRequestHeaders(Collections.singletonMap("Icy-MetaData", "1"))
+                        .build();
+                assertEquals(C.LENGTH_UNSET, source.open(spec));
+                // ExoPlayer matches these in lowercase, so mixed-case server
+                // headers must still be visible after open().
+                Map<String, List<String>> headers = source.getResponseHeaders();
+                assertEquals(Collections.singletonList("Solar Radio"), headers.get("icy-name"));
+                assertEquals(Collections.singletonList("1024"), headers.get("icy-metaint"));
+                response.get(5, TimeUnit.SECONDS);
+            } finally {
+                source.close();
+            }
+        } finally {
+            executor.shutdownNow();
+            assertTrue("Radio fixture shuts down", executor.awaitTermination(5, TimeUnit.SECONDS));
+        }
     }
 
     private void assertRequest(boolean redirect, boolean reject) throws Exception {
