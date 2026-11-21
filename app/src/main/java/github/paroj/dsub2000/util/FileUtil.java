@@ -18,9 +18,11 @@
  */
 package github.paroj.dsub2000.util;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -349,6 +351,32 @@ public class FileUtil {
 		} finally {
 			bw.close();
 			fw.close();
+		}
+	}
+	/**
+	 * Checks whether the given playlist file still lists all songs of the playlist by
+	 * comparing line counts. Reading the file sequentially is much cheaper than writing
+	 * it, which resolves the path of every song on the (possibly slow) external storage.
+	 * This catches stale or truncated files without rewriting unchanged playlists.
+	 */
+	public static boolean isPlaylistFileUpToDate(File file, MusicDirectory playlist) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			if(!"#EXTM3U".equals(reader.readLine())) {
+				return false;
+			}
+
+			int count = 0;
+			while(reader.readLine() != null) {
+				count++;
+			}
+			return count == playlist.getChildrenSize();
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to read playlist: " + file.getName(), e);
+			return false;
+		} finally {
+			Util.close(reader);
 		}
 	}
 	public static File getPlaylistDirectory(Context context) {

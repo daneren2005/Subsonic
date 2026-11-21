@@ -353,8 +353,12 @@ public class CachedMusicService implements MusicService {
 			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
 
+			// Rewrite the offline playlist file when it is missing, truncated or no longer
+			// matches the playlist. Comparing against the cached directory alone cannot
+			// detect a stale file after an in-app edit, so also check its line count.
 			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
-			if(cachedPlaylist == null || !playlistFile.exists() || !cachedPlaylist.getChildren().equals(dir.getChildren())) {
+			if(cachedPlaylist == null || !cachedPlaylist.getChildren().equals(dir.getChildren())
+					|| !playlistFile.exists() || !FileUtil.isPlaylistFileUpToDate(playlistFile, dir)) {
 				FileUtil.writePlaylistFile(context, playlistFile, dir);
 			}
 
