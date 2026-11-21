@@ -63,6 +63,10 @@ public class RemoteControlClientLP {
     private static final String THUMBS_UP = "github.paroj.dsub2000.THUMBS_UP";
     private static final String THUMBS_DOWN = "github.paroj.dsub2000.THUMBS_DOWN";
     private static final String STAR = "github.paroj.dsub2000.STAR";
+    // Same packages Media3 uses for its isAutoCompanionController/isAutomotiveController checks.
+    private static final String ANDROID_AUTO_PACKAGE = "com.google.android.projection.gearhead";
+    private static final String ANDROID_AUTOMOTIVE_MEDIA_PACKAGE = "com.android.car.media";
+    private static final String ANDROID_AUTOMOTIVE_LAUNCHER_PACKAGE = "com.android.car.carlauncher";
     private final Handler handler = new Handler(Looper.getMainLooper());
     private DownloadService service;
     private MediaLibrarySession session;
@@ -195,11 +199,27 @@ public class RemoteControlClientLP {
                 .setSessionCommand(new SessionCommand(action, Bundle.EMPTY)).build();
     }
 
+    private static boolean isCarController(MediaSession.ControllerInfo controller) {
+        String packageName = controller.getPackageName();
+        return ANDROID_AUTO_PACKAGE.equals(packageName)
+                || ANDROID_AUTOMOTIVE_MEDIA_PACKAGE.equals(packageName)
+                || ANDROID_AUTOMOTIVE_LAUNCHER_PACKAGE.equals(packageName);
+    }
+
     private final class Callback implements MediaLibrarySession.Callback {
         @Override
         public void onPlayerInteractionFinished(MediaSession session,
                 MediaSession.ControllerInfo controller, Player.Commands commands) {
             player.finishInteraction();
+        }
+
+        @Override
+        public void onPostConnect(MediaSession session, MediaSession.ControllerInfo controller) {
+            if (isCarController(controller)) {
+                // The car has no MediaRouter chooser, so jukebox playback would continue on the
+                // server with no way to switch back to the car speakers.
+                service.onCarControllerConnected();
+            }
         }
 
         @Override

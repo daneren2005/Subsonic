@@ -1768,6 +1768,35 @@ public class DownloadService extends MediaLibraryService {
 		return remoteController;
 	}
 
+	/**
+	 * Drops a selected jukebox route when Android Auto or Automotive OS connects. The car UI has
+	 * no MediaRouter route chooser, so otherwise playback would stay on the server while the car
+	 * speakers stay silent, with no way to switch back from the car.
+	 */
+	public void onCarControllerConnected() {
+		SharedPreferences prefs = Util.getPreferences(this);
+		boolean savedJukebox = prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, LOCAL.getValue())
+				== RemoteControlState.JUKEBOX_SERVER.getValue();
+		if(!savedJukebox && remoteState != RemoteControlState.JUKEBOX_SERVER) {
+			return;
+		}
+
+		Log.i(TAG, "Car controller connected; leaving jukebox mode");
+		// Clear the saved route before the queue finishes restoring, otherwise restore() would
+		// reconnect the jukebox after the car is already attached.
+		prefs.edit().putInt(Constants.PREFERENCES_KEY_CONTROL_MODE, LOCAL.getValue()).apply();
+		post(new Runnable() {
+			@Override
+			public void run() {
+				synchronized (DownloadService.this) {
+					if(remoteState == RemoteControlState.JUKEBOX_SERVER && mediaRouter != null) {
+						setRemoteEnabled(LOCAL, null);
+					}
+				}
+			}
+		});
+	}
+
 	public void setRemoteEnabled(RemoteControlState newState) {
 		if(instance != null) {
 			setRemoteEnabled(newState, null);
