@@ -30,6 +30,7 @@ import github.paroj.dsub2000.R;
 import github.paroj.dsub2000.domain.Artist;
 import github.paroj.dsub2000.domain.MusicDirectory.Entry;
 import github.paroj.dsub2000.domain.MusicFolder;
+import github.paroj.dsub2000.util.ImageLoader;
 import github.paroj.dsub2000.util.Util;
 import github.paroj.dsub2000.view.ArtistView;
 import github.paroj.dsub2000.view.FastScroller;
@@ -42,14 +43,16 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 
 	private List<MusicFolder> musicFolders;
 	private OnMusicFolderChanged onMusicFolderChanged;
+	private ImageLoader imageLoader;
 
 	public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
-		this(context, artists, null, listener, null);
+		this(context, artists, null, null, listener, null);
 	}
 
-	public ArtistAdapter(Context context, List<Serializable> artists, List<MusicFolder> musicFolders, OnItemClickedListener onItemClickedListener, OnMusicFolderChanged onMusicFolderChanged) {
+	public ArtistAdapter(Context context, List<Serializable> artists, List<MusicFolder> musicFolders, ImageLoader imageLoader, OnItemClickedListener onItemClickedListener, OnMusicFolderChanged onMusicFolderChanged) {
 		super(context, artists);
 		this.musicFolders = musicFolders;
+		this.imageLoader = imageLoader;
 		this.onItemClickedListener = onItemClickedListener;
 		this.onMusicFolderChanged = onMusicFolderChanged;
 
@@ -116,7 +119,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
 		UpdateView updateView = null;
 		if(viewType == VIEW_TYPE_ARTIST) {
-			updateView = new ArtistView(context);
+			updateView = new ArtistView(context, imageLoader);
 		} else if(viewType == VIEW_TYPE_SONG) {
 			updateView = new SongView(context);
 		}

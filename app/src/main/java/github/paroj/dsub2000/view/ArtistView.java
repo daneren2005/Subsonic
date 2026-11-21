@@ -26,7 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.paroj.dsub2000.R;
 import github.paroj.dsub2000.domain.Artist;
+import github.paroj.dsub2000.domain.MusicDirectory;
 import github.paroj.dsub2000.util.FileUtil;
+import github.paroj.dsub2000.util.ImageLoader;
 import github.paroj.dsub2000.util.TouchDelegateUtil;
 
 import java.io.File;
@@ -41,12 +43,18 @@ public class ArtistView extends UpdateView<Artist> {
 
 	private File file;
     private TextView titleView;
+	private ImageLoader imageLoader;
 
     public ArtistView(Context context) {
+		this(context, null);
+	}
+
+    public ArtistView(Context context, ImageLoader imageLoader) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+        LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.item_name);
+		coverArtView = findViewById(R.id.item_art);
 		starButton = (ImageButton) findViewById(R.id.item_star);
 		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.item_more);
@@ -56,11 +64,34 @@ public class ArtistView extends UpdateView<Artist> {
 			}
 		});
         TouchDelegateUtil.expandTouchArea(moreButton);
+
+		this.imageLoader = imageLoader;
+		((RecyclingImageView) coverArtView).setOnInvalidated(new RecyclingImageView.OnInvalidated() {
+			@Override
+			public void onInvalidated(RecyclingImageView imageView) {
+				if(item != null) {
+					setObjectImpl(item);
+				}
+			}
+		});
     }
     
     protected void setObjectImpl(Artist artist) {
     	titleView.setText(artist.getName());
 		file = FileUtil.getArtistDirectory(context, artist);
+
+		if(imageLoader == null || (artist.getCoverArt() == null && artist.getArtistImageUrl() == null)) {
+			coverArtView.setVisibility(GONE);
+			imageTask = null;
+		} else if(artist.getCoverArt() != null) {
+			coverArtView.setVisibility(VISIBLE);
+			MusicDirectory.Entry entry = new MusicDirectory.Entry(artist);
+			entry.setCoverArt(artist.getCoverArt());
+			imageTask = imageLoader.loadImage(coverArtView, entry, false, false);
+		} else {
+			coverArtView.setVisibility(VISIBLE);
+			imageTask = imageLoader.loadImage(coverArtView, artist.getArtistImageUrl(), false);
+		}
     }
     
     @Override

@@ -80,6 +80,8 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     artist.setId(get("id"));
                     artist.setName(get("name"));
                     artist.setIndex(index);
+					artist.setCoverArt(get("coverArt"));
+					artist.setArtistImageUrl(get("artistImageUrl"));
 					artist.setStarred(get("starred") != null);
                     artist.setRating(getInteger("userRating"));
 
@@ -88,6 +90,12 @@ public class IndexesParser extends MusicDirectoryEntryParser {
 						Artist originalArtist = artistList.get(artist.getName());
 						if(originalArtist.isStarred()) {
 							artist.setStarred(true);
+						}
+						if(originalArtist.getCoverArt() == null) {
+							originalArtist.setCoverArt(artist.getCoverArt());
+						}
+						if(originalArtist.getArtistImageUrl() == null) {
+							originalArtist.setArtistImageUrl(artist.getArtistImageUrl());
 						}
 						originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
 					} else {
@@ -104,6 +112,8 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     shortcut.setId(get("id"));
                     shortcut.setName(get("name"));
                     shortcut.setIndex("*");
+					shortcut.setCoverArt(get("coverArt"));
+					shortcut.setArtistImageUrl(get("artistImageUrl"));
 					shortcut.setStarred(get("starred") != null);
                     shortcuts.add(shortcut);
 				} else if("child".equals(name)) {

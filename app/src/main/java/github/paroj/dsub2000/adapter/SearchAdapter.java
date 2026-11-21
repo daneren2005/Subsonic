@@ -85,7 +85,7 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
 		} else if(viewType == VIEW_TYPE_SONG) {
 			updateView = new SongView(context);
 		} else if(viewType == VIEW_TYPE_ARTIST) {
-			updateView = new ArtistView(context);
+			updateView = new ArtistView(context, imageLoader);
 		}
 
 		return new UpdateView.UpdateViewHolder(updateView);

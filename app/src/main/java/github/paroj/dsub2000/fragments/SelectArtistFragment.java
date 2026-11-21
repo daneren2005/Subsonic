@@ -168,7 +168,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 
 	@Override
 	public SectionAdapter getAdapter(List<Serializable> objects) {
-		return new ArtistAdapter(context, objects, musicFolders, this, this);
+		return new ArtistAdapter(context, objects, musicFolders, getImageLoader(), this, this);
 	}
 
 	@Override
@@ -231,7 +231,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 
 		if(empty && !Util.isOffline(context)) {
 			objects.clear();
-			recyclerView.setAdapter(new ArtistAdapter(context, objects, musicFolders, this, this));
+			recyclerView.setAdapter(new ArtistAdapter(context, objects, musicFolders, getImageLoader(), this, this));
 			recyclerView.setVisibility(View.VISIBLE);
 
 			View view = rootView.findViewById(R.id.tab_progress);

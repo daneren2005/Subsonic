@@ -224,7 +224,8 @@ public class ImageLoader {
 		}
 		// If we know this a artist, try to load artist info instead
 		// Folder IDs are not necessarily artist IDs, so only trust them when browsing by tags
-		else if(entry != null && Util.isTagBrowsing(context) && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
+		// Prefer coverArt if the server supplied it, e.g. OpenSubsonic artist lists
+		else if(entry != null && entry.getCoverArt() == null && Util.isTagBrowsing(context) && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
 			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 			task.execute();
 			return task;

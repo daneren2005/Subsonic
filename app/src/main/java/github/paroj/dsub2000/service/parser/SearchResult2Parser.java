@@ -57,6 +57,8 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
                     Artist artist = new Artist();
                     artist.setId(get("id"));
                     artist.setName(get("name"));
+                    artist.setCoverArt(get("coverArt"));
+                    artist.setArtistImageUrl(get("artistImageUrl"));
                     artists.add(artist);
                 } else if ("album".equals(name)) {
 					MusicDirectory.Entry entry = parseEntry("");

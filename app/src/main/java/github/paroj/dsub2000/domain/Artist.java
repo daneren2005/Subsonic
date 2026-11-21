@@ -38,6 +38,8 @@ public class Artist implements Serializable {
     private String id;
     private String name;
     private String index;
+	private String coverArt;
+	private String artistImageUrl;
 	private boolean starred;
 	private Integer rating;
 	private int closeness;
@@ -70,6 +72,20 @@ public class Artist implements Serializable {
     public void setIndex(String index) {
         this.index = index;
     }
+
+	public String getCoverArt() {
+		return coverArt;
+	}
+	public void setCoverArt(String coverArt) {
+		this.coverArt = coverArt;
+	}
+
+	public String getArtistImageUrl() {
+		return artistImageUrl;
+	}
+	public void setArtistImageUrl(String artistImageUrl) {
+		this.artistImageUrl = artistImageUrl;
+	}
 	
 	public boolean isStarred() {
 		return starred;
