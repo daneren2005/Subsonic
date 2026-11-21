@@ -1,6 +1,7 @@
 package github.paroj.dsub2000.service;
 
 import android.content.ComponentName;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -38,7 +39,9 @@ import java.util.function.Supplier;
 
 import github.paroj.dsub2000.activity.SubsonicFragmentActivity;
 import github.paroj.dsub2000.domain.MusicDirectory.Entry;
+import github.paroj.dsub2000.domain.RemoteControlState;
 import github.paroj.dsub2000.util.Constants;
+import github.paroj.dsub2000.util.Util;
 import github.paroj.dsub2000.util.compat.RemoteControlClientLP;
 
 import static org.junit.Assert.assertEquals;
@@ -74,6 +77,21 @@ public class MediaSessionIntegrationTest {
         });
         if (audio != null) {
             assertTrue("Remove generated audio", audio.delete());
+        }
+    }
+
+    @Test
+    public void carConnectionClearsSavedJukeboxRoute() {
+        SharedPreferences prefs = Util.getPreferences(activity.getActivity());
+        prefs.edit().putInt(Constants.PREFERENCES_KEY_CONTROL_MODE,
+                RemoteControlState.JUKEBOX_SERVER.getValue()).commit();
+        try {
+            onMain(() -> { service.onCarControllerConnected(); return null; });
+            assertEquals(RemoteControlState.LOCAL.getValue(),
+                    prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, -1));
+        } finally {
+            prefs.edit().putInt(Constants.PREFERENCES_KEY_CONTROL_MODE,
+                    RemoteControlState.LOCAL.getValue()).commit();
         }
     }
 
