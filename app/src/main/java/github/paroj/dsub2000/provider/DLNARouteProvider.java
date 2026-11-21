@@ -24,9 +24,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
-import android.media.MediaRouter;
 import android.os.IBinder;
 import androidx.mediarouter.media.MediaControlIntent;
+import androidx.mediarouter.media.MediaRouter;
 import androidx.mediarouter.media.MediaRouteDescriptor;
 import androidx.mediarouter.media.MediaRouteDiscoveryRequest;
 import androidx.mediarouter.media.MediaRouteProvider;
@@ -65,6 +65,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 	private DownloadService downloadService;
 	private RemoteController controller;
+	private String connectedDeviceId;
 
 	private HashMap<String, DLNADevice> devices = new HashMap<String, DLNADevice>();
 	private List<String> adding = new ArrayList<String>();
@@ -180,6 +181,9 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			routeBuilder.addControlFilter(routeIntentFilter)
 					.setPlaybackStream(AudioManager.STREAM_MUSIC)
 					.setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
+					.setConnectionState(device.id.equals(connectedDeviceId)
+							? MediaRouter.RouteInfo.CONNECTION_STATE_CONNECTED
+							: MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
 					.setDescription(device.description)
 					.setVolume(volume)
 					.setVolumeMax(10)
@@ -342,22 +346,28 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 		@Override
 		public void onRelease() {
+			connectedDeviceId = null;
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 			downloadService.getMediaRouter().scheduleDlnaProviderRelease();
 			controller = null;
+			broadcastDescriptors();
 		}
 
 		@Override
 		public void onSelect() {
+			connectedDeviceId = device.id;
 			controller = new DLNAController(downloadService, dlnaService.getControlPoint(), device);
 			downloadService.setRemoteEnabled(RemoteControlState.DLNA, controller);
+			broadcastDescriptors();
 		}
 
 		@Override
 		public void onUnselect() {
+			connectedDeviceId = null;
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 			downloadService.getMediaRouter().scheduleDlnaProviderRelease();
 			controller = null;
+			broadcastDescriptors();
 		}
 
 		@Override
