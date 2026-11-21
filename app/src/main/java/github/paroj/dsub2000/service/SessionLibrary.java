@@ -217,7 +217,7 @@ public final class SessionLibrary {
             }
         } else if ("library".equals(id) || id.startsWith("mf-")) {
             boolean artists = "library".equals(id);
-            Indexes indexes = music.getIndexes(artists ? null : id.substring(3), false, service, null);
+            Indexes indexes = music.getIndexes(artists ? null : id.substring(3), true, service, null);
             for (Artist artist : indexes.getArtists()) {
                 result.add(folder((artists ? "art-" : "mdc-") + artist.getId(), artist.getName(), null));
             }
