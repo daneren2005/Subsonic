@@ -42,7 +42,7 @@ public class AudioNoisyReceiver extends BroadcastReceiver {
 					SharedPreferences prefs = Util.getPreferences(downloadService);
 					int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
 					if(pausePref == 0) {
-						downloadService.pause();
+						downloadService.pauseForDisconnect();
 					}
 				}
 		}

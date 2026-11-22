@@ -137,6 +137,12 @@ public class DownloadService extends MediaLibraryService {
 	private LocalPlayback mediaPlayer;
 	private int audioSessionId;
 	private boolean playWhenReady;
+	/**
+	 * Whether an automatic request (Android Auto, System UI) may resume this queue. It follows
+	 * the user's intent: playing and automatic pauses are resumable, an explicit pause/stop is
+	 * not.
+	 */
+	private boolean resumptionAllowed = false;
 	private PlaybackException playbackError;
 	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
@@ -648,7 +654,7 @@ public class DownloadService extends MediaLibraryService {
 		mRemoteControl.updatePlaylist(playlist);
 	}
 
-	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
+	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition, boolean resumable) {
 		SharedPreferences prefs = Util.getPreferences(this);
 		RemoteControlState newState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
 		if(newState != LOCAL) {
@@ -671,14 +677,23 @@ public class DownloadService extends MediaLibraryService {
 			editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, startShufflePlay);
 			editor.commit();
 		}
-		if (currentPlayingIndex != -1) {
+		boolean canResume = resumable && currentPlayingIndex != -1;
+		if (canResume) {
 			while(mediaPlayer == null) {
 				Util.sleepQuietly(50L);
 			}
 
 			play(currentPlayingIndex, autoPlayStart, currentPlayingPosition);
 			autoPlayStart = false;
+		} else {
+			// Restore the queue and its resume point, but without a current item. Automatic
+			// resumption (Android Auto, System UI) then has nothing to start, while an explicit
+			// in-app play or a media button press still uses the restored index and position.
+			setCurrentPlaying(null, false);
+			cachedPosition = currentPlayingPosition;
+			this.currentPlayingIndex = currentPlayingIndex;
 		}
+		setResumptionAllowed(canResume);
 
 		if(toDelete != null) {
 			for(MusicDirectory.Entry entry: toDelete) {
@@ -1001,6 +1016,7 @@ public class DownloadService extends MediaLibraryService {
 		if(currentPlaying == null) {
 			playWhenReady = false;
 			currentPlayingIndex = -1;
+			setResumptionAllowed(false);
 			setPlayerState(IDLE);
 		} else {
 			currentPlayingIndex = downloadList.indexOf(currentPlaying);
@@ -1187,6 +1203,10 @@ public class DownloadService extends MediaLibraryService {
 		int current = getCurrentPlayingIndex();
 		if (current == -1) {
 			play(0);
+		} else if (getCurrentPlaying() == null && cachedPosition > 0) {
+			// A queue restored without a current item keeps its resume point. Automatic
+			// resumption is still refused, but an explicit play continues where the user left off.
+			play(current, true, cachedPosition);
 		} else {
 			play(current);
 		}
@@ -1204,6 +1224,9 @@ public class DownloadService extends MediaLibraryService {
 	synchronized void play(int index, boolean start, int position) {
 		playbackError = null;
 		playWhenReady = start;
+		if(start) {
+			setResumptionAllowed(true);
+		}
 		int size = this.size();
 		cachedPosition = 0;
 		if (index < 0 || index >= size) {
@@ -1378,11 +1401,22 @@ public class DownloadService extends MediaLibraryService {
 	}
 
 	public synchronized void pause() {
-		pause(false);
+		pause(false, false);
 	}
 	public synchronized void pause(boolean temp) {
+		pause(temp, temp);
+	}
+	/**
+	 * Pauses because the audio route disappeared. Unlike an explicit pause this stays resumable,
+	 * so a reconnect may continue the queue the user was listening to.
+	 */
+	public synchronized void pauseForDisconnect() {
+		pause(false, true);
+	}
+	private synchronized void pause(boolean temp, boolean resumable) {
 		playWhenReady = temp;
 		autoPlayStart = false;
+		setResumptionAllowed(resumable);
 		try {
 			PlayerState paused = temp ? PAUSED_TEMP : PAUSED;
 			if (remoteState == LOCAL) {
@@ -1411,6 +1445,7 @@ public class DownloadService extends MediaLibraryService {
 	public synchronized void stop() {
 		playWhenReady = false;
 		autoPlayStart = false;
+		setResumptionAllowed(false);
 		if (bufferTask != null) {
 			bufferTask.cancel();
 			bufferTask = null;
@@ -1447,6 +1482,7 @@ public class DownloadService extends MediaLibraryService {
 	public synchronized void start() {
 		playbackError = null;
 		playWhenReady = true;
+		setResumptionAllowed(true);
 		try {
 			if (remoteState != LOCAL) {
 				remoteController.start();
@@ -1542,6 +1578,27 @@ public class DownloadService extends MediaLibraryService {
 				: remoteController != null && remoteController.isPlayWhenReady());
 	}
 
+	/**
+	 * Whether an automatic request may resume the saved queue. It is persisted with the queue
+	 * in preferences.
+	 */
+	public synchronized boolean isResumptionAllowed() {
+		return resumptionAllowed;
+	}
+
+	/** Resume position of a queue restored without a current item. */
+	public synchronized int getCachedPosition() {
+		return cachedPosition;
+	}
+
+	public synchronized void setResumptionAllowed(boolean allowed) {
+		if(resumptionAllowed == allowed) {
+			return;
+		}
+		resumptionAllowed = allowed;
+		lifecycleSupport.serializeDownloadQueue();
+	}
+
 	public synchronized PlaybackException getPlaybackError() {
 		return playbackError;
 	}
@@ -1565,6 +1622,7 @@ public class DownloadService extends MediaLibraryService {
 		this.playerState = playerState;
 
 		if(playerState == STARTED) {
+			setResumptionAllowed(true);
 			AudioManager audioManager = (AudioManager) playbackContext.getSystemService(Context.AUDIO_SERVICE);
 			Util.requestAudioFocus(this, audioManager);
 		}
@@ -1630,6 +1688,7 @@ public class DownloadService extends MediaLibraryService {
 	}
 
 	public void setPlayerStateCompleted() {
+		setResumptionAllowed(false);
 		if (Util.isScrobblingEnabled(this)) {
 			// The scrobble request is dispatched asynchronously after this method returns.
 			acquireWakelock();
@@ -2153,6 +2212,7 @@ public class DownloadService extends MediaLibraryService {
 
 	synchronized void handleError(Exception x) {
 		playWhenReady = false;
+		setResumptionAllowed(false);
 		Log.w(TAG, "Media player error: " + x, x);
 		if(mediaPlayer != null) {
 			try {

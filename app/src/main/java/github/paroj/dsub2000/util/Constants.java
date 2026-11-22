@@ -146,6 +146,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SYNC_MOST_RECENT = "syncMostRecent";
 	public static final String PREFERENCES_KEY_SYNC_LIBRARY = "syncLibrary";
 	public static final String PREFERENCES_KEY_PAUSE_DISCONNECT = "pauseOnDisconnect";
+	public static final String PREFERENCES_KEY_PLAYBACK_RESUMABLE = "playbackResumable";
 	public static final String PREFERENCES_KEY_HIDE_WIDGET = "hideWidget";
 	public static final String PREFERENCES_KEY_PODCASTS_ENABLED = "podcastsEnabled";
 	public static final String PREFERENCES_KEY_BOOKMARKS_ENABLED = "bookmarksEnabled";

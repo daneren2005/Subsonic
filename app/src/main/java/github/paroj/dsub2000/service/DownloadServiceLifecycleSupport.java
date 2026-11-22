@@ -307,7 +307,11 @@ public class DownloadServiceLifecycleSupport {
 		}
 		state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		state.currentPlayingPosition = downloadService.getPlayerPosition();
-
+		if(downloadService.getCurrentPlaying() == null && state.currentPlayingIndex >= 0) {
+			// A restored queue that is not resumable has no current item but keeps its
+			// resume point in cachedPosition.
+			state.currentPlayingPosition = downloadService.getCachedPosition();
+		}
 		DownloadFile currentPlaying = downloadService.getCurrentPlaying();
 		if(currentPlaying != null) {
 			state.renameCurrent = currentPlaying.isWorkDone() && !currentPlaying.isCompleteFileAvailable();
@@ -315,8 +319,13 @@ public class DownloadServiceLifecycleSupport {
 		state.changed = lastChange = new Date();
 
 		Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
-		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
-
+		if(FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER)) {
+			// Resumability lives in preferences rather than PlayerQueue so that adding the
+			// flag cannot break Kryo's schema for queues saved by older versions.
+			Util.getPreferences(downloadService).edit()
+					.putBoolean(Constants.PREFERENCES_KEY_PLAYBACK_RESUMABLE,
+							downloadService.isResumptionAllowed()).apply();
+		}
 		// If we are on Subsonic 5.2+, save play queue
 		if(serializeRemote && ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0 && !(state.songs.get(0) instanceof InternetRadioStation)) {
 			// Cancel any currently running tasks
@@ -383,6 +392,8 @@ public class DownloadServiceLifecycleSupport {
 	private void deserializeDownloadQueueNow() {
 		PlayerQueue state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER, PlayerQueue.class);
 		if (state == null) {
+			Util.getPreferences(downloadService).edit()
+					.putBoolean(Constants.PREFERENCES_KEY_PLAYBACK_RESUMABLE, false).apply();
 			return;
 		}
 		if (!state.isRestorable()) {
@@ -399,12 +410,16 @@ public class DownloadServiceLifecycleSupport {
 			currentPlaying.renamePartial();
 		}
 
-		downloadService.restore(state.songs, state.toDelete, state.currentPlayingIndex, state.currentPlayingPosition);
+		boolean resumable = Util.getPreferences(downloadService)
+				.getBoolean(Constants.PREFERENCES_KEY_PLAYBACK_RESUMABLE, false);
+		downloadService.restore(state.songs, state.toDelete, state.currentPlayingIndex, state.currentPlayingPosition, resumable);
 
 		lastChange = state.changed;
 	}
 
 	private void deleteSavedQueue() {
+		Util.getPreferences(downloadService).edit()
+				.putBoolean(Constants.PREFERENCES_KEY_PLAYBACK_RESUMABLE, false).apply();
 		Util.delete(new File(downloadService.getCacheDir(), FILENAME_DOWNLOADS_SER));
 	}
 

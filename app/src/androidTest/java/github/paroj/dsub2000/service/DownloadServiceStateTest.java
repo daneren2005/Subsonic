@@ -22,6 +22,7 @@ import github.paroj.dsub2000.domain.MusicDirectory.Entry;
 import github.paroj.dsub2000.domain.PlayerState;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /** Pins the externally visible local playback states, including back-to-back transport commands. */
@@ -128,6 +129,35 @@ public class DownloadServiceStateTest {
         }
         assertTrue("Position reaches the seek target", Math.abs(position() - 5000) <= 200);
         awaitState(PlayerState.PAUSED);
+    }
+
+    @Test
+    public void resumptionFollowsWhetherPlaybackWasActive() throws Exception {
+        assertTrue("Playing queues are resumable", onMain(service::isResumptionAllowed));
+
+        onMain(() -> { service.pause(true); return null; });
+        awaitState(PlayerState.PAUSED_TEMP);
+        assertTrue("A temporary pause stays resumable", onMain(service::isResumptionAllowed));
+
+        onMain(() -> { service.pause(); return null; });
+        awaitState(PlayerState.PAUSED);
+        assertFalse("A user pause is not resumable", onMain(service::isResumptionAllowed));
+
+        onMain(() -> { service.start(); return null; });
+        awaitState(PlayerState.STARTED);
+        assertTrue("Resuming playback makes the queue resumable again", onMain(service::isResumptionAllowed));
+
+        onMain(() -> { service.stop(); return null; });
+        awaitState(PlayerState.STOPPED);
+        assertFalse("A user stop is not resumable", onMain(service::isResumptionAllowed));
+    }
+
+    @Test
+    public void disconnectPauseStaysResumable() throws Exception {
+        onMain(() -> { service.pauseForDisconnect(); return null; });
+        awaitState(PlayerState.PAUSED);
+        assertTrue("Pausing for a lost audio route keeps the queue resumable",
+                onMain(service::isResumptionAllowed));
     }
 
     private void assertPositionHeld() throws Exception {
