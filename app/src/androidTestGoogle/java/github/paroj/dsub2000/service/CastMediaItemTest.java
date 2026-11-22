@@ -10,15 +10,19 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaQueueItem;
+import com.google.android.gms.cast.MediaStatus;
 import com.google.android.gms.cast.framework.CastOptions;
 
+import org.json.JSONObject;
 import org.junit.Test;
 
 import github.paroj.dsub2000.util.compat.DSubCastOptionsProvider;
 import github.paroj.dsub2000.util.compat.GoogleCompat;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @OptIn(markerClass = UnstableApi.class)
 public class CastMediaItemTest {
@@ -51,6 +55,23 @@ public class CastMediaItemTest {
                 .setMediaMetadata(new MediaMetadata.Builder().setTitle("Radio")
                         .setMediaType(MediaMetadata.MEDIA_TYPE_RADIO_STATION).build()).build();
         assertEquals(MediaInfo.STREAM_TYPE_LIVE, converter.toMediaQueueItem(item).getMedia().getStreamType());
+    }
+
+    @Test
+    public void receiverIdleFinishedIsTreatedAsTrackCompletion() throws Exception {
+        MediaStatus finished = status("IDLE", "FINISHED");
+        assertTrue(ChromeCastController.isTrackFinished(finished, false));
+
+        // A load in progress also reports IDLE for the previous item.
+        assertFalse(ChromeCastController.isTrackFinished(finished, true));
+        assertFalse(ChromeCastController.isTrackFinished(status("IDLE", "ERROR"), false));
+        assertFalse(ChromeCastController.isTrackFinished(status("PLAYING", null), false));
+    }
+
+    private static MediaStatus status(String playerState, String idleReason) throws Exception {
+        JSONObject json = new JSONObject().put("mediaSessionId", 0).put("playerState", playerState);
+        if (idleReason != null) json.put("idleReason", idleReason);
+        return new MediaStatus(json);
     }
 
     @Test
