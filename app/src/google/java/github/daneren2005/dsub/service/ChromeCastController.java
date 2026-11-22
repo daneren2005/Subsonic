@@ -63,12 +63,30 @@ public final class ChromeCastController extends RemoteController {
     private final RemoteMediaClient.Callback receiverCallback = new RemoteMediaClient.Callback() {
         @Override public void onStatusUpdated() {
             MediaStatus status = client == null ? null : client.getMediaStatus();
-            if (closed || requested == null || status == null || status.getMediaInfo() == null
-                    || !requested.getSong().getId().equals(status.getMediaInfo().getContentId())) return;
+            if (closed || requested == null || status == null) return;
+            MediaInfo media = status.getMediaInfo();
+            boolean isRequestedMedia = media != null
+                    && requested.getSong().getId().equals(media.getContentId());
+
             if (status.getPlayerState() == MediaStatus.PLAYER_STATE_IDLE
                     && status.getIdleReason() == MediaStatus.IDLE_REASON_ERROR) {
-                fail(new IOException("Cast receiver could not play the requested media"));
-            } else if (status.getPlayerState() != MediaStatus.PLAYER_STATE_IDLE) {
+                if (isRequestedMedia) {
+                    fail(new IOException("Cast receiver could not play the requested media"));
+                }
+            } else if (isTrackFinished(status, loading)) {
+                // RemoteCastPlayer maps the receiver's IDLE state to Player.STATE_IDLE, never
+                // STATE_ENDED, so refresh() cannot see the end of a track. Without this the queue
+                // stops after the first item while the app still believes it is playing.
+                if (media == null || isRequestedMedia) {
+                    requested = null;
+                    handler.post(() -> {
+                        if (!closed && requested == null
+                                && downloadService.getRemoteController() == ChromeCastController.this) {
+                            downloadService.onSongCompleted();
+                        }
+                    });
+                }
+            } else if (status.getPlayerState() != MediaStatus.PLAYER_STATE_IDLE && isRequestedMedia) {
                 loading = false;
                 handler.post(ChromeCastController.this::refresh);
             }
@@ -335,6 +353,18 @@ public final class ChromeCastController extends RemoteController {
         } else {
             handler.post(() -> { if (!closed) action.run(); });
         }
+    }
+
+    /**
+     * Whether the receiver has finished the item we asked it to play. Media3's RemoteCastPlayer
+     * reports the receiver's IDLE state as {@link Player#STATE_IDLE}, so completion has to come
+     * from the Cast status instead of {@link Player#STATE_ENDED}. A load in progress also reports
+     * IDLE for the old item, which must not be mistaken for the new one finishing.
+     */
+    static boolean isTrackFinished(MediaStatus status, boolean loading) {
+        return !loading
+                && status.getPlayerState() == MediaStatus.PLAYER_STATE_IDLE
+                && status.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED;
     }
 
     static final class RadioItemConverter implements MediaItemConverter {
