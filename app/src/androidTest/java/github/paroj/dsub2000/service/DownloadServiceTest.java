@@ -5,21 +5,26 @@ import static github.paroj.dsub2000.domain.PlayerState.IDLE;
 import static github.paroj.dsub2000.domain.PlayerState.PAUSED;
 import static github.paroj.dsub2000.domain.PlayerState.STARTED;
 import static github.paroj.dsub2000.domain.PlayerState.STOPPED;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import github.paroj.dsub2000.activity.SubsonicFragmentActivity;
 import github.paroj.dsub2000.domain.MusicDirectory;
 import github.paroj.dsub2000.domain.PlayerState;
+import github.paroj.dsub2000.util.FileUtil;
 
-import java.util.LinkedList;
-
-import android.content.Context;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,12 +34,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 public class DownloadServiceTest {
+	private static final int SECONDS = 30;
 
 	@Rule
 	public ActivityTestRule<SubsonicFragmentActivity> activityRule = new ActivityTestRule<>(SubsonicFragmentActivity.class, true, true);
 
 	private SubsonicFragmentActivity activity;
 	private DownloadService downloadService;
+	private final List<MusicDirectory.Entry> generatedSongs = new ArrayList<>();
 
 	@Before
 	public void setUp() throws Exception {
@@ -48,7 +55,16 @@ public class DownloadServiceTest {
 			Thread.sleep(50);
 		}
 
-		downloadService.clear();
+		InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> downloadService.clear());
+	}
+
+	@After
+	public void tearDown() {
+		InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> downloadService.clear());
+		for (MusicDirectory.Entry song : generatedSongs) {
+			new DownloadFile(activity, song, false).delete();
+		}
+		generatedSongs.clear();
 	}
 
 	/**
@@ -77,7 +93,7 @@ public class DownloadServiceTest {
 	@Test
 	public void testGetRecentDownloadsWithPlaylist() {
 		downloadService.getDownloads().clear();
-		downloadService.download(this.createMusicSongs(2), false, false, false,
+		downloadService.download(this.createSongs(2), false, false, false,
 				false, 0, 0);
 
 		int output_length = downloadService.getRecentDownloads().size();
@@ -89,13 +105,15 @@ public class DownloadServiceTest {
 		downloadService.clear();
 		downloadService.clearBackground();
 
-		List<MusicDirectory.Entry> queueSongs = createMusicSongs(2);
-		deleteCachedFiles(queueSongs);
+		List<MusicDirectory.Entry> queueSongs = createSongs(2);
 		downloadService.download(queueSongs, false, false, false, false, 0, 0);
 		int queueSize = downloadService.size();
 
-		List<MusicDirectory.Entry> backgroundSongs = createMusicSongs(1);
-		deleteCachedFiles(backgroundSongs);
+		List<MusicDirectory.Entry> backgroundSongs = createSongs(1);
+		// Keep the background song out of the playback queue but ready to be promoted
+		// without consulting the server.
+		FileUtil.SongFiles backgroundFiles = FileUtil.getSongFiles(activity, backgroundSongs.get(0));
+		assertTrue("Background audio prepared", backgroundFiles.save().renameTo(backgroundFiles.complete()));
 		downloadService.downloadBackground(backgroundSongs, true);
 		int backgroundSize = downloadService.getBackgroundDownloads().size();
 		assertEquals(1, backgroundSize);
@@ -142,15 +160,11 @@ public class DownloadServiceTest {
 	 * Test next action with playlist.
 	 */
 	@Test
-	public void testNextWithPlayList() throws InterruptedException {
+	public void testNextWithPlayList() {
 		// Download two songs
 		downloadService.getDownloads().clear();
-		downloadService.download(this.createMusicSongs(2), false, false, false,
+		downloadService.download(this.createSongs(2), false, false, false,
 				false, 0, 0);
-
-		Log.w("testPreviousWithPlayList", "Start waiting to downloads");
-		Thread.sleep(5000);
-		Log.w("testPreviousWithPlayList", "Stop waiting downloads");
 
 		// Get the current index
 		int oldCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
@@ -167,15 +181,11 @@ public class DownloadServiceTest {
 	 * Test previous action with playlist.
 	 */
 	@Test
-	public void testPreviousWithPlayList() throws InterruptedException {
+	public void testPreviousWithPlayList() {
 		// Download two songs
 		downloadService.getDownloads().clear();
-		downloadService.download(this.createMusicSongs(2), false, false, false,
+		downloadService.download(this.createSongs(2), false, false, false,
 				false, 0, 0);
-
-		Log.w("testPreviousWithPlayList", "Start waiting downloads");
-		Thread.sleep(5000);
-		Log.w("testPreviousWithPlayList", "Stop waiting downloads");
 
 		// Get the current index
 		int oldCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
@@ -253,8 +263,7 @@ public class DownloadServiceTest {
 	@Test
 	public void testTogglePlayPauseWithPlayList() throws InterruptedException {
 		// Download two songs
-		List<MusicDirectory.Entry> songs = this.createMusicSongs(2);
-		deleteCachedFiles(songs);
+		List<MusicDirectory.Entry> songs = this.createSongs(2);
 		downloadService.getDownloads().clear();
 		downloadService.download(songs, false, false, false,
 				false, 0, 0);
@@ -275,16 +284,14 @@ public class DownloadServiceTest {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void testAutoplay() throws InterruptedException, Exception {
-		// Download one songs
-		List<MusicDirectory.Entry> songs = this.createMusicSongs(1);
-		deleteCachedFiles(songs);
+	public void testAutoplay() throws InterruptedException {
+		// Download one song
+		List<MusicDirectory.Entry> songs = this.createSongs(1);
 		downloadService.getDownloads().clear();
 		downloadService.download(songs, false, true, false,
 				false, 0, 0);
 
-		// Starting a remote track involves downloading enough of it to buffer,
-		// preparing the decoder and then actually starting playback.
+		// The cached file still has to be opened and prepared, which is asynchronous.
 		awaitPlayerState(STARTED, 60000);
 	}
 
@@ -312,7 +319,7 @@ public class DownloadServiceTest {
 		}
 
 		// Launch download
-		downloadService.download(this.createMusicSongs(1), false, false, false,
+		downloadService.download(this.createSongs(1), false, false, false,
 				false, 0, 0);
 
 		// Check number of download after
@@ -325,8 +332,8 @@ public class DownloadServiceTest {
 	}
 
 	/**
-	 * Waits for the player to reach the expected state. Remote tracks need to be
-	 * buffered and prepared first, so a fixed sleep is not reliable.
+	 * Waits for the player to reach the expected state. Opening and preparing a track is
+	 * asynchronous, so a fixed sleep is not reliable.
 	 */
 	private void awaitPlayerState(PlayerState expected, long timeoutMillis) throws InterruptedException {
 		long deadline = SystemClock.elapsedRealtime() + timeoutMillis;
@@ -339,54 +346,40 @@ public class DownloadServiceTest {
 	}
 
 	/**
-	 * Removes cached copies so a previous run (or a server error that was saved as
-	 * audio) cannot make the player use a stale or unreadable file.
+	 * Creates local tracks so the tests do not depend on a configured server or credentials.
 	 */
-	private void deleteCachedFiles(List<MusicDirectory.Entry> songs) {
-		Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-		for (MusicDirectory.Entry song : songs) {
-			new DownloadFile(context, song, false).delete();
+	private List<MusicDirectory.Entry> createSongs(int size) {
+		List<MusicDirectory.Entry> songs = new ArrayList<>(size);
+		for (int i = 0; i < size; i++) {
+			songs.add(createSong());
 		}
+		return songs;
 	}
 
-	/**
-	 * Generate a list containing some music directory entries. Produced from current subsonic
-	 * server. Is uses *alphabeticalByName* album list. Given server stays with the
-	 * same music content, this method should produce the same results for every call with
-	 * unique *size* argument. It is important for this method to return really existing on server
-	 * songs, as other tests rely on it.
-	 * 
-	 * @return list containing some music directory entries.
-	 */
-	private List<MusicDirectory.Entry> createMusicSongs(int size) {
-		try {
-			Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-			MusicService service = MusicServiceFactory.getMusicService(context);
-			String albumId = service
-					.getAlbumList("alphabeticalByName", 1, 0, false, context, null)
-					.getChildren().get(0).getId();
+	private MusicDirectory.Entry createSong() {
+		MusicDirectory.Entry song = new MusicDirectory.Entry(UUID.randomUUID().toString());
+		song.setTitle("Test " + song.getId());
+		song.setSuffix("wav");
+		song.setDuration(SECONDS);
 
-			MusicDirectory.Entry musicEntry = service
-					.getMusicDirectory(albumId, "", false, context, null)
-					.getSongs()
-					.get(0);
-
-
-			List<MusicDirectory.Entry> musicEntries = new LinkedList<>();
-
-			for (int i = 0; i < size; i++) {
-				musicEntries.add(musicEntry);
-			}
-
-			return musicEntries;
-
-		} catch (Exception ex) {
-			throw new AssertionError(ex);
-			// Throwing exactly AssertError because it will not require to add *throws Exception*
-			// to every test case where this method gets used
+		File audio = new DownloadFile(activity, song, false).getSaveFile();
+		File parent = audio.getParentFile();
+		assertTrue("Audio directory exists", parent.isDirectory() || parent.mkdirs());
+		int bytes = 8000 * 2 * SECONDS;
+		ByteBuffer header = ByteBuffer.allocate(44).order(ByteOrder.LITTLE_ENDIAN);
+		header.putInt(0x46464952).putInt(36 + bytes).putInt(0x45564157);
+		header.putInt(0x20746d66).putInt(16).putShort((short) 1).putShort((short) 1);
+		header.putInt(8000).putInt(16000).putShort((short) 2).putShort((short) 16);
+		header.putInt(0x61746164).putInt(bytes);
+		try (FileOutputStream output = new FileOutputStream(audio)) {
+			output.write(header.array());
+			output.write(new byte[bytes]);
+		} catch (IOException error) {
+			throw new AssertionError(error);
 		}
 
-
+		generatedSongs.add(song);
+		return song;
 	}
 
 }
