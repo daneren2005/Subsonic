@@ -10,7 +10,6 @@
 package github.paroj.dsub2000.util.compat;
 
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -81,7 +80,7 @@ public class RemoteControlClientLP {
         @Override public void onRouteChanged(MediaRouter router, MediaRouter.RouteInfo route) { refresh(); }
     };
 
-    public void register(Context context, ComponentName mediaButtonReceiverComponent) {
+    public void register(Context context) {
         service = (DownloadService) context;
         player = new SessionPlayer(service);
         library = new SessionLibrary(service);
@@ -304,8 +303,10 @@ public class RemoteControlClientLP {
 
         @Override
         public ListenableFuture<MediaSession.MediaItemsWithStartPosition> onPlaybackResumption(
-                MediaSession session, MediaSession.ControllerInfo controller) {
-            return resolver.resume();
+                MediaSession session, MediaSession.ControllerInfo controller, boolean isForPlayback) {
+            // SessionQueueResolver waits for the saved queue to be restored before deciding:
+            // a queue that was explicitly paused or stopped is not resumable.
+            return resolver.resume(isForPlayback);
         }
 
         @Override

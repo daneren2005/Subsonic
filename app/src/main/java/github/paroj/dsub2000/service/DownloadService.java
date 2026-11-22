@@ -42,7 +42,6 @@ import github.paroj.dsub2000.domain.RemoteControlState;
 import github.paroj.dsub2000.domain.RepeatMode;
 import github.paroj.dsub2000.domain.ServerInfo;
 import github.paroj.dsub2000.receiver.AudioNoisyReceiver;
-import github.paroj.dsub2000.receiver.MediaButtonIntentReceiver;
 import github.paroj.dsub2000.util.ArtistRadioBuffer;
 import github.paroj.dsub2000.util.FileUtil;
 import github.paroj.dsub2000.util.ImageLoader;
@@ -73,7 +72,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.app.Activity;
 import android.content.ComponentCallbacks2;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -140,9 +138,14 @@ public class DownloadService extends MediaLibraryService {
 	/**
 	 * Whether an automatic request (Android Auto, System UI) may resume this queue. It follows
 	 * the user's intent: playing and automatic pauses are resumable, an explicit pause/stop is
-	 * not.
+	 * not. A real media button press overrides this, see {@link #consumeMediaButtonStart()}.
 	 */
 	private boolean resumptionAllowed = false;
+	/**
+	 * Set when this service instance was started by a real media button press. The request is
+	 * consumed once, so a stale press cannot authorise a later automatic resumption.
+	 */
+	private volatile boolean mediaButtonStarted = false;
 	private PlaybackException playbackError;
 	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
@@ -270,8 +273,7 @@ public class DownloadService extends MediaLibraryService {
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
 			mRemoteControl = new RemoteControlClientLP();
-			ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
-			mRemoteControl.register(this, mediaButtonReceiverComponent);
+			mRemoteControl.register(this);
 			// Without a connected controller Media3 would never request a notification for this session.
 			addSession(mRemoteControl.getMediaSession());
 		}
@@ -303,6 +305,19 @@ public class DownloadService extends MediaLibraryService {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
+
+		// Media3 drops MEDIA_BUTTON intents without a key event (the broadcast Android sends
+		// when a Bluetooth device connects) before starting the service. Reaching this point
+		// with a play key therefore means a real media button press: a user request to play
+		// that may resume even a queue which was explicitly paused.
+		if (intent != null && Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+			KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+			if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY
+					|| event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+					|| event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK)) {
+				mediaButtonStarted = true;
+			}
+		}
 
 		// A start with startForegroundService() has to be answered with startForeground()
 		// within a few seconds, otherwise the OS kills the process with
@@ -1580,7 +1595,8 @@ public class DownloadService extends MediaLibraryService {
 
 	/**
 	 * Whether an automatic request may resume the saved queue. It is persisted with the queue
-	 * in preferences.
+	 * in preferences. A real media button press does not consult this: see
+	 * {@link #consumeMediaButtonStart()}.
 	 */
 	public synchronized boolean isResumptionAllowed() {
 		return resumptionAllowed;
@@ -1589,6 +1605,16 @@ public class DownloadService extends MediaLibraryService {
 	/** Resume position of a queue restored without a current item. */
 	public synchronized int getCachedPosition() {
 		return cachedPosition;
+	}
+
+	/**
+	 * Consumes the "started by a media button press" marker. A press is an explicit user
+	 * request to play, so it may resume a queue that was paused or stopped.
+	 */
+	public synchronized boolean consumeMediaButtonStart() {
+		boolean started = mediaButtonStarted;
+		mediaButtonStarted = false;
+		return started;
 	}
 
 	public synchronized void setResumptionAllowed(boolean allowed) {
@@ -1622,6 +1648,7 @@ public class DownloadService extends MediaLibraryService {
 		this.playerState = playerState;
 
 		if(playerState == STARTED) {
+			mediaButtonStarted = false;
 			setResumptionAllowed(true);
 			AudioManager audioManager = (AudioManager) playbackContext.getSystemService(Context.AUDIO_SERVICE);
 			Util.requestAudioFocus(this, audioManager);

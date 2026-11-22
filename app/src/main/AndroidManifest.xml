@@ -190,7 +190,7 @@
 		</service>
 
 
-        <receiver android:name="github.paroj.dsub2000.receiver.MediaButtonIntentReceiver"
+        <receiver android:name="androidx.media3.session.MediaButtonReceiver"
 			android:exported="true">
         	<intent-filter>
 				<action android:name="android.intent.action.MEDIA_BUTTON" />

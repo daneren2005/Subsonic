@@ -35,11 +35,12 @@ import static org.junit.Assert.fail;
 public class SessionQueueResolverTest {
     private SessionQueueResolver resolver;
     private SessionLibrary library;
+    private TestService service;
 
     @Before
     public void setUp() {
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-            TestService service = new TestService(InstrumentationRegistry.getInstrumentation().getTargetContext());
+            service = new TestService(InstrumentationRegistry.getInstrumentation().getTargetContext());
             library = new SessionLibrary(service);
             resolver = new SessionQueueResolver(service, library);
         });
@@ -144,6 +145,55 @@ public class SessionQueueResolverTest {
         }
     }
 
+    @Test
+    public void playbackResumptionReturnsTheWholeQueue() throws Exception {
+        addToQueue();
+        MediaItemsWithStartPosition queue = resolver.resume(true).get(5, TimeUnit.SECONDS);
+        assertEquals(2, queue.mediaItems.size());
+        assertEquals(1, queue.startIndex);
+        assertEquals(4200L, queue.startPositionMs);
+    }
+
+    @Test
+    public void metadataOnlyResumptionReturnsJustTheCurrentItem() throws Exception {
+        addToQueue();
+        MediaItemsWithStartPosition queue = resolver.resume(false).get(5, TimeUnit.SECONDS);
+        assertEquals(1, queue.mediaItems.size());
+        assertEquals("second", queue.mediaItems.get(0).mediaId);
+        assertEquals(0, queue.startIndex);
+        assertEquals(4200L, queue.startPositionMs);
+    }
+
+    @Test
+    public void pausedQueueIgnoresAutomaticResumption() throws Exception {
+        addToQueue();
+        service.resumable = false;
+        try {
+            resolver.resume(true).get(5, TimeUnit.SECONDS);
+            fail("An automatic request must not revive a queue that was explicitly paused");
+        } catch (ExecutionException expected) {
+            assertTrue(expected.getCause() instanceof UnsupportedOperationException);
+        }
+    }
+
+    @Test
+    public void pausedQueueResumesAfterAMediaButtonPress() throws Exception {
+        addToQueue();
+        service.resumable = false;
+        service.mediaButtonStarted = true;
+        MediaItemsWithStartPosition queue = resolver.resume(true).get(5, TimeUnit.SECONDS);
+        assertEquals(2, queue.mediaItems.size());
+        assertEquals(1, queue.startIndex);
+        assertEquals(4200L, queue.startPositionMs);
+    }
+
+    private void addToQueue() {
+        service.queue.add(new DownloadFile(service, entry("first"), false));
+        service.queue.add(new DownloadFile(service, entry("second"), false));
+        service.index = 1;
+        service.position = 4200;
+    }
+
     private static Entry entry(String id) {
         Entry entry = new Entry(id);
         entry.setTitle(id);
@@ -167,7 +217,24 @@ public class SessionQueueResolverTest {
     }
 
     private static final class TestService extends DownloadService {
+        final List<DownloadFile> queue = new java.util.ArrayList<>();
+        int index = -1;
+        int position;
+        boolean resumable = true;
+        boolean mediaButtonStarted = false;
+
         TestService(Context context) { attachBaseContext(context); }
-        @Override public List<DownloadFile> getSongs() { return Collections.emptyList(); }
+        @Override public List<DownloadFile> getSongs() { return queue; }
+        @Override public boolean isInitialized() { return true; }
+        @Override public boolean isResumptionAllowed() { return resumable; }
+        @Override public boolean consumeMediaButtonStart() {
+            boolean started = mediaButtonStarted;
+            mediaButtonStarted = false;
+            return started;
+        }
+        @Override public DownloadFile getCurrentPlaying() { return index < 0 ? null : queue.get(index); }
+        @Override public int getCurrentPlayingIndex() { return index; }
+        @Override public int getPlayerPosition() { return position; }
+        @Override public int getCachedPosition() { return position; }
     }
 }

@@ -69,7 +69,6 @@ import github.paroj.dsub2000.domain.MusicDirectory;
 import github.paroj.dsub2000.domain.PlayerState;
 import github.paroj.dsub2000.domain.RepeatMode;
 import github.paroj.dsub2000.domain.ServerInfo;
-import github.paroj.dsub2000.receiver.MediaButtonIntentReceiver;
 import github.paroj.dsub2000.service.DownloadService;
 
 import java.io.ByteArrayOutputStream;

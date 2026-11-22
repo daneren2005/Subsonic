@@ -51,6 +51,17 @@ public final class SessionQueueResolver {
     }
 
     public ListenableFuture<MediaItemsWithStartPosition> resume() {
+        return resume(true);
+    }
+
+    /**
+     * Restores the saved queue for a platform request (Android Auto, System UI) or a media
+     * button press.
+     *
+     * @param forPlayback when false the caller only needs the metadata of the item that would
+     *                    play; when true Media3 will start playback with the returned queue.
+     */
+    public ListenableFuture<MediaItemsWithStartPosition> resume(boolean forPlayback) {
         return executor.submit(() -> {
             long deadline = android.os.SystemClock.elapsedRealtime() + 10_000;
             while (!service.isInitialized()) {
@@ -60,6 +71,14 @@ public final class SessionQueueResolver {
                 Thread.sleep(50);
             }
             synchronized (service) {
+                // A real media button press is an explicit play request and may resume a queue
+                // that was paused or stopped. Automatic requests (Android Auto, System UI) may
+                // only resume a queue that was playing when it was saved.
+                boolean fromMediaButton = forPlayback && service.consumeMediaButtonStart();
+                if (!fromMediaButton && !service.isResumptionAllowed()) {
+                    Log.i("SessionQueueResolver", "Saved playback queue is not resumable");
+                    throw new UnsupportedOperationException("The saved playback queue was not playing");
+                }
                 List<MediaItem> items = new ArrayList<>();
                 for (DownloadFile file : service.getSongs()) {
                     items.add(SessionPlayer.mediaItem(file.getSong()));
@@ -68,8 +87,20 @@ public final class SessionQueueResolver {
                     Log.i("SessionQueueResolver", "No saved playback queue to resume");
                     throw new IllegalStateException("No saved playback queue");
                 }
-                return new MediaItemsWithStartPosition(items, Math.max(0, service.getCurrentPlayingIndex()),
-                        service.getPlayerPosition());
+                int position = service.getCurrentPlaying() == null
+                        ? service.getCachedPosition() : service.getPlayerPosition();
+                int index = Math.max(0, service.getCurrentPlayingIndex());
+                if (!forPlayback) {
+                    // The platform only populates its resumption UI; idle cost matters more
+                    // than returning the whole queue.
+                    DownloadFile current = service.getCurrentPlaying();
+                    if (current != null) {
+                        return new MediaItemsWithStartPosition(
+                                Collections.singletonList(SessionPlayer.mediaItem(current.getSong())),
+                                0, position);
+                    }
+                }
+                return new MediaItemsWithStartPosition(items, index, position);
             }
         });
     }
