@@ -172,12 +172,14 @@ public class DownloadFile implements BufferFile {
      */
     public synchronized void download(boolean highPerformanceWifi) {
     	rateLimit = false;
-        preDownload(highPerformanceWifi);
+        failedDownload = false;
+        downloadTask = new DownloadTask(context, highPerformanceWifi);
         downloadTask.execute();
     }
     public synchronized void downloadNow(MusicService musicService) {
     	rateLimit = true;
-    	preDownload(false);
+        failedDownload = false;
+        downloadTask = new DownloadTask(context, false);
 		downloadTask.setMusicService(musicService);
 		try {
 			downloadTask.doInBackground();
@@ -185,15 +187,14 @@ public class DownloadFile implements BufferFile {
 			// This should never be reached
 		}
     }
-    private void preDownload(boolean highPerformanceWifi) {
+    /** Runs on the download thread, never on the caller's thread: it touches the database and the filesystem. */
+    private void prepareDownload() {
 		SongDBHandler.getHandler(context).addSong(this);  // Add every locally available
 		// song to db so we can use their serverId for offline scrobbling
     	FileUtil.createDirectoryForParent(saveFile);
-        failedDownload = false;
 		if(bitRate == UNKNOWN_BITRATE || !partialFile.exists()) {
 			bitRate = getActualBitrate();
 		}
-		downloadTask = new DownloadTask(context, highPerformanceWifi);
     }
 
     public synchronized void cancelDownload() {
@@ -439,6 +440,7 @@ public class DownloadFile implements BufferFile {
             PowerManager.WakeLock wakeLock = null;
 			WifiManager.WifiLock wifiLock = null;
             try {
+				prepareDownload();
 
                 if (Util.isScreenLitOnDownload(context)) {
                     PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
