@@ -69,6 +69,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
 import android.content.ComponentCallbacks2;
@@ -157,7 +161,13 @@ public class DownloadService extends MediaLibraryService {
 	private ArtistRadioBuffer artistRadioBuffer;
 
 	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
-	private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
+	final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
+	private final ExecutorService cleanupExecutor = Executors.newSingleThreadExecutor(runnable -> {
+		Thread thread = new Thread(runnable, "DownloadService-cleanup");
+		thread.setDaemon(true);
+		return thread;
+	});
+	private final AtomicBoolean cleanupScheduled = new AtomicBoolean();
 	private final Scrobbler scrobbler = new Scrobbler();
 	private RemoteController remoteController;
 	private DownloadFile currentPlaying;
@@ -369,6 +379,7 @@ public class DownloadService extends MediaLibraryService {
 			sleepTimer.purge();
 		}
 		lifecycleSupport.onDestroy();
+		cleanupExecutor.shutdownNow();
 
 		try {
 			Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
@@ -2412,7 +2423,7 @@ public class DownloadService extends MediaLibraryService {
 		}
 
 		// Delete obsolete .partial and .complete files.
-		cleanup();
+		scheduleCleanup();
 	}
 
 	private synchronized void checkRemovePlayed() {
@@ -2520,15 +2531,52 @@ public class DownloadService extends MediaLibraryService {
 		return revision;
 	}
 
-	private synchronized void cleanup() {
-		Iterator<DownloadFile> iterator = cleanupCandidates.iterator();
-		while (iterator.hasNext()) {
-			DownloadFile downloadFile = iterator.next();
-			if (downloadFile != currentPlaying && downloadFile != currentDownloading) {
-				if (downloadFile.cleanup()) {
-					iterator.remove();
+	/**
+	 * Deletes leftover .partial and .complete files from finished downloads.
+	 *
+	 * The filesystem work runs on a worker thread. File.exists() and File.delete() can
+	 * block for seconds on slow storage, and the main thread needs the service monitor
+	 * to build the media session state, so doing this under the monitor caused ANRs.
+	 */
+	void scheduleCleanup() {
+		if (!cleanupScheduled.compareAndSet(false, true)) {
+			return;
+		}
+		try {
+			cleanupExecutor.execute(() -> {
+				cleanupScheduled.set(false);
+				List<DownloadFile> claimed = new ArrayList<DownloadFile>();
+				synchronized (DownloadService.this) {
+					Iterator<DownloadFile> iterator = cleanupCandidates.iterator();
+					while (iterator.hasNext()) {
+						DownloadFile downloadFile = iterator.next();
+						if (downloadFile != currentPlaying && downloadFile != currentDownloading) {
+							claimed.add(downloadFile);
+							iterator.remove();
+						}
+					}
 				}
-			}
+
+				for (DownloadFile downloadFile : claimed) {
+					// The queue can advance while the filesystem work runs; never delete
+					// the files of the entry that started playing in the meantime.
+					synchronized (DownloadService.this) {
+						if (downloadFile == currentPlaying || downloadFile == currentDownloading) {
+							cleanupCandidates.add(downloadFile);
+							continue;
+						}
+					}
+					if (!downloadFile.cleanup()) {
+						// Failed deletions are retried by the next checkDownloads().
+						synchronized (DownloadService.this) {
+							cleanupCandidates.add(downloadFile);
+						}
+					}
+				}
+			});
+		} catch (RejectedExecutionException e) {
+			// The service is shutting down.
+			cleanupScheduled.set(false);
 		}
 	}
 
