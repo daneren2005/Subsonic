@@ -16,6 +16,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import github.paroj.dsub2000.domain.MusicDirectory.Entry;
 import github.paroj.dsub2000.domain.PlayerState;
@@ -85,6 +88,49 @@ public class SessionPlayerTest {
             assertNotEquals(timeline.getWindow(0, new Timeline.Window()).uid,
                     timeline.getWindow(1, new Timeline.Window()).uid);
         });
+    }
+
+    @Test
+    public void stateRefreshDoesNotHoldServiceLockWhileBuildingPlaylist() throws Exception {
+        CountDownLatch building = new CountDownLatch(1);
+        CountDownLatch lockAcquired = new CountDownLatch(1);
+        AtomicBoolean acquiredDuringBuild = new AtomicBoolean();
+        DownloadFile file = new DownloadFile(service, entry("slow"), false) {
+            @Override
+            public boolean isStream() {
+                building.countDown();
+                try {
+                    if (lockAcquired.await(1, TimeUnit.SECONDS)) {
+                        acquiredDuringBuild.set(true);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                return false;
+            }
+        };
+        onMain(() -> {
+            service.queue.add(file);
+            service.index = 0;
+        });
+
+        Thread lockThread = new Thread(() -> {
+            try {
+                if (building.await(5, TimeUnit.SECONDS)) {
+                    synchronized (service) {
+                        lockAcquired.countDown();
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        lockThread.start();
+        onMain(player::refresh);
+        lockThread.join(5000);
+
+        assertTrue("service lock stayed available while the playlist was built",
+                acquiredDuringBuild.get());
     }
 
     @Test

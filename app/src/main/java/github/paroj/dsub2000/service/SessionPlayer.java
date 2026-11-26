@@ -8,6 +8,7 @@ import androidx.media3.common.C;
 import androidx.media3.common.DeviceInfo;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
+import androidx.media3.common.PlaybackException;
 import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.SimpleBasePlayer;
 import androidx.media3.common.SimpleBasePlayer.PositionSupplier;
@@ -26,6 +27,7 @@ import java.util.Set;
 import github.paroj.dsub2000.domain.MusicDirectory;
 import github.paroj.dsub2000.domain.PlayerState;
 import github.paroj.dsub2000.util.Constants;
+import github.paroj.dsub2000.util.MediaRouteManager;
 import github.paroj.dsub2000.util.Util;
 
 import static github.paroj.dsub2000.domain.RepeatMode.ALL;
@@ -79,100 +81,137 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
 
     @Override
     protected State getState() {
+        final List<DownloadFile> files;
+        final DownloadFile current;
+        final PlayerState state;
+        final PlaybackException playbackError;
+        final boolean playWhenReady;
+        final boolean fastForward;
+        final boolean remoteEnabled;
+        final boolean remoteSupportsSpeed;
+        final float speed;
+        final github.paroj.dsub2000.domain.RepeatMode repeatMode;
+        final boolean hasMediaRouter;
+        final int volumeMax;
+        final int volume;
+        final boolean volumeVariable;
+
+        // Take one consistent snapshot under the service lock, but build the playlist
+        // outside it. Download cleanup or queue edits on a background task must not
+        // delay the main thread's session refresh; that contention caused ANRs.
         synchronized (service) {
-            List<MediaItemData> playlist = new ArrayList<>();
-            List<DownloadFile> files = new ArrayList<>(service.getSongs());
-            DownloadFile current = service.getCurrentPlaying();
-            // SimpleBasePlayer requires a unique UID per playlist entry. The queue
-            // should never contain the same DownloadFile twice, but stay defensive:
-            // a duplicate used to crash every session refresh with
-            // "Duplicate MediaItemData UID in playlist".
-            Set<DownloadFile> seen = Collections.newSetFromMap(new IdentityHashMap<>());
-            int index = 0;
-            for (DownloadFile file : files) {
-                MusicDirectory.Entry entry = file.getSong();
-                MediaItem item = mediaItem(entry);
-                if (file == current && entry == artworkEntry && artwork != null) {
-                    item = item.buildUpon().setMediaMetadata(item.mediaMetadata.buildUpon()
-                            .setArtworkData(artwork, MediaMetadata.PICTURE_TYPE_FRONT_COVER).build()).build();
-                }
-                long duration = entry.getDuration() == null || file.isStream()
-                        ? C.TIME_UNSET : entry.getDuration() * 1_000_000L;
-                Object uid = seen.add(file) ? file : Integer.valueOf(index);
-                playlist.add(new MediaItemData.Builder(uid).setMediaItem(item)
-                        .setDurationUs(duration)
-                        .setIsSeekable(file == current && service.isSeekable())
-                        .setIsDynamic(file.isStream()).build());
-                index++;
-            }
-            int currentIndex = files.indexOf(current);
-            PlayerState state = service.getPlayerState();
-            int playbackState = STATE_IDLE;
-            if (!playlist.isEmpty()) {
-                switch (state) {
-                    case DOWNLOADING:
-                    case PREPARING: playbackState = STATE_BUFFERING; break;
-                    case COMPLETED: playbackState = STATE_ENDED; break;
-                    case STARTED:
-                    case PAUSED:
-                    case PAUSED_TEMP: playbackState = STATE_READY; break;
-                    default: break;
-                }
-            }
-            Commands.Builder commands = new Commands.Builder().addAll(
-                    COMMAND_GET_CURRENT_MEDIA_ITEM, COMMAND_GET_TIMELINE, COMMAND_GET_METADATA,
-                    COMMAND_GET_AUDIO_ATTRIBUTES, COMMAND_GET_DEVICE_VOLUME,
-                    COMMAND_PLAY_PAUSE, COMMAND_PREPARE, COMMAND_STOP, COMMAND_RELEASE,
-                    COMMAND_SET_MEDIA_ITEM, COMMAND_CHANGE_MEDIA_ITEMS, COMMAND_SET_REPEAT_MODE);
-            if (current != null) {
-                commands.add(COMMAND_SEEK_TO_MEDIA_ITEM);
-                if (!service.isRemoteEnabled() || service.getRemoteController().supportsPlaybackSpeed()) {
-                    commands.add(COMMAND_SET_SPEED_AND_PITCH);
-                }
-                if (service.isSeekable()) {
-                    commands.addAll(COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM, COMMAND_SEEK_BACK,
-                            COMMAND_SEEK_FORWARD);
-                }
-                if (service.shouldFastForward() || currentIndex > 0 || service.getRepeatMode() == ALL) {
-                    commands.add(COMMAND_SEEK_TO_PREVIOUS);
-                }
-                if (service.shouldFastForward() || currentIndex < files.size() - 1
-                        || service.getRepeatMode() == ALL) {
-                    commands.add(COMMAND_SEEK_TO_NEXT);
-                }
-            }
-            State.Builder builder = new State.Builder().setPlaylist(playlist)
-                    .setCurrentMediaItemIndex(currentIndex < 0 ? C.INDEX_UNSET : currentIndex)
-                    .setPlaybackState(playbackState)
-                    .setPlayerError(service.getPlaybackError())
-                    .setIsLoading(playbackState == STATE_BUFFERING)
-                    .setPlayWhenReady(service.isPlayWhenReady() && !playlist.isEmpty(),
-                            PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST)
-                    .setPlaybackSuppressionReason(state == PlayerState.PAUSED_TEMP
-                            ? PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS
-                            : PLAYBACK_SUPPRESSION_REASON_NONE)
-                    .setContentPositionMs((PositionSupplier) () -> Math.max(0, service.getPlayerPosition()))
-                    .setPlaybackParameters(new PlaybackParameters(service.getPlaybackSpeed()))
-                    .setRepeatMode(repeatMode(service.getRepeatMode()))
-                    .setSeekBackIncrementMs(interval(Constants.PREFERENCES_KEY_REWIND_INTERVAL, "10"))
-                    .setSeekForwardIncrementMs(interval(Constants.PREFERENCES_KEY_FASTFORWARD_INTERVAL, "30"))
-                    .setMaxSeekToPreviousPositionMs(5000)
-                    .setAudioAttributes(new AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                            .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build());
-            if (service.getMediaRouter() != null) {
-                MediaRouter.RouteInfo route = service.getMediaRouter().getSelectedRoute();
-                boolean remote = service.isRemoteEnabled();
-                builder.setDeviceInfo(new DeviceInfo.Builder(remote
-                        ? DeviceInfo.PLAYBACK_TYPE_REMOTE : DeviceInfo.PLAYBACK_TYPE_LOCAL)
-                        .setMaxVolume(route.getVolumeMax()).build())
-                        .setDeviceVolume(route.getVolume());
-                if (remote && route.getVolumeHandling() == MediaRouter.RouteInfo.PLAYBACK_VOLUME_VARIABLE) {
-                    commands.addAll(COMMAND_SET_DEVICE_VOLUME_WITH_FLAGS,
-                            COMMAND_ADJUST_DEVICE_VOLUME_WITH_FLAGS);
-                }
-            }
-            return builder.setAvailableCommands(commands.build()).build();
+            files = new ArrayList<>(service.getSongs());
+            current = service.getCurrentPlaying();
+            state = service.getPlayerState();
+            playbackError = service.getPlaybackError();
+            playWhenReady = service.isPlayWhenReady();
+            fastForward = service.shouldFastForward();
+            remoteEnabled = service.isRemoteEnabled();
+            RemoteController controller = service.getRemoteController();
+            remoteSupportsSpeed = !remoteEnabled
+                    || (controller != null && controller.supportsPlaybackSpeed());
+            speed = service.getPlaybackSpeed();
+            repeatMode = service.getRepeatMode();
+            MediaRouteManager router = service.getMediaRouter();
+            hasMediaRouter = router != null;
+            MediaRouter.RouteInfo route = hasMediaRouter ? router.getSelectedRoute() : null;
+            volumeMax = route == null ? 0 : route.getVolumeMax();
+            volume = route == null ? 0 : route.getVolume();
+            volumeVariable = route != null
+                    && route.getVolumeHandling() == MediaRouter.RouteInfo.PLAYBACK_VOLUME_VARIABLE;
         }
+
+        // isWorkDone() stats files; keep it off the service lock as well.
+        boolean seekable = remoteEnabled
+                ? service.getRemoteController() != null && service.getRemoteController().isSeekable()
+                : current != null && current.isWorkDone() && state != PlayerState.PREPARING;
+
+        // SimpleBasePlayer requires a unique UID per playlist entry. The queue
+        // should never contain the same DownloadFile twice, but stay defensive:
+        // a duplicate used to crash every session refresh with
+        // "Duplicate MediaItemData UID in playlist".
+        List<MediaItemData> playlist = new ArrayList<>();
+        Set<DownloadFile> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+        int index = 0;
+        for (DownloadFile file : files) {
+            MusicDirectory.Entry entry = file.getSong();
+            MediaItem item = mediaItem(entry);
+            if (file == current && entry == artworkEntry && artwork != null) {
+                item = item.buildUpon().setMediaMetadata(item.mediaMetadata.buildUpon()
+                        .setArtworkData(artwork, MediaMetadata.PICTURE_TYPE_FRONT_COVER).build()).build();
+            }
+            long duration = entry.getDuration() == null || file.isStream()
+                    ? C.TIME_UNSET : entry.getDuration() * 1_000_000L;
+            Object uid = seen.add(file) ? file : Integer.valueOf(index);
+            playlist.add(new MediaItemData.Builder(uid).setMediaItem(item)
+                    .setDurationUs(duration)
+                    .setIsSeekable(file == current && seekable)
+                    .setIsDynamic(file.isStream()).build());
+            index++;
+        }
+        int currentIndex = files.indexOf(current);
+        int playbackState = STATE_IDLE;
+        if (!playlist.isEmpty()) {
+            switch (state) {
+                case DOWNLOADING:
+                case PREPARING: playbackState = STATE_BUFFERING; break;
+                case COMPLETED: playbackState = STATE_ENDED; break;
+                case STARTED:
+                case PAUSED:
+                case PAUSED_TEMP: playbackState = STATE_READY; break;
+                default: break;
+            }
+        }
+        Commands.Builder commands = new Commands.Builder().addAll(
+                COMMAND_GET_CURRENT_MEDIA_ITEM, COMMAND_GET_TIMELINE, COMMAND_GET_METADATA,
+                COMMAND_GET_AUDIO_ATTRIBUTES, COMMAND_GET_DEVICE_VOLUME,
+                COMMAND_PLAY_PAUSE, COMMAND_PREPARE, COMMAND_STOP, COMMAND_RELEASE,
+                COMMAND_SET_MEDIA_ITEM, COMMAND_CHANGE_MEDIA_ITEMS, COMMAND_SET_REPEAT_MODE);
+        if (current != null) {
+            commands.add(COMMAND_SEEK_TO_MEDIA_ITEM);
+            if (remoteSupportsSpeed) {
+                commands.add(COMMAND_SET_SPEED_AND_PITCH);
+            }
+            if (seekable) {
+                commands.addAll(COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM, COMMAND_SEEK_BACK,
+                        COMMAND_SEEK_FORWARD);
+            }
+            if (fastForward || currentIndex > 0 || repeatMode == ALL) {
+                commands.add(COMMAND_SEEK_TO_PREVIOUS);
+            }
+            if (fastForward || currentIndex < files.size() - 1 || repeatMode == ALL) {
+                commands.add(COMMAND_SEEK_TO_NEXT);
+            }
+        }
+        State.Builder builder = new State.Builder().setPlaylist(playlist)
+                .setCurrentMediaItemIndex(currentIndex < 0 ? C.INDEX_UNSET : currentIndex)
+                .setPlaybackState(playbackState)
+                .setPlayerError(playbackError)
+                .setIsLoading(playbackState == STATE_BUFFERING)
+                .setPlayWhenReady(playWhenReady && !playlist.isEmpty(),
+                        PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST)
+                .setPlaybackSuppressionReason(state == PlayerState.PAUSED_TEMP
+                        ? PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS
+                        : PLAYBACK_SUPPRESSION_REASON_NONE)
+                .setContentPositionMs((PositionSupplier) () -> Math.max(0, service.getPlayerPosition()))
+                .setPlaybackParameters(new PlaybackParameters(speed))
+                .setRepeatMode(repeatMode(repeatMode))
+                .setSeekBackIncrementMs(interval(Constants.PREFERENCES_KEY_REWIND_INTERVAL, "10"))
+                .setSeekForwardIncrementMs(interval(Constants.PREFERENCES_KEY_FASTFORWARD_INTERVAL, "30"))
+                .setMaxSeekToPreviousPositionMs(5000)
+                .setAudioAttributes(new AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+                        .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build());
+        if (hasMediaRouter) {
+            builder.setDeviceInfo(new DeviceInfo.Builder(remoteEnabled
+                    ? DeviceInfo.PLAYBACK_TYPE_REMOTE : DeviceInfo.PLAYBACK_TYPE_LOCAL)
+                    .setMaxVolume(volumeMax).build())
+                    .setDeviceVolume(volume);
+            if (remoteEnabled && volumeVariable) {
+                commands.addAll(COMMAND_SET_DEVICE_VOLUME_WITH_FLAGS,
+                        COMMAND_ADJUST_DEVICE_VOLUME_WITH_FLAGS);
+            }
+        }
+        return builder.setAvailableCommands(commands.build()).build();
     }
 
     private long interval(String key, String defaultValue) {
