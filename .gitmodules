@@ -1,3 +1,0 @@
-[submodule "ServerProxy"]
-	path = ServerProxy
-	url = https://github.com/daneren2005/ServerProxy.git

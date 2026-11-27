@@ -15,19 +15,16 @@
             android:layout_centerVertical="true"
             android:paddingLeft="8dip"
             android:text="0:00"
-            android:textSize="12sp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
 			android:textColor="?android:textColorPrimary"
 			android:paddingBottom="4dip"/>
 
-    <SeekBar
+    <com.google.android.material.slider.Slider
             android:id="@+id/download_progress_bar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:paddingLeft="55dip"
-            android:paddingRight="55dip"
-            android:paddingTop="3dip"
-            android:paddingBottom="7dip" />
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip" />
 			
 	<TextView
             android:id="@+id/download_duration"
@@ -37,7 +34,7 @@
             android:layout_centerVertical="true"
             android:paddingRight="8dip"
             android:text="-:--"
-            android:textSize="12sp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
 			android:textColor="?android:textColorPrimary"
 			android:paddingBottom="4dip"/>
 </RelativeLayout>

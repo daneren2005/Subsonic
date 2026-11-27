@@ -5,7 +5,7 @@
 		android:id="@+id/menu_global_search"
 		android:icon="?attr/search"
 		android:title="@string/menu.search"
-		compat:actionViewClass="android.support.v7.widget.SearchView"
+		compat:actionViewClass="androidx.appcompat.widget.SearchView"
 		compat:showAsAction="always|collapseActionView"/>
 
 	<item 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/download_layout_container"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -24,15 +25,18 @@
 				android:background="@android:color/transparent">
 
 				<FrameLayout
+                    android:id="@+id/download_album_art_background"
+                    android:clickable="true"
 					android:layout_width="match_parent"
 					android:layout_height="0dp"
 					android:layout_weight="1">
 
 					<FrameLayout android:orientation="vertical"
 						android:layout_width="match_parent"
-						android:layout_height="wrap_content">
+						android:layout_height="wrap_content"
+                        android:layout_gravity="center">
 
-						<github.daneren2005.dsub.view.RecyclingImageView
+						<github.paroj.dsub2000.view.RecyclingImageView
 							android:id="@+id/download_album_art_image"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
@@ -45,34 +49,46 @@
 							android:layout_height="wrap_content"
 							android:layout_gravity="center_horizontal|bottom"
 							android:background="@color/overlayColor"
-							android:visibility="invisible"
 							android:gravity="center"
-							android:orientation="horizontal">
+							android:orientation="horizontal"
+							android:visibility="invisible"
+							tools:visibility="visible">
 
-								<ImageButton
-									android:id="@+id/download_rating_bad"
-									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_rating_bad_dark"/>
+							<ImageButton
+								android:id="@+id/download_rating_bad"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_action_rating_bad" />
 
-								<ImageButton
-									android:id="@+id/download_star"
-									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_toggle_star_outline_dark"/>
+							<ImageButton
+								android:id="@+id/download_star"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_toggle_star" />
 
-								<ImageButton
-									android:id="@+id/download_playback_speed"
-									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_playback_speed_dark"/>
+                            <ImageButton
+                                android:id="@+id/download_add_to_playlist"
+                                style="@style/DownloadActionImageButton"
+                                android:src="@drawable/ic_action_add"
+                                android:tint="@android:color/white" />
 
-								<ImageButton
-									android:id="@+id/download_bookmark"
-									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_menu_bookmark_dark"/>
+							<ImageButton
+								android:id="@+id/download_playback_speed"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_action_playback_speed" />
 
-								<ImageButton
-									android:id="@+id/download_rating_good"
-									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_rating_good_dark"/>
+							<ImageButton
+								android:id="@+id/download_bookmark"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_menu_bookmark" />
+
+							<ImageButton
+								android:id="@+id/download_rating_good"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_action_rating_good" />
+
+							<ImageButton
+								android:id="@+id/download_rating_combined"
+								style="@style/DownloadActionImageButton"
+								android:src="@drawable/ic_action_rating_combined" />
 						</LinearLayout>
 					</FrameLayout>
 				</FrameLayout>

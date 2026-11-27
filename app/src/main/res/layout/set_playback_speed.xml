@@ -11,26 +11,39 @@
 		android:id="@+id/playback_speed_buttons"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:gravity="center"
+		android:paddingLeft="8dp"
+		android:paddingRight="8dp"
 		android:orientation="horizontal"
 		>
 
 		<Button
 			android:id="@+id/playback_speed_normal"
-			android:layout_width="wrap_content"
+			style="@style/Widget.DSub2000.Button.Compact"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
 			android:layout_height="wrap_content"
 			android:text="1.0x"
 			android:tag="1.0"/>
 		<Button
 			android:id="@+id/playback_speed_one_half"
-			android:layout_width="wrap_content"
+			style="@style/Widget.DSub2000.Button.Compact"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
 			android:layout_height="wrap_content"
 			android:tag="1.5"
 			android:text="1.5x"/>
 
 		<Button
 			android:id="@+id/playback_speed_double"
-			android:layout_width="wrap_content"
+			style="@style/Widget.DSub2000.Button.Compact"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
 			android:layout_height="wrap_content"
 			android:tag="2.0"
 			android:text="2.0x"/>
@@ -38,7 +51,11 @@
 
 		<Button
 			android:id="@+id/playback_speed_triple"
-			android:layout_width="wrap_content"
+			style="@style/Widget.DSub2000.Button.Compact"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
 			android:layout_height="wrap_content"
 			android:text="3.0x"
 			android:tag="3.0"/>
@@ -54,11 +71,13 @@
 		android:textColor="?android:textColorPrimary"
 		android:layout_below="@+id/playback_speed_buttons"/>
 
-	<SeekBar
+	<com.google.android.material.slider.Slider
 		android:id="@+id/playback_speed_bar"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:max="25"
+		android:valueFrom="0"
+		android:valueTo="25"
+		android:stepSize="1"
 		android:layout_toRightOf="@+id/playback_speed_label"
 		android:layout_below="@+id/playback_speed_buttons"
 		/>

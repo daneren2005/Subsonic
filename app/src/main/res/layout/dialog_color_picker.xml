@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/colorPreview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/color_preview"/>
+
+    <TextView
+        android:text="@string/color_picker.hue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/hueSlider"
+        android:valueFrom="0"
+        android:valueTo="359"
+        android:stepSize="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <!-- max 359. Set because HSL Hue is cyclic (360° = 0°),
+    preventing redundant values. -->
+
+    <TextView
+        android:text="@string/color_picker.saturation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/satSlider"
+        android:valueFrom="0"
+        android:valueTo="100"
+        android:stepSize="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="@string/color_picker.lightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/lightSlider"
+        android:valueFrom="0"
+        android:valueTo="95"
+        android:stepSize="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <!-- max 95 ensures contrast/readability as L=100% is pure white,
+         causing white-on-white text issues. -->
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/button_reset"
+            android:text="@string/common.reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

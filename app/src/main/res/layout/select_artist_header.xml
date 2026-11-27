@@ -33,7 +33,7 @@
 					  android:layout_marginLeft="10dip"
 					  android:layout_marginTop="6dip"
 					  android:textAppearance="?android:attr/textAppearanceLarge"
-					  android:textColor="?attr/colorAccent"/>
+					  android:textColor="?attr/colorPrimary"/>
 
 			<TextView android:id="@+id/select_artist_folder_2"
 					  android:layout_width="fill_parent"

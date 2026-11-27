@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
-	<item 
+	<item
 		android:id="@+id/menu_delete"
 		android:title="@string/menu.delete_cache"/>
+
+	<item
+		android:id="@+id/menu_reverse_sort"
+		android:title="@string/menu.reverse_sort"
+		android:checkable="true"
+		compat:showAsAction="never"/>
 </menu>

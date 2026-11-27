@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Opslaan</string>
     <string name="common.cancel">Annuleer</string>
@@ -21,7 +21,7 @@
 	<string name="common.stream_external">Stream video</string>
 	<string name="common.confirm">Bevestig</string>
 	<string name="common.confirm_message">Wil je %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">de cache</string>
 	<string name="common.empty">Geen data</string>
 	<string name="common.warning">Waarschuwing</string>
 	<string name="common.close">Sluiten</string>
@@ -42,13 +42,13 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welkom!</string>
-    <string name="main.welcome_text">Welkom bij DSub! De app is momenteel alleen geconfigureerd om de demo server te gebruiken. Nadat je eigen server geïnstalleerd hebt  (beschikbaar bij <b>subsonic.org</b>), ga dan naar <b>Instellingen</b> en verander de configuratie zodat je ermee kunt verbinden.</string>
-	<string name="main.about_title">Over DSub</string>
+    <string name="main.welcome_text">Welkom bij DSub2000! De app is momenteel alleen geconfigureerd om de demo server te gebruiken. Nadat je eigen server geïnstalleerd hebt  (beschikbaar bij <b>subsonic.org</b>), ga dan naar <b>Instellingen</b> en verander de configuratie zodat je ermee kunt verbinden.</string>
+	<string name="main.about_title">Over DSub2000</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache versus Permanente Cache</font>:
-		<br/>Wanneer nummers zijn gedownload door DSub (cache), kunnen ze verwijderd worden om ruimte te maken voor nieuwe downloads. Permanente cache, daarentegen, wordt nooit automatisch verwijderd. 
+		<br/>Wanneer nummers zijn gedownload door DSub2000 (cache), kunnen ze verwijderd worden om ruimte te maken voor nieuwe downloads. Permanente cache, daarentegen, wordt nooit automatisch verwijderd. 
 		<p/><font color="red">ChromeCast faalt</font>:
 		<br/>Probeer de optie Instellingen -> Afspelen -> Gebruik apparaat proxy. Hiermee wordt het probleem van niet geaccepteerde \'self signed\' certificaten omzeild.
 		<p/><font color="red">Het eerste niveau in de bibliotheek zijn eigenlijk groepen artiesten.</font>:
@@ -60,7 +60,7 @@
 	<string name="main.online">Ga online</string>
     <string name="main.settings">Instellingen</string>
     <string name="main.albums_title">Album lijsten</string>
-	<string name="main.albums_per_folder">Per folder</string>
+    <string name="main.not_supported">Niet ondersteund door deze server</string>
     <string name="main.albums_newest">Recent toegevoegd</string>
     <string name="main.albums_recent">Recent afgespeeld</string>
     <string name="main.albums_frequent">Meest afgespeeld</string>
@@ -71,6 +71,8 @@
 	<string name="main.albums_year">Decennia</string>
 	<string name="main.albums_alphabetical">Alfabetisch</string>
 	<string name="main.videos">Video\'s</string>
+    <string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Druk nogmaals terug om te stoppen</string>
 	<string name="main.scan_complete">Server scan afgerond</string>
@@ -113,7 +115,7 @@
     <string name="playlist.label">Speellijsten</string>
 	<string name="playlist.update_info">Update informatie</string>
 	<string name="playlist.updated_info">Update speellijst informatie voor %s</string>
-	<string name="playlist.updated_info_error">Niet gelust speellijst information for %s te updaten</string>
+	<string name="playlist.updated_info_error">Bijwerken van speellijstinformatie voor %s mislukt</string>
 	<string name="playlist.overwrite">Overschrijf bestaande playlist</string>
 	<string name="playlist.add_to">Voeg toe aan playlist</string>
 	<string name="playlist.create_new">Creëer nieuw</string>
@@ -186,7 +188,7 @@
 	<string name="download.menu_remove_played_songs">Verwijder afgespeelde nummers</string>
     <string name="download.playlist_title">Bewaar playlist</string>
     <string name="download.playlist_name">Voer de naam in van de playlist:</string>
-    <string name="download.playlist_saving">Playlist \"%s\ wordt opgeslagen"...</string>
+    <string name="download.playlist_saving">Playlist \"%s\" wordt opgeslagen...</string>
     <string name="download.playlist_done">Playlist was succesvol opgeslagen.</string>
     <string name="download.playlist_error">Niet gelukt playlist op te slaan, probeer het later nog eens.</string>
     <string name="download.repeat_off">Herhalen uit</string>
@@ -217,8 +219,8 @@
 	<string name="sync.new_albums">Nieuwe albums beschikbaar</string>
 	<string name="sync.new_starred">Nieuwe nummers met sterren beschikbaar</string>
     
-	<string name="starring_content_starred">Met sterren \"%s\"</string>
-	<string name="starring_content_unstarred">Zoner sterren \"%s\"</string>
+	<string name="starring_content_starred">Ster toegevoegd aan \"%s\"</string>
+	<string name="starring_content_unstarred">Ster verwijderd van \"%s\"</string>
     <string name="starring_content_error">Kon \"%s\" niet updaten, probeer het later nog eens.</string>
 
 	<string name="playlist.mine">Mijn playlists</string>
@@ -274,7 +276,7 @@
     <string name="settings.cache_size">Cache grootte</string>
     <string name="settings.cache_location">Cache locatie</string>
     <string name="settings.cache_location_error">Onjuiste cache locatie. Standaard wordt gebruikt.</string>
-    <string name="settings.cache_location_reset">De locatie van de cache die u hebt ingesteld is niet meer beschrijfbaar. Als onlangs uw Android telefoon geüpgraded is naar KitKat 4.4 en hoger, dan is de manier waarop apps naar de SD-kaart schrijven veranderd zodat er alleen naar een specifieke locatie geschreven kan worden. De locatie die DSub gebruikt is al automatisch veranderd naar de juiste locatie. Om de oude app-data te verwijderen, moet de SD-kaart gekoppeld worden aan een computer om de oude folder handmatig te verwijderen.</string>
+    <string name="settings.cache_location_reset">De locatie van de cache die u hebt ingesteld is niet meer beschrijfbaar. Als onlangs uw Android telefoon geüpgraded is naar KitKat 4.4 en hoger, dan is de manier waarop apps naar de SD-kaart schrijven veranderd zodat er alleen naar een specifieke locatie geschreven kan worden. De locatie die DSub2000 gebruikt is al automatisch veranderd naar de juiste locatie. Om de oude app-data te verwijderen, moet de SD-kaart gekoppeld worden aan een computer om de oude folder handmatig te verwijderen.</string>
 	<string name="settings.cache_clear">Cache legen</string>
 	<string name="settings.cache_clear_complete">Klaar met cache legen</string>
     <string name="settings.testing_connection">Verbinding testen...</string>
@@ -346,8 +348,6 @@
     <string name="settings.hide_media_title">Verberg voor andere</string>
     <string name="settings.hide_media_summary">Verberg muziek voor andere apps.</string>
     <string name="settings.hide_media_toast">Is actief wanneer Android de volgende keer je telefoon scant voor nieuwe muziek.</string>
-    <string name="settings.media_button_title">Mediaknoppen</string>
-    <string name="settings.media_button_summary">Reageer op telefoon, koptelefoon en bluetooth mediaknoppen</string>
     <string name="settings.screen_lit_title">Houd scherm aan</string>
     <string name="settings.screen_lit_summary">Houdt scherm aan tijdens het downloaden verbetert de download snelheid.</string>
 	<string name="settings.playlist_title">Afspelen</string>
@@ -357,7 +357,7 @@
 	<string name="settings.sleep_timer_off">Uit</string>
 	<string name="settings.sleep_timer_on">Aan</string>
 	<string name="settings.sleep_timer_always_on">Altijd aan</string>
-	<string name="settings.temp_loss_title">Tijdelijk focus verlies</string>
+	<string name="settings.temp_loss_title">Wanneer een andere app audio afspeelt</string>
 	<string name="settings.temp_loss_pause">Altijd pauzeren</string>
 	<string name="settings.temp_loss_pause_lower">Pauze, lagere volume desgevraagd</string>
 	<string name="settings.temp_loss_lower">Altijd lagere volume</string>
@@ -373,7 +373,7 @@
 	<string name="settings.persistent_title">Permanente vermelding</string>
 	<string name="settings.persistent_summary">Toon de vermelding zelfs na pauzeren. Druk op de stopknop om de vermelding te verwijderen.</string>
 	<string name="settings.gapless_playback">Ononderbroken afspelen</string>
-	<string name="settings.gapless_playback_summary">Indien je vreemde storingen ondervindt tijdens het afspelen, kan het uitzetten van deze functie misschien helpen.</string>
+	<string name="settings.gapless_playback_summary">Start het volgende nummer zonder pauze zodra het gedownload is. Als je vreemde fouten ziet tijdens het afspelen, kan dit uitzetten helpen.</string>
 	<string name="settings.chat_refresh">Chat vernieuwingsfrequentie (sec.)</string>
 	<string name="settings.chat_enabled">Chat aanzetten</string>
 	<string name="settings.chat_enabled_summary">Al dan niet weergeven van de chatlijst in de lade</string>
@@ -389,7 +389,7 @@
 	<string name="settings.hide_widget_summary">Verberg widget na verlaten app</string>
 	<string name="settings.podcasts_enabled">Podcasts ingeschakeld</string>
 	<string name="settings.podcasts_enabled_summary">Al dan niet weergeven van de podcastlijst in de lade</string>
-	<string name="settings.bookmarks_enabled">Bladwijzers ingeschakelPlayback</string>
+	<string name="settings.bookmarks_enabled">Bladwijzers ingeschakeld</string>
 	<string name="settings.bookmarks_enabled_summary">Al dan niet weergeven van de bladwijzerlijst in de lade</string>
 	<string name="settings.shares_enabled">Shares ingeschakeld</string>
 	<string name="settings.shares_enabled_summary">Al dan niet weergeven van de shareslijst in de lade</string>
@@ -436,7 +436,7 @@
 	<string name="settings.admin_enabled">Beheer ingeschakeld</string>
 	<string name="settings.admin_enabled_summary">Al dan niet weergeven van de adminlijst in de lade</string>
 	<string name="settings.replay_gain">Normaliseren</string>
-	<string name="settings.replay_gain_summary">Aldan of niet de afspeelvolume per nummer of album normaliseren adhv (replay gain) tags</string>
+	<string name="settings.replay_gain_summary">Of het afspeelvolume per nummer of album genormaliseerd wordt aan de hand van replay gain-tags. Nummers worden nooit luider dan het normale maximumvolume.</string>
 	<string name="settings.replay_gain_type">Lees van tags</string>
 	<string name="settings.replay_gain_type.smart">Slimme detectie</string>
 	<string name="settings.replay_gain_type.album">Album tags</string>
@@ -448,8 +448,6 @@
 	<string name="settings.casting_proxy_summary">Stream alles via het apparaat als een proxy. Dit omzeilt problemen zoals zelf toegekende certificaten.</string>
 	<string name="settings.rename_duplicates">Hernoem dubbele nummers</string>
 	<string name="settings.rename_duplicates_summary">Hernoem dubbele nummers naar de originele bestandsnaam om ze te kunnen onderscheiden.</string>
-	<string name="settings.start_on_headphones">Start met koptelefoon</string>
-	<string name="settings.start_on_headphones_summary">Start als een koptelefoon gekoppeld wordt. Dit vereist het gebruik van een service bij het opstarten van de telefoon om de de koptelefoonplugin te monitoren, zelfs als Dsub niet gebruikt wordt.</string>
 	<string name="settings.color_action_bar">Kleur actiebalk</string>
 	<string name="settings.color_action_bar.summary">Kleur de actiebalk en statusbalk, of laat ze ongemoeid.</string>
 	<string name="settings.shuffle_by_album">Shuffle op basis van albums</string>
@@ -520,7 +518,7 @@
 
     <string name="service.connecting">Serververbinding wordt opgezet, moment geduld a.u.b.</string>
 
-    <string name="parser.upgrade_client">Onverenigbare versies. DSub upgraden a.u.b.</string>
+    <string name="parser.upgrade_client">Onverenigbare versies. DSub2000 upgraden a.u.b.</string>
     <string name="parser.upgrade_server">Onverenigbare versies. Subsonic server upgraden a.u.b.</string>
     <string name="parser.not_authenticated">Verkeerde gebruikersnaam of wachtwoord.</string>
     <string name="parser.not_authorized">Niet geautoriseerd. Controleer de gebruikerspermissies op Subsonic server.</string>
@@ -539,10 +537,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">DSub2000 (4x1)</string>
+	<string name="widget.4x2">DSub2000 (4x2)</string>
+	<string name="widget.4x3">DSub2000 (4x3)</string>
+	<string name="widget.4x4">DSub2000 (4x4)</string>
     <string name="widget.initial_text">Aanraken om muziek te selecteren</string>
     <string name="widget.sdcard_busy">SD-kaart onbeschikbaar</string>
     <string name="widget.sdcard_missing">Geen SD-kaart</string>
@@ -563,7 +561,7 @@
 
 	<string name="tasker.start_playing">Begin met spelen</string>
 	<string name="tasker.start_playing_shuffled">Begin met spelen in shuffle-modus</string>
-	<string name="tasker.start_playing_title">Tasker -> Start DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Start DSub2000</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle-modus: </string>
 	<string name="tasker.edit_shuffle_start_year">Shuffle start jaar:</string>
 	<string name="tasker.edit_shuffle_end_year">Shuffle einde jaar:</string>

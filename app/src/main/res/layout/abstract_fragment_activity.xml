@@ -7,14 +7,14 @@
 	android:layout_height="match_parent"
 	android:gravity="bottom"
 	sothree:umanoPanelHeight="?attr/actionBarSize"
-	sothree:umanoShadowHeight="4dp"
+	sothree:umanoShadowHeight="0dp"
 	sothree:umanoDragView="@+id/slide_up_swipe_target">
 
 	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<android.support.v7.widget.Toolbar
+		<com.google.android.material.appbar.MaterialToolbar
 			android:id="@+id/main_toolbar"
 			android:layout_height="?attr/actionBarSize"
 			android:layout_width="match_parent"
@@ -36,14 +36,14 @@
 			android:id="@+id/slide_up_swipe_target"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:background="?attr/actionbarBackgroundColor">
+			android:background="?attr/actionbarNowPlayingBackgroundColor">
 
-			<android.support.v7.widget.Toolbar
+			<com.google.android.material.appbar.MaterialToolbar
 				android:id="@+id/now_playing_toolbar"
 				android:layout_height="?attr/actionBarSize"
 				android:layout_width="match_parent"
 				android:elevation="4dp"
-				android:visibility="gone"
+				android:visibility="invisible"
 				android:theme="?attr/actionbarThemeStyle"
 				app:popupTheme="?attr/actionbarPopupStyle"/>
 
@@ -55,7 +55,7 @@
 				android:orientation="horizontal"
 				android:elevation="4dp">
 
-				<github.daneren2005.dsub.view.RecyclingImageView
+				<github.paroj.dsub2000.view.RecyclingImageView
 					android:id="@+id/album_art"
 					android:layout_width="?attr/actionBarSize"
 					android:layout_height="?attr/actionBarSize"

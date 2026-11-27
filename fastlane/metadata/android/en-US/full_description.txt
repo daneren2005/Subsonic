@@ -1,0 +1,18 @@
+Connect to your Subsonic server and listen to your music wherever you go. Songs
+are cached for playback to save on your mobile bandwidth and to make them
+available when you have no connection at all.
+
+Subsonic is a cross-platform FOSS media server that's capable of indexing very
+large media collections. The server can transcode if necessary so that the app
+can play files that your device may not normally support.
+
+<h2>Features</h2>
+
+<ul>
+<li>Drag and drop songs to rearrange your playlist on the Now Playing tab</li>
+<li>Pause playback when other apps request audio focus (navigation, etc)</li>
+<li>Lockscreen controls</li>
+<li>Gapless Playback</li>
+<li>Highly customizable UI</li>
+<li>User defined Cache Size, Network Timeout, and Buffer Length</li>
+</ul>

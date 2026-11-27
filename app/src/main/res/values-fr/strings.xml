@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Sauver</string>
     <string name="common.cancel">Annuler</string>
@@ -22,7 +22,7 @@
 	<string name="common.stream_external">Vidéo en streaming</string>
 	<string name="common.confirm">Confirmer</string>
 	<string name="common.confirm_message">Voulez-vous %1$s %2$s ?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">le cache</string>
 	<string name="common.empty">Aucune donnée</string>
 	<string name="common.warning">Avertissement</string>
 
@@ -31,20 +31,20 @@
 	<string name="button_bar.playlists">Listes de lecture</string>
     <string name="button_bar.now_playing">Lecture en cours</string>
 	<string name="button_bar.podcasts">Podcasts</string>
-	<string name="button_bar.bookmarks">Favoris</string>
+	<string name="button_bar.bookmarks">Signets</string>
 	<string name="button_bar.shares">Partages</string>
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Téléchargement</string>
 
     <string name="main.welcome_title">Bienvenue !</string>
-    <string name="main.welcome_text">Bienvenue dans DSub ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
-    	<string name="main.about_title">À propos de DSub</string>
+    <string name="main.welcome_text">Bienvenue dans DSub2000 ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
+    	<string name="main.about_title">À propos de DSub2000</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Cache permanent</font> :
-		<br/>Lorsque des titres sont téléchargés par DSub, ils peuvent être supprimés pour libérer de l\'espace pour de nouveaux téléchargements. Le cache permanent premet, lui, de ne jamais supprimer automatiquement la musique téléchargée.
+		<br/>Lorsque des titres sont téléchargés par DSub2000, ils peuvent être supprimés pour libérer de l\'espace pour de nouveaux téléchargements. Le cache permanent premet, lui, de ne jamais supprimer automatiquement la musique téléchargée.
 		<p/><font color="red">ChromeCast a échoué</font> :
 		<br/>Assurez-vous de ne pas utiliser un certificat auto-signé, Chromecast les rejette systématiquement.
 	]]>
@@ -54,6 +54,7 @@
 	<string name="main.online">Connecter</string>
     <string name="main.settings">Paramètres</string>
     <string name="main.albums_title">Albums</string>
+    <string name="main.not_supported">Non pris en charge par ce serveur</string>
     <string name="main.albums_newest">Ajoutés récemment</string>
     <string name="main.albums_recent">Joués récemment</string>
     <string name="main.albums_frequent">Les plus joués</string>
@@ -62,6 +63,8 @@
     <string name="main.albums_random">Au hasard</string>
 	<string name="main.albums_genres">Par genres</string>
 	<string name="main.albums_year">Par décennies</string>
+    <string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Presser retour à nouveau pour quitter</string>
 	<string name="main.scan_complete">Analyse du server terminée</string>
@@ -78,7 +81,7 @@
 	<string name="menu.about">À propos</string>
 	<string name="menu.add_playlist">Ajouter à la playlist</string>
 	<string name="menu.remove_playlist">Supprimer de la playlist</string>
-	<string name="menu.deleted_playlist">Supprimer la playlist %s</string>
+	<string name="menu.deleted_playlist">Playlist %s supprimée</string>
 	<string name="menu.deleted_playlist_error">Échec de la suppression de la playlist %s</string>
 	<string name="menu.log">Envoyer le journal</string>
 	<string name="menu.set_timer">Ajuster le minuteur</string>
@@ -176,27 +179,27 @@
     <string name="download.repeat_single">Répéter titre</string>
 	<string name="download.jukebox_server_too_old">Télécommande non supportée. Mettre à jour le serveur Subsonic.</string>
     <string name="download.jukebox_offline">La télécommande n\'est pas disponible en mode déconnecté.</string>
-    <string name="download.jukebox_not_authorized">Mode télécommande non autorisé. Activer le mode jukebox.<b>Users &gt; Settings</b> on your Subsonic server.</string>
+    <string name="download.jukebox_not_authorized">Mode télécommande non autorisé. Activez le mode jukebox dans <b>Users &gt; Settings</b> sur votre serveur Subsonic.</string>
 	<string name="download.start_timer">Démarrer le minuteur</string>
 	<string name="download.need_download">La vidéo doit d\'abord être téléchargée</string>
 	<string name="download.no_streaming_player">Aucun lecteur ne peut afficher ce flux</string>
 	<string name="download.playing_out_of">Lecture : %1$d/%2$d</string>
-	<string name="download.save_bookmark_title">Créer un favori</string>
-	<string name="download.save_bookmark">Favori créé</string>
+	<string name="download.save_bookmark_title">Créer un signet</string>
+	<string name="download.save_bookmark">Signet créé</string>
 	<string name="download.downloading_title">Chargement des titres %1$d</string>
 	<string name="download.downloading_summary">En cours : %1$s</string>
 	<string name="download.downloading_summary_expanded">En cours : %1$s
 		\nTaille estimée : %2$s</string>
 	<string name="download.failed_to_load">Échec du chargement</string>
-	<string name="download.save_bookmark_failed">Échec de la création du favori</string>
+	<string name="download.save_bookmark_failed">Échec de la création du signet</string>
 
 	<string name="sync.new_podcasts">Nouveaux podcasts disponibles</string>
 	<string name="sync.new_playlists">Nouveaux titres dans les playlists</string>
 	<string name="sync.new_albums">Nouveaux albums disponibles</string>
-	<string name="sync.new_starred">Nouveaux titres notés disponibles</string>
+	<string name="sync.new_starred">Nouveaux titres mis en favori disponibles</string>
     
-	<string name="starring_content_starred">Noté \&quot;%s\&quot;</string>
-	<string name="starring_content_unstarred">Dévalués \&quot;%s\&quot;</string>
+	<string name="starring_content_starred">\&quot;%s\&quot; ajouté aux favoris</string>
+	<string name="starring_content_unstarred">\&quot;%s\&quot; retiré des favoris</string>
     <string name="starring_content_error">Échec de la mise à jour \&quot;%s\&quot;, réessayer plus tard.</string>
 	
 	<string name="playlist_error">Échec de la récupération des playlists</string>
@@ -204,16 +207,11 @@
     <string name="updated_playlist_error">Échec de la mise à jour \&quot;%s\&quot;, réessayer plus tard.</string>
 	<string name="removed_playlist">Titre %1$s retiré de \&quot;%2$s\&quot;</string>
 	
-	<string name="bookmark.delete">Supprimer le favori</string>
-	<string name="bookmark.delete_title">Supprimer le favori pour</string>
-	<string name="bookmark.deleted">Favori pour \&quot;%s\&quot; supprimé</string>
-	<string name="bookmark.deleted_error">Échec de la suppression du favori pour \&quot;%s\&quot;</string>
-	<string name="bookmark.details_title">Détails du favori</string>
-	<string name="bookmark.details">Titre : %1$s
-		\nPosition : %2$s
-		\nCréé le : %3$s
-		\nMis à jour : %4$s
-		\nCommentaire : %5$s</string>
+	<string name="bookmark.delete">Supprimer le signet</string>
+	<string name="bookmark.delete_title">Supprimer le signet pour</string>
+	<string name="bookmark.deleted">Signet pour \&quot;%s\&quot; supprimé</string>
+	<string name="bookmark.deleted_error">Échec de la suppression du signet pour \&quot;%s\&quot;</string>
+	<string name="bookmark.details_title">Détails du signet</string>
 	<string name="bookmark.resume_title">Reprendre la lecture ?</string>
 	<string name="bookmark.resume">Reprendre la lecture de \'%1$s\' depuis %2$s</string>
 	<string name="bookmark.action_resume">Reprendre</string>
@@ -233,7 +231,7 @@
 
     <string name="error.label">Erreur</string>
 
-    <string name="settings.title">Paramètres DSub</string>
+    <string name="settings.title">Paramètres DSub2000</string>
     <string name="settings.test_connection_title">Test de connexion</string>
 	<string name="settings.servers_add">Ajouter un serveur</string>
 	<string name="settings.servers_remove">Supprimer le serveur</string>
@@ -253,7 +251,7 @@
     <string name="settings.cache_size">Taille de la mémoire tampon (MB)</string>
     <string name="settings.cache_location">Emplacement de la mémoire tampon</string>
     <string name="settings.cache_location_error">Emplacement invalide pour la mémoire tampon. Utilisation emplacement par défaut.</string>
-    <string name="settings.cache_location_reset">L\'emplacement choisi pour la mémoire tampon ne peut plus être utilisé. S\'il y a eu une mise à jour récente vers Android 4.4 KiktKat, la façon dont les application écrivent sur la carte SD à changée afin que ces dernières ne puissent écrire que dans un emplacement spécifique. L\'emplacement à utiliser pour DSub a déjà été mis à jour. Afin de supprimer toutes les données obsolètes, il faut vider l\'ancien emplacement en utilisant un ordinateur.</string>
+    <string name="settings.cache_location_reset">L\'emplacement choisi pour la mémoire tampon ne peut plus être utilisé. S\'il y a eu une mise à jour récente vers Android 4.4 KiktKat, la façon dont les application écrivent sur la carte SD à changée afin que ces dernières ne puissent écrire que dans un emplacement spécifique. L\'emplacement à utiliser pour DSub2000 a déjà été mis à jour. Afin de supprimer toutes les données obsolètes, il faut vider l\'ancien emplacement en utilisant un ordinateur.</string>
 	<string name="settings.cache_clear">Vider la mémoire tampon</string>
 	<string name="settings.cache_clear_complete">Mémoire tampon vidée</string>
     <string name="settings.testing_connection">Test de connexion...</string>
@@ -323,8 +321,6 @@
     <string name="settings.hide_media_title">Invisible pour les autres</string>
     <string name="settings.hide_media_summary">Rendre les fichiers de musique indisponibles pour les autres applications.</string>
     <string name="settings.hide_media_toast">Prendra effet au prochain scan de musique d\'Android.</string>
-    <string name="settings.media_button_title">Boutons physiques</string>
-    <string name="settings.media_button_summary">Répondre aux boutons du mobile, du casque filaire ou bluetooth</string>
     <string name="settings.screen_lit_title">Garder l\'écran allumé</string>
     <string name="settings.screen_lit_summary">Garder l\'écran allumé augmente la vitesse de téléchargement.</string>
 	<string name="settings.playlist_title">Lecture</string>
@@ -334,7 +330,7 @@
 	<string name="settings.sleep_timer_off">Éteindre</string>
 	<string name="settings.sleep_timer_on">Allumer</string>
 	<string name="settings.sleep_timer_always_on">Toujours en fonctionnement</string>
-	<string name="settings.temp_loss_title">Perte temporaire de focus</string>
+	<string name="settings.temp_loss_title">Quand une autre application joue du son</string>
 	<string name="settings.temp_loss_pause">Toujours mettre en pause</string>
 	<string name="settings.temp_loss_pause_lower">Pause, baisser le volume si demandé</string>
 	<string name="settings.temp_loss_lower">Toujours baisser le volume</string>
@@ -345,7 +341,7 @@
 	<string name="settings.persistent_title">Notification persistente</string>
 	<string name="settings.persistent_summary">Afficher la notification même après la mise en pause. Appuyer sur stop pour l\'effacer.</string>
 	<string name="settings.gapless_playback">Lecture sans saut</string>
-	<string name="settings.gapless_playback_summary">Si vous rencontrez des problèmes lors de la lecture, désactiver ceci pourrait aider.</string>
+	<string name="settings.gapless_playback_summary">Démarre le titre suivant sans interruption une fois qu\'il est téléchargé. Si vous rencontrez des problèmes lors de la lecture, désactiver ceci pourrait aider.</string>
 	<string name="settings.chat_refresh">Fréquence de rafraîchissement du chat (Secs)</string>
 	<string name="settings.chat_enabled">Chat autorisé</string>
 	<string name="settings.chat_enabled_summary">Afficher ou non la zone de chat</string>
@@ -361,8 +357,8 @@
 	<string name="settings.hide_widget_summary">Cacher le widget après avoir quitté l\'application</string>
 	<string name="settings.podcasts_enabled">Podcasts autorisés</string>
 	<string name="settings.podcasts_enabled_summary">Afficher ou non l\'accès aux podcasts</string>
-	<string name="settings.bookmarks_enabled">Favoris autorisés</string>
-	<string name="settings.bookmarks_enabled_summary">Afficher ou non l\'accès aux favoris</string>
+	<string name="settings.bookmarks_enabled">Signets autorisés</string>
+	<string name="settings.bookmarks_enabled_summary">Afficher ou non l\'accès aux signets</string>
 	<string name="settings.shares_enabled">Partages autorisés</string>
 	<string name="settings.shares_enabled_summary">Afficher ou non l\'accès aux partages</string>
 	<string name="settings.sync_title">Sync</string>
@@ -381,8 +377,8 @@
 	<string name="settings.sync_wifi_summary">Synchroniser uniquement quand la connexion Wifi est active</string>
 	<string name="settings.sync_most_recent">Sync ajouts récents</string>
 	<string name="settings.sync_most_recent_summary">Charger automatiquement les nouveaux albums</string>
-	<string name="settings.sync_starred">Sync notés</string>
-	<string name="settings.sync_starred_summary">Charger automatiquement les titres, albums et artistes bien notés</string>
+	<string name="settings.sync_starred">Synchroniser les favoris</string>
+	<string name="settings.sync_starred_summary">Mettre automatiquement en cache les titres, albums et artistes mis en favori</string>
 	<string name="settings.sync_notification">Afficher des notifications de synchro</string>
 	<string name="settings.sync_notification_summary">Afficher une notification dès qu\'un média a été synchronisé</string>
 	<string name="settings.server_sync_summary">Synchron autorisée ou non sur ce serveur</string>
@@ -390,13 +386,13 @@
 	<string name="settings.menu_options.title">Options de menu optionnelles</string>
 	<string name="settings.menu_options.play_next_summary">Afficher Lire suivant dans les menus</string>
 	<string name="settings.menu_options.play_last_summary">Afficher Lire dernier dans les menus</string>
-	<string name="settings.menu_options.star_summary">Afficher Noter dans les menus</string>
+	<string name="settings.menu_options.star_summary">Afficher Favori dans les menus</string>
 	<string name="settings.menu_options.shared_summary">Afficher Partager dans les menus</string>
 	<string name="settings.menu_options.rate_summary">Montrer les notes dans les menus</string>
 	<string name="settings.browse_by_tags">Naviguer via les tags</string>
 	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Nécessite Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>
-	<string name="settings.override_system_language_summary">Afficher DSub en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
+	<string name="settings.override_system_language_summary">Afficher DSub2000 en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
 	<string name="settings.drawer_items_title">Entrées de menu</string>
 	<string name="settings.large_album_art">Pochettes larges</string>
 	<string name="settings.large_album_art_summary">Afficher les pochettes en grand plutôt qu\'en liste.</string>
@@ -411,7 +407,7 @@
 
 	<string name="share.expires">Expiration : %s</string>
 	<string name="share.expires_never">N\'expire jamais</string>
-	<string name="share.deleted">Supprimer le partage %s</string>
+	<string name="share.deleted">Partage %s supprimé</string>
 	<string name="share.deleted_error">Échec de la suppression du partage %s</string>
 	<string name="share.no_expiration">Pas d\'expiration</string>
 	<string name="share.expiration">Expiration :</string>
@@ -467,7 +463,7 @@
 
     <string name="service.connecting">Interrogation du serveur, veuillez patienter.</string>
 
-    <string name="parser.upgrade_client">Version incompatible. Mettre à jour DSub.</string>
+    <string name="parser.upgrade_client">Version incompatible. Mettre à jour DSub2000.</string>
     <string name="parser.upgrade_server">Version incompatible. Mettre à jour le serveur Subsonic.</string>
     <string name="parser.not_authenticated">Mauvais nom d\'utilisateur ou mot de passe.</string>
     <string name="parser.not_authorized">Non autorisé. Vérifier les droit de l\'utilisateur sur le serveur Subsonic.</string>
@@ -486,10 +482,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">DSub2000 (4x1)</string>
+	<string name="widget.4x2">DSub2000 (4x2)</string>
+	<string name="widget.4x3">DSub2000 (4x3)</string>
+	<string name="widget.4x4">DSub2000 (4x4)</string>
     <string name="widget.initial_text">Toucher pour choisir de la musique</string>
     <string name="widget.sdcard_busy">Carte SD indisponible</string>
     <string name="widget.sdcard_missing">Pas de carte SD</string>
@@ -507,7 +503,7 @@
 	<string name="chat.send_a_message">Envoyer un message</string>
 
 	<string name="tasker.start_playing">Commencer la lecture</string>
-	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub2000</string>
 	<string name="tasker.edit_shuffle_mode">Démarrer en mode lecture aléatoire : </string>
 	<string name="tasker.start_playing_shuffled">Démarrer la lecture en mode lecture aléatoire</string>
 
@@ -529,4 +525,5 @@
         <item quantity="other">%d jours avant la fin de période d\'essai.</item>
     </plurals>
 
+	<string name="settings.replay_gain_summary">Baisser le volume de lecture selon les balises Replay Gain de la piste et de l\'album. Les titres ne sont jamais plus forts que le volume maximum normal.</string>
 </resources>

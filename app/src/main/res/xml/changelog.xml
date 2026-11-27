@@ -1,5 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.8.1" versioncode="222" releasedate="20/11/2026">
+		<change>Fix APKs failing to install</change>
+		<change>New overview screen with a tile grid, an Albums/Songs switch and a folder picker; Videos moved to the side menu</change>
+		<change>Add song lists on servers with the songListsNCM extension (recently played, most played, highest rated, by year, alphabetical); capabilities are detected and refreshed when the server software changes</change>
+		<change>Show station logos in the internet radio list</change>
+		<change>Show artist credits as provided by the server, including multi-artist credits</change>
+		<change>Show messages as snackbars instead of system toasts</change>
+		<change>Fix the restore play queue prompt reappearing and queue changes being lost when playback stops</change>
+		<change>Fix "No network available" warning in offline mode</change>
+		<change>Fix TalkBack crash when drawer entries are hidden</change>
+		<change>Fix the gap below the Now Playing title with three-button navigation</change>
+		<change>Fix Chromecast, DLNA and Jukebox route selection when not scanning</change>
+		<change>Fix the Authorization header being sent when disabled, breaking servers such as Nextcloud Music</change>
+		<change>Fix crashes from duplicate entries in the play queue</change>
+		<change>Fix a crash when seeking while the track changes</change>
+		<change>Fix launch crashes caused by a foreground service timeout</change>
+		<change>Speed up queueing large playlists</change>
+	</release>
+	<release version="5.8.0" versioncode="221" releasedate="01/11/2026">
+		<change>Fix artist bios and images being requested for folders when browsing by folder structure</change>
+		<change>Improve battery life by releasing Wi-Fi and UPnP locks when idle and stopping unnecessary background polling</change>
+		<change>Resume playback after another app temporarily takes audio focus</change>
+		<change>Fix corrupt or partially written play and download queues crashing the app on startup</change>
+		<change>Never cache server error pages as media, which left songs unplayable until the cache was cleared</change>
+		<change>Only show settings that apply to the installed Android version and remove settings made obsolete by the new playback core</change>
+		<change>Remove the USB DAC routing option, which never delivered high-res audio at its native rate</change>
+		<change>Finish the Material 3 migration for dialogs, text fields, menus, switches, progress indicators and date pickers</change>
+		<change>Draw the app edge to edge with correct system bar and toolbar spacing</change>
+		<change>Keep the Now Playing content steady and fade between the bottom bar and toolbar while the panel slides</change>
+		<change>Fix UI flicker while seeking in the Now Playing view</change>
+		<change>Fix playback speed buttons not fitting on narrow screens</change>
+	</release>
+	<release version="5.8.0-rc1" versioncode="220" releasedate="17/10/2026">
+		<change>Add synced lyrics via OpenSubsonic, with an option for lyrics to follow the queue</change>
+		<change>Add entire-library caching</change>
+		<change>Add optional USB DAC routing for high-res playback</change>
+		<change>Add reverse sort for podcast episode lists</change>
+		<change>New ExoPlayer-based playback core, replacing MediaPlayer 1</change>
+		<change>Fade audio smoothly on focus loss/gain instead of ducking abruptly</change>
+		<change>Update theme to Material 3</change>
+		<change>Fix Ogg/Opus internet radios now work correctly and streaming/seek behaviour is improved</change>
+		<change>Fix playback hanging when many tracks are queued for download</change>
+		<change>Fix playback of offline non-server files and local files with special characters</change>
+		<change>Fix renaming of media store entries when unpinning a song</change>
+	</release>
+	<release version="5.7.5" versioncode="218" releasedate="10/10/2026">
+		<change>Filter out outdated TLS protocols</change>
+		<change>Fix playback hang when many tracks are queued for download</change>
+		<change>minor fixes for ServerProxy</change>
+		<change>Show "No matches" empty state when search returns no results</change>
+	</release>
+	<release version="5.7.4" versioncode="217" releasedate="13/05/2026">
+		<change>fix AVRCP media browsing for Android 16</change>
+		<change>Use server-provided coverArt ID for playlists</change>
+		<change>fix some crashes and deadlocks</change>
+	</release>
+	<release version="5.7.3" versioncode="216" releasedate="15/03/2026">
+		<change>fix multi selection in playlists</change>
+		<change>fix some crashes and deadlocks</change>
+	</release>
+	<release version="5.7.2" versioncode="215" releasedate="19/02/2026">
+		<change>correctly ask for notification permissions</change>
+		<change>get rid of pastebin and directly attach logs</change>
+		<change>fix storing equalizer settings</change>
+		<change>Fix back action in Settings</change>
+		<change>Add disc to song details and remove starred</change>
+		<change>default to hide media</change>
+		<change>fix some potential crashes and bugs</change>
+	</release>
+	<release version="5.7.1" versioncode="214" releasedate="08/02/2026">
+		<change>Fix track names / file names in offline mode</change>
+		<change>Use dark navigation bar for dark themes</change>
+		<change>Fix saving of pinned playlists</change>
+		<change>Fix mRemoteControl.setPlaybackState race condition</change>
+		<change>Handle background restrictions on Android 12+</change>
+	</release>
+	<release version="5.7.0" versioncode="213" releasedate="30/12/2025">
+		<change>Special thanks to @Faeb35 for the contributions to this release</change>
+		<change>Improved Now Playing layout and gestures</change>
+		<change>add to playlist button in Now Playing view</change>
+		<change>configurable Action Bar colors</change>
+		<change>replay song instead of skip on error</change>
+		<change>fixes for TransactionTooLargeException</change>
+		<change>new file naming pattern, respecting disc number</change>
+		<change>Respect Per Folder setting in random song feature</change>
+	</release>
+	<release version="5.6.3" versioncode="212" releasedate="09/10/2025">
+		<change>Fix resume playing after being backgrounded</change>
+		<change>Fix flickering changelog</change>
+		<change>Add a fake setting showing Chromecast support</change>
+		<change>Port to API 36</change>
+	</release>
+	<release version="5.6.2" versioncode="211" releasedate="26/07/2025">
+		<change>Fix multiple crashes and memory leaks</change>
+		<change>Fix downloading files when cache is full</change>
+	</release>
+	<release version="5.6.1" versioncode="210" releasedate="21/04/2025">
+		<change>Target Android API 33</change>
+		<change>Allow Android Auto with the FLOSS build</change>
+	</release>
+	<release version="5.6.0" versioncode="209" releasedate="28/06/2024">
+		<change>Rebrand app to DSub2000 to indicate the fork</change>
+		<change>Change setting defaults to improve compatibility and UI clarity</change>
+		<change>Added a random option to the songs part of the mainview</change>
+		<change>Add option to show a single rating button</change>
+		<change>Make tapping on cover art to open playlist configurable</change>
+		<change>When the user has made a selection, only the selected songs are downloaded</change>
+		<change>Migrate to vector drawables</change>
+		<change>Setting to add song suffix as details of list song item</change>
+		<change>Toggling the caching status from "permanently cached" to just "cached" (and back) does not require connectivity</change>
+		<change>Fix replaygain selection logic for track gain</change>
+		<change>Fix album sort with duplicate track numbers</change>
+		<change>Fix offline scrobbling for servers without lucene support</change>
+		<change>Make connections secure by default CVE-2018-1000664</change>
+		<change>Port from orphaned cling to jupnp</change>
+		<change>Sync bastp to upstream/ vanilla-music for improved replaygain parsing</change>
+		<change>Replace subsonic.org demo server with navidrome.org demo server</change>
+	</release>
 	<release version="5.5.3" versioncode="208" releasedate="04/01/2022">
 		<change>Fix album art with Airsonic 11</change>
 		<change>Fixed an issue with SSID detection</change>
@@ -304,7 +422,7 @@
 		<change>Bug fixes for Ampache users</change>
 	</release>
 	<release version="4.9.5" versioncode="149" releasedate="3/25/2015">
-		<change>Handoff: move to another DSub client and pickup where you left off (Subsonic 5.2+)</change>
+		<change>Handoff: move to another DSub2000 client and pickup where you left off (Subsonic 5.2+)</change>
 		<change>DLNA: gapless playback on supported renders</change>
 		<change>Option to warning on back press</change>
 		<change>Better handle date for Subsonic 5.1+</change>
@@ -503,6 +621,6 @@
 		<change>Fix for delay between headset disconnect and pause</change>
 		<change>Fix background bluetooth disconnects causing playback to stop</change>
 		<change>Fix app trying to upsample songs in mp3 -> mp3 transcode</change>
-		<change>Fix for DSub preempting bluetooth events</change>
+		<change>Fix for DSub2000 preempting bluetooth events</change>
 	</release>
 </changelog>

@@ -7,17 +7,25 @@
 
 	<ViewFlipper
 		android:id="@+id/download_playlist_flipper"
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1">
 
-		<github.daneren2005.dsub.view.RecyclingImageView
-			android:id="@+id/download_album_art_image"
-			android:src="@drawable/unknown_album_large"
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:scaleType="fitCenter"/>
+        <FrameLayout
+            android:id="@+id/download_album_art_background"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <github.paroj.dsub2000.view.RecyclingImageView
+                android:id="@+id/download_album_art_image"
+                android:src="@drawable/unknown_album_large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
+        </FrameLayout>
 
 		<include layout="@layout/download_playlist"/>
 
@@ -25,7 +33,7 @@
 
 	<RelativeLayout
 		android:id="@+id/download_control_layout"
-		android:layout_width="match_parent"
+        android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
 		android:background="@android:color/transparent">
@@ -47,27 +55,44 @@
 				<ImageButton
 					android:id="@+id/download_rating_bad"
 					style="@style/DownloadActionImageButton"
-					android:src="?attr/rating_bad"/>
+					android:src="?attr/rating_bad"
+					android:tint="?attr/element_color"/>
 
 				<ImageButton
 					android:id="@+id/download_star"
 					style="@style/DownloadActionImageButton"
-					android:src="@android:drawable/star_big_off"/>
+					android:src="?attr/star"
+					android:tint="?attr/element_color"/>
+
+                <ImageButton
+                    android:id="@+id/download_add_to_playlist"
+                    style="@style/DownloadActionImageButton"
+                    android:src="@drawable/ic_action_add"
+                    android:tint="?attr/element_color" />
 
 				<ImageButton
 					android:id="@+id/download_playback_speed"
 					style="@style/DownloadActionImageButton"
-					android:src="?attr/playback_speed"/>
+					android:src="?attr/playback_speed"
+					android:tint="?attr/element_color"/>
 
 				<ImageButton
 					android:id="@+id/download_bookmark"
 					style="@style/DownloadActionImageButton"
-					android:src="?attr/bookmark"/>
+					android:src="?attr/bookmark"
+					android:tint="?attr/element_color"/>
 
 				<ImageButton
 					android:id="@+id/download_rating_good"
 					style="@style/DownloadActionImageButton"
-					android:src="?attr/rating_good"/>
+					android:src="?attr/rating_good"
+					android:tint="?attr/element_color"/>
+
+				<ImageButton
+					android:id="@+id/download_rating_combined"
+					style="@style/DownloadActionImageButton"
+					android:src="?attr/rating_combined"
+					android:tint="?attr/element_color"/>
 			</LinearLayout>
 		</LinearLayout>
 

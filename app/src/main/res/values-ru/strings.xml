@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Сохранить</string>
     <string name="common.cancel">Отмена</string>
@@ -12,8 +12,8 @@
 	<string name="common.download">Скачать</string>
     <string name="common.pin">Кешировать</string>
     <string name="common.delete">Удалить</string>
-	<string name="common.star">Добавить в закладки</string>
-	<string name="common.unstar">Удалить из закладок</string>
+	<string name="common.star">Добавить в избранное</string>
+	<string name="common.unstar">Удалить из избранного</string>
 	<string name="common.info">Информация</string>
 	<string name="common.name">Название</string>
 	<string name="common.comment">Комментарий</string>
@@ -28,20 +28,23 @@
     <string name="button_bar.now_playing">Плеер</string>
 
     <string name="main.welcome_title">Здравствуйте!</string>
-    <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
+    <string name="main.welcome_text">Добро пожаловать в DSub2000! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
-	<string name="main.about_title">О программе DSub</string>
+	<string name="main.about_title">О программе DSub2000</string>
     <string name="main.shuffle">Случайное воспроизведение</string>
     <string name="main.offline">Отключиться</string>
 	<string name="main.online">Подключиться</string>
     <string name="main.settings">Настройки</string>
     <string name="main.albums_title">Альбомы</string>
+    <string name="main.not_supported">Не поддерживается этим сервером</string>
     <string name="main.albums_newest">Недавно добавленные</string>
     <string name="main.albums_recent">Недавно прослушанные</string>
     <string name="main.albums_frequent">Часто прослушиваемые</string>
     <string name="main.albums_highest">Максимальный рейтинг</string>
-    <string name="main.albums_starred">Закладки</string>
+    <string name="main.albums_starred">Избранное</string>
     <string name="main.albums_random">Случайные</string>
+    <string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 
 	<string name="menu.search">Поиск</string>
 	<string name="menu.shuffle">Перемешать</string>
@@ -113,8 +116,8 @@
     <string name="download.need_download">Необходимо сначала скачать видео</string>
 	<string name="download.no_streaming_player">Нет плеера для воспроизведения потока</string>
     
-	<string name="starring_content_starred">\"%s\" добавлено в закладки</string>
-	<string name="starring_content_unstarred">\"%s\" удалено из закладок</string>
+	<string name="starring_content_starred">\"%s\" добавлено в избранное</string>
+	<string name="starring_content_unstarred">\"%s\" удалено из избранного</string>
     <string name="starring_content_error">Не удалось обновить \"%s\", пожалуйста, попробуйте позже.</string>
 	
 	<string name="playlist_error">Не удалось прочитать списки воспроизведения</string>
@@ -126,7 +129,7 @@
 
     <string name="error.label">Ошибка</string>
 
-    <string name="settings.title">Настройки DSub</string>
+    <string name="settings.title">Настройки DSub2000</string>
     <string name="settings.test_connection_title">Проверить соединение</string>
     <string name="settings.servers_title">Серверы</string>
     <string name="settings.server_name">Название</string>
@@ -193,12 +196,10 @@
     <string name="settings.search_history_cleared">История поиска очищена</string>
     <string name="settings.other_title">Другие настройки</string>
     <string name="settings.scrobble_title">Скробблинг на Last.fm</string>
-    <string name="settings.scrobble_summary">Не забудьте установить логин и пароль от Last.fm на сервере DSub</string>
+    <string name="settings.scrobble_summary">Не забудьте установить логин и пароль от Last.fm на сервере DSub2000</string>
     <string name="settings.hide_media_title">Прятать от других</string>
     <string name="settings.hide_media_summary">Прятать музыкальные файлы от других приложений</string>
     <string name="settings.hide_media_toast">Изменения вступят в силу при следующем поиске музыки на Вашем устройстве.</string>
-    <string name="settings.media_button_title">Кнопки управления</string>
-    <string name="settings.media_button_summary">Разрешить управление кнопками мультимедиа на устройстве и гарнитуре</string>
     <string name="settings.screen_lit_title">Держать экран включенным</string>
     <string name="settings.screen_lit_summary">Оставить экран включенным для повышения скорости при скачивании.</string>
 	<string name="settings.playlist_title">Списки воспроизведения</string>
@@ -208,7 +209,7 @@
 	<string name="settings.sleep_timer_off">Выключен</string>
 	<string name="settings.sleep_timer_on">Включен</string>
 	<string name="settings.sleep_timer_always_on">Всегда включен</string>
-	<string name="settings.temp_loss_title">Временная потеря связи</string>
+	<string name="settings.temp_loss_title">Когда другое приложение воспроизводит звук</string>
 	<string name="settings.temp_loss_pause">Всегда останавливать</string>
 	<string name="settings.temp_loss_pause_lower">Останавливать, понижать громкость, если требуется</string>
 	<string name="settings.temp_loss_lower">Всегда понижать громкость</string>
@@ -227,7 +228,7 @@
 
     <string name="service.connecting">Подключение к серверу. Пожалуйста, подождите.</string>
 
-    <string name="parser.upgrade_client">Несовместимые версии. Пожалуйста, обновите приложение DSub для Android.</string>
+    <string name="parser.upgrade_client">Несовместимые версии. Пожалуйста, обновите приложение DSub2000 для Android.</string>
     <string name="parser.upgrade_server">Несовместимые версии. Пожалуйста, обновите сервер Subsonic.</string>
     <string name="parser.not_authenticated">Неправильное имя пользователя или пароль.</string>
     <string name="parser.not_authorized">Не авторизирован. Проверьте права пользователя на сервере Subsonic.</string>
@@ -255,7 +256,7 @@
 	<string name="settings.persistent_title">Постоянное уведомление</string>
     <string name="settings.persistent_summary">Показывать уведомление даже во время паузы. Остановка воспроизведения уберет это уведомление.</string>
     <string name="settings.gapless_playback">Непрерывное воспроизведение</string>
-    <string name="settings.gapless_playback_summary">Galaxy S3 может зависать или испытывать прочие трудности с момента начала непрерывного воспроизведения. Выключите эту функцию для исправления данной проблемы.</string>
+    <string name="settings.gapless_playback_summary">Начинать следующую композицию без паузы после её загрузки. Если во время воспроизведения наблюдаются странные ошибки, попробуйте отключить эту функцию.</string>
     <string name="settings.chat_refresh">Частота обновления чата (сек)</string>
     <string name="settings.chat_enabled">Чат активен</string>
     <string name="settings.chat_enabled_summary">Показывать или нет вкладку чата</string>
@@ -284,4 +285,5 @@
         <item quantity="other">%d дней до конца пробного периода</item>
     </plurals>
 
+	<string name="settings.replay_gain_summary">Понижать громкость воспроизведения в соответствии с тегами Replay Gain композиции и альбома. Громкость песен никогда не превышает обычный максимальный уровень.</string>
 </resources>

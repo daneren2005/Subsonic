@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Guardar</string>
     <string name="common.cancel">Cancelar</string>
@@ -22,7 +22,7 @@
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">la caché</string>
 	<string name="common.empty">No hay datos</string>
 	<string name="common.warning">Aviso</string>
 
@@ -38,13 +38,14 @@
 	<string name="button_bar.admin">Admin</string>
 
     <string name="main.welcome_title">Bienvenido!</string>
-    <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
-	<string name="main.about_title">Acerca de DSub</string>
+    <string name="main.welcome_text">Bienvenido a DSub2000! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
+	<string name="main.about_title">Acerca de DSub2000</string>
 	<string name="main.shuffle">Reproducción aleatoria</string>
     <string name="main.offline">Modo Offline</string>
 	<string name="main.online">Modo Online</string>
     <string name="main.settings">Preferencias</string>
     <string name="main.albums_title">Discos</string>
+    <string name="main.not_supported">No compatible con este servidor</string>
     <string name="main.albums_newest">Añadidos recientemente</string>
     <string name="main.albums_recent">Reproducidos recientemente</string>
     <string name="main.albums_frequent">Más reproducidos</string>
@@ -52,18 +53,19 @@
     <string name="main.albums_starred">Con estrella</string>
     <string name="main.albums_random">Aleatorio</string>
 	<string name="main.albums_genres">Géneros</string>
+    <string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 	<string name="main.back_confirm">Pulsa atrás de nuevo para salir</string>
 	<string name="main.albums_year">Décadas</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Cache permanente</font>:
-		<br/>Cuando DSub descarga las canciones, pueden ser eliminadas para dejar espacio a nuevas descargas.  La música en Caché Permanente, nunca será eliminada automáticamente.
+		<br/>Cuando DSub2000 descarga las canciones, pueden ser eliminadas para dejar espacio a nuevas descargas.  La música en Caché Permanente, nunca será eliminada automáticamente.
 		<p/><font color="red">ChromeCast falla</font>:
 		<br/>Asegúrate que no estás utilizando un certificado auto-firmado, porque Chromecast automáticamente lo rechazará.
 	]]>
    </string>
 	<string name="main.scan_complete">Escaneado del servidor completado</string>
-	<string name="main.albums_per_folder">Por carpetar</string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
@@ -76,7 +78,7 @@
 	<string name="menu.about">Acerca de</string>
 	<string name="menu.add_playlist">Añadir a lista de reproducción</string>
 	<string name="menu.remove_playlist">Borrar de lista de reproducción</string>
-	<string name="menu.deleted_playlist">Listas borradas %s</string>
+	<string name="menu.deleted_playlist">Lista de reproducción %s eliminada</string>
 	<string name="menu.deleted_playlist_error">Error al borrar la lista de reproducción %s</string>
 	<string name="menu.log">Enviar Log</string>
 	<string name="menu.set_timer">Ajustar temporizador</string>
@@ -145,7 +147,7 @@
 	<string name="select_podcasts.server_delete">Borrar en el servidor</string>
 	<string name="select_podcasts.downloading">Descargando %s en el servidor</string>
 	<string name="select_podcasts.refreshing">El servidor está comprobando nuevos podcasts ahora</string>
-	<string name="select_podcasts.deleted">Podcasts eliminados %s</string>
+	<string name="select_podcasts.deleted">Podcast %s eliminado</string>
 	<string name="select_podcasts.deleted_error">Error al elimintar el podcast %s</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Error al agregar podcast</string>
@@ -203,9 +205,6 @@
 	<string name="bookmark.delete">Borrar marcador</string>
 	<string name="bookmark.deleted">Borrado marcador para \"%s\"</string>
 	<string name="bookmark.deleted_error">Error al borrar el marcador para \"%s\"</string>
-	<string name="bookmark.details">Canción: %1$s
-		\nComentario: %2$s
-		\nPosición: %3$s</string>
 	<string name="bookmark.resume_title">Reanudar reproducción?</string>
 	<string name="bookmark.resume">Reanudar reproducción \'%1$s\' desde%2$s</string>
 	<string name="bookmark.action_resume">Reanudar</string>
@@ -224,7 +223,7 @@
 
     <string name="error.label">Error</string>
 
-    <string name="settings.title">Ajustes de DSub</string>
+    <string name="settings.title">Ajustes de DSub2000</string>
     <string name="settings.test_connection_title">Comprobar conexión</string>
 	<string name="settings.servers_add">Añadir servidor</string>
 	<string name="settings.servers_remove">Borrar servidor</string>
@@ -310,18 +309,16 @@
     <string name="settings.hide_media_title">Ocultar del resto</string>
     <string name="settings.hide_media_summary">Ocultar archivos de música de otras aplicaciones.</string>
     <string name="settings.hide_media_toast">Se aplicará la próxima vez que Android escanee la música de su teléfono.</string>
-    <string name="settings.media_button_title">Botones multimedia</string>
-    <string name="settings.media_button_summary">Responder a los botones Bluetooth, teléfono y manos libres</string>
     <string name="settings.screen_lit_title">Mantener pantalla encendida</string>
     <string name="settings.screen_lit_summary">Mantener la pantalla encendida durantes las descargas mejora la velocidad de descarga.</string>
 	<string name="settings.playlist_title">Listas de reproducción</string>
 	<string name="settings.playlist_random_size_title">Tamaño de la lista de reproducción en aleatorio</string>
 	<string name="settings.sleep_timer_title">Temporizador</string>
 	<string name="settings.sleep_timer_duration_title">Duración del temporizador</string>
-	<string name="settings.sleep_timer_off">Encendido</string>
-	<string name="settings.sleep_timer_on">Apagado</string>
+	<string name="settings.sleep_timer_off">Apagado</string>
+	<string name="settings.sleep_timer_on">Encendido</string>
 	<string name="settings.sleep_timer_always_on">Siempre encendido</string>
-	<string name="settings.temp_loss_title">Pérdida temporal de foco</string>
+	<string name="settings.temp_loss_title">Cuando otra aplicación reproduce audio</string>
 	<string name="settings.temp_loss_pause">Pausar siempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, bajar el volumen cuando sea solicitado</string>
 	<string name="settings.temp_loss_lower">Bajar volumen siempre</string>
@@ -332,7 +329,7 @@
 	<string name="settings.persistent_title">Notificación permanente</string>
 	<string name="settings.persistent_summary">Mostrar la notificación incluso tras pausar. Pulsar botón stop para quitarlo.</string>
 	<string name="settings.gapless_playback">Reproducción sin pausas</string>
-	<string name="settings.gapless_playback_summary">El Galaxy S3 parece sufrir algunos bloqueos y funcionamentos extraños desde la introducción de la reproducción sin pausas. Desmarca esta opción para solucionar el problema.</string>
+	<string name="settings.gapless_playback_summary">Iniciar la siguiente canción sin pausa una vez terminada la descarga. Si experimentas errores extraños durante la reproducción, desactivar esta opción puede ayudar.</string>
 	<string name="settings.chat_refresh">Tiempo de actualización de chat (Segundos)</string>
 	<string name="settings.chat_enabled">Chat habilitado</string>
 	<string name="settings.chat_enabled_summary">Para mostrar o no mostrar la pestaña de chat. Reinicia la aplicación tras el cambio.</string>
@@ -375,16 +372,16 @@
 	<string name="settings.menu_options.play_last_summary">Mostrar Reproducir Anterior en menús</string>
 	<string name="settings.menu_options.star_summary">Mostrar estrella en menús</string>
 	<string name="settings.menu_options.shared_summary">Mostrar Compartir en menús</string>
-	<string name="settings.shares_enabled">Compartir habilitadoShares Enabled</string>
+	<string name="settings.shares_enabled">Compartidos habilitados</string>
 	<string name="settings.shares_enabled_summary">Mostrar o no mostrar la lista de compartidos en el menú desplegable</string>
 	<string name="settings.server_internal_address">Dirección de red interna</string>
 	<string name="settings.browse_by_tags">Explorar por tags</string>
 	<string name="settings.browse_by_tags_summary">Explorar por tags en vez de por estructura de carpetas. Requiere Subsonic 4.7+</string>
 	<string name="settings.server_local_network_ssid" >SSID Red local</string>
 	<string name="settings.server_local_network_ssid_hint">SSID Actual: %s</string>
-	<string name="settings.cache_location_reset">No se puede escribir en la ubicación seleccionada para la caché. Si has actualizado recientemente el sistema operativo de tu dispositivo a KitKat 4.4, la manera en la que las apps escriben en la Tarjeta SD ha cambiado, por lo que sólo pueden escribir en una ubicación específica. La ubicación que utiliza DSub ha sido automáticamente cambiada por la ubicación correcta. Para eliminar todos los datos de la app anterior, tendrás que introducir la Tarjeta SD en el ordenador y eliminar la carpeta manualmente.</string>
+	<string name="settings.cache_location_reset">No se puede escribir en la ubicación seleccionada para la caché. Si has actualizado recientemente el sistema operativo de tu dispositivo a KitKat 4.4, la manera en la que las apps escriben en la Tarjeta SD ha cambiado, por lo que sólo pueden escribir en una ubicación específica. La ubicación que utiliza DSub2000 ha sido automáticamente cambiada por la ubicación correcta. Para eliminar todos los datos de la app anterior, tendrás que introducir la Tarjeta SD en el ordenador y eliminar la carpeta manualmente.</string>
 	<string name="settings.override_system_language">Sobreescribir idioma del sistema</string>
-	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible DSub en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
+	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible DSub2000 en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
 	<string name="settings.drawer_items_title">Pestañas</string>
 	<string name="settings.large_album_art">Carátulas grandes</string>
 	<string name="settings.large_album_art_summary">Mostrar los discos con carátulas grandes en vez de en lista</string>
@@ -393,18 +390,16 @@
 	<string name="settings.server_sync_summary">Activar o no la sincronización en este server</string>
 	<string name="settings.server_sync">Sincronización activada</string>
 	<string name="settings.menu_options.rate_summary">Mostrar valoración en los menús</string>
-	<string name="settings.replay_gain">Ganancia de reproducción</string>
-	<string name="settings.replay_gain_summary">Modificar la ganancia de reproducción por tags de pista o album</string>
-	<string name="settings.replay_gain_bump">Ganancia de Pre-amp en la reproducciónReplay Gain Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Canciones sin ganancia de reproducciónSongs without Replay Gain</string>
+	<string name="settings.replay_gain">Replay Gain</string>
+	<string name="settings.replay_gain_summary">Bajar el volumen de reproducción según las etiquetas de Replay Gain de pista y álbum. Las canciones nunca suenan más fuerte que el volumen máximo normal.</string>
+	<string name="settings.replay_gain_bump">Preamplificación de Replay Gain</string>
+	<string name="settings.replay_gain_untagged">Canciones sin Replay Gain</string>
 	<string name="settings.replay_gain_type">Leer desde los tags</string>
 	<string name="settings.replay_gain_type.smart">Detección inteligente</string>
 	<string name="settings.replay_gain_type.album">Tags de albums</string>
 	<string name="settings.replay_gain_type.track">Tags de pistas</string>
 	<string name="settings.open_to_tab">Abrir en pestaña</string>
 	<string name="settings.open_to_tab_summary">Abrir directamente a esta pestaña</string>
-	<string name="settings.media_style_notification">Notificaciones nativas multimedia de Android (5.0+)</string>
-	<string name="settings.media_style_notification_summary">Mostrar las notificaciones de reproducción como notificaciones de estilo multimedia nativas (solo en Android Lollipop y superior)</string>
 
 	<string name="share.expires">Expira: %s</string>
 	<string name="share.expires_never">Nunca expira</string>
@@ -475,7 +470,7 @@
 
     <string name="service.connecting">Conectando con el servidor, espere por favor.</string>
 
-    <string name="parser.upgrade_client">Versiones incompatibles. Por favor, actualice la aplicación DSub de Android.</string>
+    <string name="parser.upgrade_client">Versiones incompatibles. Por favor, actualice la aplicación DSub2000 de Android.</string>
     <string name="parser.upgrade_server">Versiones incompatibles. Por favor, actualice su servidor Subsonic.</string>
     <string name="parser.not_authenticated">Usuario o contraseña inconrrectos.</string>
     <string name="parser.not_authorized">Sin autorización. Compruebe los permisos en el servidor Subsonic.</string>
@@ -494,10 +489,10 @@
     <string name="equalizer.enabled">Activado</string>
     <string name="equalizer.preset">Seleccionar preset</string>
 
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">DSub2000 (4x1)</string>
+	<string name="widget.4x2">DSub2000 (4x2)</string>
+	<string name="widget.4x3">DSub2000 (4x3)</string>
+	<string name="widget.4x4">DSub2000 (4x4)</string>
     <string name="widget.initial_text">Toca para seleccionar música</string>
     <string name="widget.sdcard_busy">Tarjeta SD no disponible</string>
     <string name="widget.sdcard_missing">No hay tarjeta SD</string>
@@ -515,7 +510,7 @@
 	<string name="chat.send_a_message">Enviar un mensaje</string>
 
 	<string name="tasker.start_playing">Comenzar reproduciendo</string>
-	<string name="tasker.start_playing_title">Tasker -> Encender DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Encender DSub2000</string>
 	<string name="tasker.edit_shuffle_mode">Comenzar en modo aleatorio: </string>
 	<string name="tasker.start_playing_shuffled">Comenzar en modo aleatorio</string>
 	<string name="tasker.edit_do_nothing">No hacer nada</string>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:background="?attr/selectableItemBackground">
+
+	<github.paroj.dsub2000.view.RecyclingImageView
+		android:id="@+id/item_art"
+		android:layout_width="@dimen/AlbumArt.Small"
+		android:layout_height="@dimen/AlbumArt.Small"
+		android:layout_gravity="left|center_vertical"/>
+
+	<TextView
+		android:id="@+id/item_name"
+		android:layout_width="0dip"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:layout_gravity="left|center_vertical"
+		android:paddingLeft="10dip"
+		android:paddingRight="3dip"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:singleLine="true"
+		android:ellipsize="marquee"
+		android:textColor="?android:textColorPrimary"/>
+
+	<ImageButton
+		android:id="@+id/item_star"
+		android:layout_width="@dimen/Star.Small"
+		android:layout_height="@dimen/Star.Small"
+		android:layout_gravity="center_vertical|end"
+		android:background="@android:color/transparent"
+		android:focusable="false"
+		android:scaleType="fitCenter"
+		android:visibility="gone" />
+
+	<ImageView
+		android:id="@+id/item_more"
+		android:src="?attr/download_none"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:layout_gravity="right|center_vertical"
+		style="@style/MoreButton"/>
+</LinearLayout>

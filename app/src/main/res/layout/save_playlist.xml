@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/save_playlist_root"
-	android:padding="10dip"
+	style="@style/DSub2000.DialogContent"
 	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
-	<EditText
+	<github.paroj.dsub2000.view.FormTextInputLayout
+		style="@style/Widget.DSub2000.TextField"
+		android:hint="@string/common.name">
+
+		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/save_playlist_name"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="text"
 			android:singleLine="true"/>
+	</github.paroj.dsub2000.view.FormTextInputLayout>
 
-	<CheckBox
-			android:id="@+id/save_playlist_overwrite"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/playlist.overwrite"
-			android:layout_marginLeft="4dp"
-			android:checked="false"
-			android:visibility="gone"
-			android:textColor="?android:textColorPrimary"/>
-
+	<com.google.android.material.materialswitch.MaterialSwitch
+		android:id="@+id/save_playlist_overwrite"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:text="@string/playlist.overwrite"
+		android:checked="false"/>
 </LinearLayout>
-

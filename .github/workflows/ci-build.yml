@@ -1,0 +1,44 @@
+name: CI Build
+on: 
+  push:
+    branches: [edge]
+    tags: ["*"]
+  pull_request:
+    branches: [edge]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/setup-java@v6
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - uses: actions/checkout@v6
+
+    - name: Build
+      run: sh gradlew --no-daemon assembleRelease
+    - name: Sign the apk with debug key
+      run: /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --ks-key-alias androiddebugkey app/build/outputs/apk/floss/release/*-release.apk
+
+    - uses: actions/upload-artifact@v7
+      with:
+        name: DSub2000 APK
+        path: app/build/outputs/apk/floss/release/*-release.apk
+        compression-level: 0
+
+  instrumented-tests:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v6
+    - name: Enable KVM
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: run tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: ./gradlew app:connectedFlossDebugAndroidTest

@@ -15,7 +15,7 @@
 	<TextView
 		android:id="@+id/equalizer.level"
 		android:text="0 dB"
-		android:textSize="12sp"
+		android:textAppearance="?attr/textAppearanceBodySmall"
 		android:gravity="right"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
 		android:layout_toRightOf="@+id/equalizer.frequency"
 		android:textColor="?android:textColorSecondary"/>
 
-	<SeekBar
+	<com.google.android.material.slider.Slider
 		android:id="@+id/equalizer.bar"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"

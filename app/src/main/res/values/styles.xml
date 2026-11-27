@@ -1,40 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<style name="Widget.DSub2000.Slider" parent="Widget.Material3.Slider">
+		<item name="labelBehavior">gone</item>
+		<item name="tickVisible">false</item>
+	</style>
+
+	<!-- Tonal button without a minimum width or side padding, so several share one row on small screens. -->
+	<style name="Widget.DSub2000.Button.Compact" parent="Widget.Material3.Button.TonalButton">
+		<item name="android:minWidth">0dp</item>
+		<item name="android:paddingLeft">0dp</item>
+		<item name="android:paddingRight">0dp</item>
+	</style>
+
+	<!-- Root of a custom dialog view; Material 3 dialogs inset their content by 24 dp. -->
+	<style name="DSub2000.DialogContent" parent="">
+		<item name="android:paddingLeft">24dp</item>
+		<item name="android:paddingRight">24dp</item>
+		<item name="android:paddingBottom">8dp</item>
+	</style>
+
+	<!-- Full width form field with the label as its floating hint, see FormTextInputLayout. -->
+	<style name="Widget.DSub2000.TextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">8dp</item>
+	</style>
+	<!-- Read only picker field; tapping it opens a selection dialog. -->
+	<style name="Widget.DSub2000.TextField.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">8dp</item>
+	</style>
+
+	<!-- Theme of the framework AlertDialogs built by the platform preferences. The Material 3
+	     framework overlays are full platform dialog themes (the default one is the dark
+	     Theme.Material.Dialog.Alert), and they keep the square platform window, which is
+	     replaced with the Material 3 shape and surface colour. -->
+	<style name="ThemeOverlay.DSub2000.Dialog.Framework" parent="ThemeOverlay.Material3.Dialog.Alert.Framework">
+		<item name="android:windowBackground">@drawable/dialog_background_m3</item>
+	</style>
+	<style name="ThemeOverlay.DSub2000.Dialog.Framework.Light" parent="ThemeOverlay.Material3.Light.Dialog.Alert.Framework">
+		<item name="android:windowBackground">@drawable/dialog_background_m3</item>
+	</style>
+
+	<!-- Material 3 header for the platform preference framework; applied through
+	     android:preferenceCategoryStyle in themes.xml. The framework's
+	     Preference.Material.Category style is private, so the layout item is repeated. -->
+	<style name="Preference.DSub2000.Category" parent="">
+		<item name="android:layout">@layout/preference_category_m3</item>
+		<item name="android:selectable">false</item>
+	</style>
+
+	<style name="TextAppearance.DSub2000.BarTitle" parent="TextAppearance.Material3.TitleLarge">
+		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
+	<style name="TextAppearance.DSub2000.BarTitle.Inverse">
+		<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+	</style>
+	<style name="TextAppearance.DSub2000.BarSubtitle" parent="TextAppearance.Material3.BodyLarge">
+		<item name="android:textColor">?android:attr/textColorSecondary</item>
+	</style>
+	<style name="TextAppearance.DSub2000.BarSubtitle.Inverse">
+		<item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+	</style>
 	<style name="BasicButton">
 		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
 	</style>
-	<style name="NotificationButtonBase">
-		<item name="android:background">?android:selectableItemBackground</item>
+	<style name="NotificationButton">
+		<item name="android:background">?android:selectableItemBackgroundBorderless</item>
 		<item name="android:layout_width">46dip</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_gravity">center</item>
 		<item name="android:scaleType">fitCenter</item>
 		<item name="android:padding">2dip</item>
-	</style>
-	<style name="NotificationButton" parent="NotificationButtonBase">
-	</style>
-
-	<style name="NotificationButton.ExpandedBase">
-		<item name="android:background">?android:selectableItemBackground</item>
-		<item name="android:layout_width">0dp</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_weight">1</item>
-		<item name="android:layout_gravity">center</item>
-		<item name="android:scaleType">fitCenter</item>
-	</style>
-
-	<style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
-		<item name="android:padding">10dip</item>
-	</style>
-
-	<style name="NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title"></style>
-	<style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent"></style>
-
-	<style name="NotificationLayoutDivider">
-		<item name="android:divider">?android:listDivider</item>
-	</style>
-	<style name="NotificationDivider">
-		<item name="android:background">?android:dividerHorizontal</item>
 	</style>
 
 	<style name="MoreButton" parent="@style/BasicButton">
@@ -77,7 +115,7 @@
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">22sp</item>
+		<item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
 		<item name="android:paddingTop">4dip</item>
 		<item name="android:paddingBottom">4dip</item>
 		<item name="android:paddingRight">4dip</item>
@@ -89,7 +127,7 @@
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:paddingTop">8dip</item>
 		<item name="android:paddingBottom">8dip</item>
-		<item name="android:paddingRight">16dip</item>
-		<item name="android:paddingLeft">16dip</item>
+		<item name="android:paddingRight">14dip</item>
+		<item name="android:paddingLeft">14dip</item>
 	</style>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Spara</string>
     <string name="common.cancel">Avbryt</string>
@@ -22,12 +22,12 @@
 	<string name="common.stream_external">Streama video</string>
 	<string name="common.confirm">Konfirmera</string>
 	<string name="common.confirm_message">Vill du %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.confirm_message_cache">cachen</string>
 	<string name="common.empty">Ingen data</string>
 	<string name="common.warning">Varning</string>
 	<string name="common.close">Stäng</string>
-	<string name="common.false">Ja</string>
-	<string name="common.true">Nej</string>
+	<string name="common.false">Nej</string>
+	<string name="common.true">Ja</string>
 	<string name="common.never">Aldrig</string>
 
     <string name="button_bar.home">Hem</string>
@@ -43,14 +43,14 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Välkommen!</string>
-    <string name="main.welcome_text">Välkommen till DSub! Appen är för tillfället konfigurerad till att använda Subsonics demo server.
+    <string name="main.welcome_text">Välkommen till DSub2000! Appen är för tillfället konfigurerad till att använda Subsonics demo server.
         När du har satt upp din egen server (hämtas på <b>subsonic.org</b>), kan du gå till inställningar och ändra konfigurationen till att ansluta till den.</string>
-	<string name="main.about_title">Om DSub</string>
+	<string name="main.about_title">Om DSub2000</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>:
-		<br/>När filer laddas ner av DSub kan de senare raderas för att lämna rum åt nya filer.  Permanent cache kan aldrig raderas utan ett aktivt val av dig.
+		<br/>När filer laddas ner av DSub2000 kan de senare raderas för att lämna rum åt nya filer.  Permanent cache kan aldrig raderas utan ett aktivt val av dig.
 		<p/><font color="red">ChromeCast misslyckande</font>:
 		<br/>Prova att använda alternativet Inställningar -> Uppspelning -> Använd enhets proxy.  Det är ett "hack" för att Chromecast inte godtar självsignerade certifikat.
 		<p/><font color="red">Första steget i biblioteket är grupper med artister</font>:
@@ -62,7 +62,7 @@
 	<string name="main.online">Gå Online</string>
     <string name="main.settings">Inställningar</string>
     <string name="main.albums_title">Album Listor</string>
-	<string name="main.albums_per_folder">Per album</string>
+    <string name="main.not_supported">Stöds inte av den här servern</string>
     <string name="main.albums_newest">Nyligen tillagt</string>
     <string name="main.albums_recent">Nyligen spelat</string>
     <string name="main.albums_frequent">Mest spelat</string>
@@ -73,6 +73,8 @@
 	<string name="main.albums_year">Årtionden</string>
 	<string name="main.albums_alphabetical">Alfabetiskt</string>
 	<string name="main.videos">Videor</string>
+    <string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Tryck bakåt igen för att avsluta</string>
 	<string name="main.scan_complete">Skanning av server klar</string>
@@ -273,7 +275,7 @@
     <string name="settings.cache_size">Cache storlek</string>
     <string name="settings.cache_location">Cache plats</string>
     <string name="settings.cache_location_error">Ogiltig cache placering. Använder standard.</string>
-    <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som DSub använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
+    <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som DSub2000 använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
 	<string name="settings.cache_clear">Rensa cachen</string>
 	<string name="settings.cache_clear_complete">Cachen har rensats</string>
     <string name="settings.testing_connection">Testar anslutning...</string>
@@ -345,8 +347,6 @@
     <string name="settings.hide_media_title">Dölj för andra</string>
     <string name="settings.hide_media_summary">Dölj spår för andra appar.</string>
     <string name="settings.hide_media_toast">Börjar gälla nästa gång Android skannar din telefon efter musikfiler.</string>
-    <string name="settings.media_button_title">Media knappar</string>
-    <string name="settings.media_button_summary">Reagera på telefonen, headset och bluetooths media knappar</string>
     <string name="settings.screen_lit_title">Håll skärmen igång</string>
     <string name="settings.screen_lit_summary">Att hålla skärmen igång när man laddar ner ökar nerladdningshastigheten.</string>
 	<string name="settings.playlist_title">Spela</string>
@@ -356,7 +356,7 @@
 	<string name="settings.sleep_timer_off">Av</string>
 	<string name="settings.sleep_timer_on">på</string>
 	<string name="settings.sleep_timer_always_on">Alltid på</string>
-	<string name="settings.temp_loss_title">Förlorade fokus temporärt</string>
+	<string name="settings.temp_loss_title">När en annan app spelar ljud</string>
 	<string name="settings.temp_loss_pause">Pausa alltid</string>
 	<string name="settings.temp_loss_pause_lower">Pause, sänk volymen när tillsagd</string>
 	<string name="settings.temp_loss_lower">Alltid lägre volym</string>
@@ -372,7 +372,7 @@
 	<string name="settings.persistent_title">Ihållande notifikation</string>
 	<string name="settings.persistent_summary">Visa notifikationen även när jag har pausat.  Tryck stop för att ta bort den.</string>
 	<string name="settings.gapless_playback">Spela upp utan mellanrum</string>
-	<string name="settings.gapless_playback_summary">Om du märker några konstiga buggar när du lyssnar kan det hjälpa att slå av den här.</string>
+	<string name="settings.gapless_playback_summary">Starta nästa spår utan mellanrum när det har laddats ner. Om du märker konstiga buggar vid uppspelning kan det hjälpa att stänga av detta.</string>
 	<string name="settings.chat_refresh">Hur ofta ska chat uppdateras (sekunder)</string>
 	<string name="settings.chat_enabled">Chat aktiverad</string>
 	<string name="settings.chat_enabled_summary">Om chatten ska visas i menyn till vänster</string>
@@ -435,7 +435,7 @@
 	<string name="settings.admin_enabled">Admin aktiverad</string>
 	<string name="settings.admin_enabled_summary">Om admin ska visas eller inte i menyn till vänster</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Om volymen ska skalas efter albumet eller spårets replay gain tagg</string>
+	<string name="settings.replay_gain_summary">Sänk uppspelningsvolymen enligt spårets och albumets replay gain-taggar. Låtar blir aldrig starkare än normal maxvolym.</string>
 	<string name="settings.replay_gain_type">Läs från taggar</string>
 	<string name="settings.replay_gain_type.smart">Smart upptäckande</string>
 	<string name="settings.replay_gain_type.album">Album taggar</string>
@@ -447,8 +447,6 @@
 	<string name="settings.casting_proxy_summary">Streama allting genom enheten som en proxy.  Det här kommer runt problem med självsignerade certifikat.</string>
 	<string name="settings.rename_duplicates">Döp om tvillingspår</string>
 	<string name="settings.rename_duplicates_summary">Döp om tvillingspår till originalnamnet så att jag kan se skillnad på dem.</string>
-	<string name="settings.start_on_headphones">Starta när hörlurar sätts in</string>
-	<string name="settings.start_on_headphones_summary">Starta när hörlurar sätts in.  Det här kräver en service som startat när telefonen bootar upp så den kan kolla om hörlurarna är i även när Dsub inte körs.</string>
 	<string name="settings.color_action_bar">Färgad action bar</string>
 	<string name="settings.color_action_bar.summary">Om action baren ska färgas eller inte</string>
 	<string name="settings.shuffle_by_album">Slumba per Album</string>
@@ -519,7 +517,7 @@
 
     <string name="service.connecting">Ansluter till servern, vänta.</string>
 
-    <string name="parser.upgrade_client">Okompatibel version. Uppgradera DSub.</string>
+    <string name="parser.upgrade_client">Okompatibel version. Uppgradera DSub2000.</string>
     <string name="parser.upgrade_server">Okompatibel version. Uppgradera din Subsonic server.</string>
     <string name="parser.not_authenticated">Ogiltigt användarnamn eller lösenord.</string>
     <string name="parser.not_authorized">Inte auktoriserad. Kontrollera tillstånd på din Subsonic server.</string>
@@ -538,10 +536,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">DSub2000 (4x1)</string>
+	<string name="widget.4x2">DSub2000 (4x2)</string>
+	<string name="widget.4x3">DSub2000 (4x3)</string>
+	<string name="widget.4x4">DSub2000 (4x4)</string>
     <string name="widget.initial_text">Tryck för att välja musik</string>
     <string name="widget.sdcard_busy">SD-kort kunde inte användas</string>
     <string name="widget.sdcard_missing">Inget SD-kort</string>
@@ -560,7 +558,7 @@
 
 	<string name="tasker.start_playing">Börja spela</string>
 	<string name="tasker.start_playing_shuffled">Börja spela i slumpat läge</string>
-	<string name="tasker.start_playing_title">Tasker -> Starta DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Starta DSub2000</string>
 	<string name="tasker.edit_shuffle_mode">Starta i slumpat läge: </string>
 	<string name="tasker.edit_shuffle_start_year">Slumpa start år:</string>
 	<string name="tasker.edit_shuffle_end_year">Slumpa slut år:</string>
@@ -599,7 +597,6 @@
 	<string name="details.error">Felmeddelande</string>
 	<string name="details.author">Utvecklare</string>
 	<string name="details.email">Email</string>
-	<string name="details.fork">Forked från</string>
 	<string name="details.version">Version</string>
 	<string name="details.files_cached">Filer cachade</string>
 	<string name="details.files_permanent">Permanent cachade</string>

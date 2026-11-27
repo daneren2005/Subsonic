@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="github.daneren2005.dsub">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:label="@string/common.appname"
-         android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
+         android:backupAgent="github.paroj.dsub2000.util.SettingsBackupAgent"
          android:icon="@drawable/launch"
-         android:theme="@style/Theme.DSub.Light"
+         android:theme="@style/Theme.DSub2000.Light"
          android:largeHeap="true">
 
+        <meta-data
+            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="github.paroj.dsub2000.util.compat.DSubCastOptionsProvider" />
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIUhOMtwa_eG-f0oYUHnetl_Cz7cO9zae8ZXOK5w" />

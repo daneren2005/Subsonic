@@ -1,73 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-		
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
+	style="@style/DSub2000.DialogContent"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
-		<TextView
-			android:id="@+id/get_playlist_name_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/common.name" />
-		<EditText
+	<github.paroj.dsub2000.view.FormTextInputLayout
+		style="@style/Widget.DSub2000.TextField"
+		android:hint="@string/common.name">
+
+		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/get_playlist_name"
-			android:inputType="text"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:hint="@string/common.name"
-			android:textColor="?android:textColorPrimary"/>
-	</LinearLayout>
-		
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
+			android:inputType="text"/>
+	</github.paroj.dsub2000.view.FormTextInputLayout>
 
-		<TextView
-			android:id="@+id/get_playlist_comment_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/common.comment"
-			android:textColor="?android:textColorPrimary"/>
-		<EditText
+	<github.paroj.dsub2000.view.FormTextInputLayout
+		style="@style/Widget.DSub2000.TextField"
+		android:hint="@string/common.comment">
+
+		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/get_playlist_comment"
-			android:inputType="text"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:hint="@string/common.comment" />
-	</LinearLayout>
+			android:inputType="text"/>
+	</github.paroj.dsub2000.view.FormTextInputLayout>
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-
-		<TextView
-			android:id="@+id/get_playlist_public_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/common.public"
-			android:textColor="?android:textColorPrimary"/>
-		<CheckBox
-			android:id="@+id/get_playlist_public"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:checked="false"/>
-	</LinearLayout>
+	<com.google.android.material.materialswitch.MaterialSwitch
+		android:id="@+id/get_playlist_public"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:text="@string/common.public"
+		android:checked="false"/>
 </LinearLayout>

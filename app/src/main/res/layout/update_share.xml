@@ -1,72 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-		
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	style="@style/DSub2000.DialogContent"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
-		<TextView
-			android:id="@+id/get_share_name_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/common.name"
-			android:textColor="?android:textColorPrimary"/>
-		<EditText
+	<github.paroj.dsub2000.view.FormTextInputLayout
+		style="@style/Widget.DSub2000.TextField"
+		android:hint="@string/common.name">
+
+		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/get_share_name"
-			android:inputType="text"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:hint="@string/common.name" />
-	</LinearLayout>
-		
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
+			android:inputType="text"/>
+	</github.paroj.dsub2000.view.FormTextInputLayout>
 
-		<TextView
-			android:id="@+id/get_share_expire_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/share.expiration"
-			android:textColor="?android:textColorPrimary"/>
-		<DatePicker
+	<github.paroj.dsub2000.view.FormTextInputLayout
+		android:id="@+id/get_share_expire_layout"
+		style="@style/Widget.DSub2000.TextField"
+		android:hint="@string/share.expiration"
+		app:endIconMode="custom"
+		app:endIconDrawable="@drawable/ic_action_calendar">
+
+		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/get_share_expire"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:calendarViewShown="false"/>
-	</LinearLayout>
+			android:inputType="none"
+			android:focusable="false"
+			android:cursorVisible="false"/>
+	</github.paroj.dsub2000.view.FormTextInputLayout>
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-
-		<TextView
-			android:id="@+id/get_share_no_expire_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/share.no_expiration"
-			android:textColor="?android:textColorPrimary"/>
-		<CheckBox
-			android:id="@+id/get_share_no_expire"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:checked="false"/>
-	</LinearLayout>
+	<com.google.android.material.materialswitch.MaterialSwitch
+		android:id="@+id/get_share_no_expire"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:text="@string/share.no_expiration"
+		android:checked="false"/>
 </LinearLayout>

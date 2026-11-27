@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
+	<string name="attribution_audio_playback">Audio playback</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Save</string>
     <string name="common.cancel">Cancel</string>
@@ -29,6 +30,7 @@
 	<string name="common.false">No</string>
 	<string name="common.true">Yes</string>
 	<string name="common.never">Never</string>
+    <string name="common.reset">Reset</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -44,14 +46,14 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welcome!</string>
-    <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
+    <string name="main.welcome_text">Welcome to DSub2000! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
-	<string name="main.about_title">About DSub</string>
+	<string name="main.about_title">About DSub2000</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>:
-		<br/>When songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
+		<br/>When songs are downloaded by DSub2000, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
 		<p/><font color="red">ChromeCast fails</font>:
 		<br/>Try setting the option Settings -> Playback -> Use device proxy.  It is a work around for Chromecast not accepting self-signed certificates.
 		<p/><font color="red">First level in Library are actually groups of artists</font>:
@@ -63,7 +65,6 @@
 	<string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
     <string name="main.albums_title">Album Lists</string>
-	<string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>
@@ -74,11 +75,17 @@
 	<string name="main.albums_year">Decades</string>
 	<string name="main.albums_alphabetical">Alphabetically</string>
 	<string name="main.videos">Videos</string>
+	<string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
+	<string name="main.songs_year">@string/main.albums_year</string>
 	<string name="main.songs_newest">@string/main.albums_newest</string>
 	<string name="main.songs_top_played">Top Played</string>
 	<string name="main.songs_recent">@string/main.albums_recent</string>
 	<string name="main.songs_frequent">@string/main.albums_frequent</string>
+	<string name="main.songs_highest">@string/main.albums_highest</string>
+	<string name="main.songs_alphabetical">@string/main.albums_alphabetical</string>
+	<string name="main.not_supported">Not supported by this server</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 	<string name="main.scan_complete">Completed scan of Server</string>
 	<string name="main.artist">Artist</string>
@@ -87,6 +94,7 @@
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>
 	<string name="menu.refresh">Refresh</string>
+	<string name="menu.reverse_sort">Newest first</string>
 	<string name="menu.play">Play</string>
 	<string name="menu.play_last">Play Last</string>
     <string name="menu.exit">Exit</string>
@@ -198,6 +206,7 @@
     <string name="download.playlist_saving">Saving playlist \"%s\"...</string>
     <string name="download.playlist_done">Playlist was successfully saved.</string>
     <string name="download.playlist_error">Failed to save playlist, please try later.</string>
+    <string name="download.playlist_name_in_used">This name is already taken. Please choose another one.</string>
     <string name="download.repeat_off">Repeat off</string>
     <string name="download.repeat_all">Repeat all</string>
     <string name="download.repeat_single">Repeat song</string>
@@ -232,6 +241,7 @@
 	<string name="sync.new_playlists">New songs in playlists</string>
 	<string name="sync.new_albums">New albums available</string>
 	<string name="sync.new_starred">New starred songs available</string>
+	<string name="sync.new_library">New library tracks cached</string>
     
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
@@ -265,6 +275,11 @@
 	<string name="song_details.downloading">Downloading</string>
 
     <string name="lyrics.nomatch">No lyrics found</string>
+    <string name="lyrics.select_version">Lyrics version</string>
+    <string name="lyrics.version_format">%1$s (%2$s)</string>
+    <string name="lyrics.synced">synced</string>
+    <string name="lyrics.unsynced">plain</string>
+    <string name="lyrics.unknown_language">Unknown language</string>
 
     <string name="error.label">Error</string>
 
@@ -292,7 +307,7 @@
     <string name="settings.cache_size">Cache size</string>
     <string name="settings.cache_location">Cache location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>
-    <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that DSub uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
+    <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that DSub2000 uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
 	<string name="settings.cache_location_internal">Internal</string>
 	<string name="settings.cache_location_external">External</string>
 	<string name="settings.cache_clear">Clear Cache</string>
@@ -373,8 +388,6 @@
     <string name="settings.hide_media_title">Hide from other</string>
     <string name="settings.hide_media_summary">Hide music files from other apps.</string>
     <string name="settings.hide_media_toast">Takes effect next time Android scans your phone for music.</string>
-    <string name="settings.media_button_title">Media buttons</string>
-    <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
 	<string name="settings.playlist_title">Play</string>
@@ -384,7 +397,8 @@
 	<string name="settings.sleep_timer_off">Off</string>
 	<string name="settings.sleep_timer_on">On</string>
 	<string name="settings.sleep_timer_always_on">Always On</string>
-	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
+	<string name="settings.temp_loss_title">When another app plays audio</string>
+	<string name="settings.temp_loss_summary">Behavior when navigation TTS, voice assistants, or other apps request audio focus</string>
 	<string name="settings.temp_loss_pause">Always Pause</string>
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
 	<string name="settings.temp_loss_lower">Always lower volume</string>
@@ -400,7 +414,7 @@
 	<string name="settings.persistent_title">Persistent Notification</string>
 	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
 	<string name="settings.gapless_playback">Gapless Playback</string>
-	<string name="settings.gapless_playback_summary">If you are seeing strange bugs during playback, turning this off may help.</string>
+	<string name="settings.gapless_playback_summary">Start the next song without a gap once it has finished downloading. If you are seeing strange bugs during playback, turning this off may help.</string>
 	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
 	<string name="settings.chat_enabled">Chat Enabled</string>
 	<string name="settings.chat_enabled_summary">Whether or not to display the chat listing in the pull out drawer</string>
@@ -440,6 +454,8 @@
 	<string name="settings.sync_most_recent_summary">Automatically cache newly added albums</string>
 	<string name="settings.sync_starred">Sync Starred</string>
 	<string name="settings.sync_starred_summary">Automatically cache songs, albums, and artists which are starred</string>
+	<string name="settings.sync_library">Cache Entire Library</string>
+	<string name="settings.sync_library_summary">Automatically cache every song in the library and keep the cache in sync with the server. Uses significant storage and bandwidth.</string>
 	<string name="settings.sync_notification">Show Sync Notification</string>
 	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
 	<string name="settings.menu_options.title">Optional Menu Options</string>
@@ -458,7 +474,7 @@
 	<string name="settings.disable_exit_prompt">Disable Exit Prompt</string>
 	<string name="settings.disable_exit_prompt_summary">Exit the app immediately upon pressing back from the home screen</string>
 	<string name="settings.override_system_language">Override System Language</string>
-	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub has a translation for.  May need to clear the app from memory for changes to take affect.</string>
+	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub2000 has a translation for.  May need to clear the app from memory for changes to take affect.</string>
 	<string name="settings.drawer_items_title">Drawer Tabs</string>
 	<string name="settings.song_press_action">Song Press Action</string>
 	<string name="settings.song_press_play_single">Play only that song</string>
@@ -470,7 +486,7 @@
 	<string name="settings.admin_enabled">Admin Enabled</string>
 	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and album replay gain tags</string>
+	<string name="settings.replay_gain_summary">Lower playback volume according to track and album replay gain tags. Songs are never made louder than the normal maximum volume.</string>
 	<string name="settings.replay_gain_type">Read from tags</string>
 	<string name="settings.replay_gain_type.smart">Smart detection</string>
 	<string name="settings.replay_gain_type.album">Album tags</string>
@@ -482,25 +498,25 @@
 	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates.</string>
 	<string name="settings.rename_duplicates">Rename duplicate tracks</string>
 	<string name="settings.rename_duplicates_summary">Rename duplicate tracks to the original filename so you can tell them apart.</string>
-	<string name="settings.start_on_headphones">Start on headphones</string>
-	<string name="settings.start_on_headphones_summary">Start when headphones are plugged in.  This requires the use of a service which starts on boot up to check for the headphone plug event even when DSub is not running.</string>
 	<string name="settings.color_action_bar">Color Action Bar</string>
 	<string name="settings.color_action_bar.summary">Color the action bar and status bar or leave them alone</string>
+    <string name="settings.general_action_bar_color">General Action Bar Color</string>
+    <string name="settings.general_action_bar_color_summary">Choose a color for the general action bar</string>
+    <string name="settings.now_playing_action_bar_color">Now Playing Action Bar Color</string>
+    <string name="settings.now_playing_action_bar_color_summary">Choose a color for the action bar in the Now Playing screen</string>
 	<string name="settings.shuffle_by_album">Shuffle By Album</string>
 	<string name="settings.shuffle_by_album.true">Shuffle order of albums</string>
 	<string name="settings.shuffle_by_album.false">Shuffle all songs together</string>
 	<string name="settings.casting_stream_original">Stream original</string>
 	<string name="settings.casting_stream_original_summary">Stream original files where supported by cast device</string>
-	<string name="settings.heads_up_notification">Heads Up Notifications (5.0+)</string>
-	<string name="settings.heads_up_notification_summary">Show playing notifications as Heads Up notifications (Android Lollipop+ only)</string>
 	<string name="settings.casting_cache">Cache While Casting</string>
 	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
+	<string name="settings.casting.chromecast_available">Chromecast Support</string>
+	<string name="settings.casting.chromecast_available_summary">Whether Chromecast Support is enabled in this DSub2000 release.</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
-	<string name="settings.media_style_notification">Native Android media notification (5.0+)</string>
-	<string name="settings.media_style_notification_summary">Show playing notifications as native media style notifications (Android Lollipop+ only)</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
@@ -571,10 +587,13 @@
 
     <string name="service.connecting">Contacting server, please wait.</string>
 
-    <string name="parser.upgrade_client">Incompatible versions. Please upgrade DSub.</string>
+    <string name="parser.upgrade_client">Incompatible versions. Please upgrade DSub2000.</string>
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
+    <string name="parser.auth_mechanism_unsupported">This login method is not supported by the server. Create an API key in the server settings and enter it as the password.</string>
+    <string name="parser.auth_conflict">Conflicting login methods were sent to the server.</string>
+    <string name="parser.invalid_api_key">Invalid API key. Check or recreate the key in the server settings.</string>
     <string name="parser.artist_count">Got %d artists.</string>
 	<string name="parser.server_error">Server error: %s</string>
 	<string name="parser.scan_count">Scanned %d entries</string>
@@ -590,10 +609,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">DSub2000 (4x1)</string>
+	<string name="widget.4x2">DSub2000 (4x2)</string>
+	<string name="widget.4x3">DSub2000 (4x3)</string>
+	<string name="widget.4x4">DSub2000 (4x4)</string>
     <string name="widget.initial_text">Touch to select music</string>
     <string name="widget.sdcard_busy">SD card unavailable</string>
     <string name="widget.sdcard_missing">No SD card</string>
@@ -614,7 +633,7 @@
 
 	<string name="tasker.start_playing">Start playing</string>
 	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
-	<string name="tasker.start_playing_title">Tasker -> Start DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Start DSub2000</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>
 	<string name="tasker.edit_shuffle_start_year">Shuffle start year:</string>
 	<string name="tasker.edit_shuffle_end_year">Shuffle end year:</string>
@@ -632,6 +651,7 @@
 	<string name="details.status">Status</string>
 	<string name="details.artist">Artist</string>
 	<string name="details.album">Album</string>
+    <string name="details.disc">Disc</string>
 	<string name="details.track">Track</string>
 	<string name="details.genre">Genre</string>
 	<string name="details.year">Year</string>
@@ -670,8 +690,8 @@
 	<string name="details.stream_url">Stream URL</string>
 	<string name="details.home_page">Home Page</string>
 
-	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
-	<string name="permission.location.failed">This apps uses location data to get the WIFI SSID to match against your local network settings. To get rid of this message, change the local network SSID to blank.</string>
+	<string name="permission.external_storage.failed">DSub2000 cannot function without the ability to write to storage</string>
+	<string name="permission.location.failed">This app uses location data to get the WIFI SSID to match against your local network settings. To get rid of this message, change the local network SSID to blank.</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
@@ -690,5 +710,18 @@
         <item quantity="one">One day left of trial period</item>
         <item quantity="other">%d days left of trial period</item>
     </plurals>
+	<string name="settings.server_allowinsecure">Allow insecure connections</string>
+	<string name="settings.server_allowinsecure_summary">Allow http traffic and ignore warnings and errors with https connections (not recommended!)</string>
+	<string name="background_task.network_insecure_error">The connection to the server is insecure. Insecure connections have not been enabled in the settings.</string>
+	<string name="settings.tap_cover_for_playlist">Album art opens playlist</string>
+	<string name="settings.tap_cover_for_playlist_summary">Open the current playlist when clicking on the album art</string>
+	<string name="settings.combine_thumbs_up_down">Combine rating buttons</string>
+	<string name="settings.combine_thumbs_up_down_summary">Merge the thumbs up and thumbs down buttons into one single button that opens a rating dialog</string>
+	<string name="settings.lyrics_follow_queue">Lyrics follow the queue</string>
+	<string name="settings.lyrics_follow_queue_summary">When the track changes, switch to the new song\'s lyrics instead of keeping the ones that are open</string>
 
+    <string name="color_picker.title">Select a Color</string>
+    <string name="color_picker.hue">Hue</string>
+    <string name="color_picker.saturation">Saturation</string>
+    <string name="color_picker.lightness">Lightness</string>
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="shape_corner_small">8dp</dimen>
+	<dimen name="shape_corner_medium">12dp</dimen>
+	<dimen name="shape_corner_large">16dp</dimen>
+
+	<style name="ShapeAppearance.DSub2000.Small" parent="ShapeAppearance.Material3.SmallComponent">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">@dimen/shape_corner_small</item>
+	</style>
+	<style name="ShapeAppearance.DSub2000.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">@dimen/shape_corner_medium</item>
+	</style>
+	<style name="ShapeAppearance.DSub2000.Large" parent="ShapeAppearance.Material3.LargeComponent">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">@dimen/shape_corner_large</item>
+	</style>
+</resources>

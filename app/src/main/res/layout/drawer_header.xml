@@ -42,7 +42,7 @@
 
 		<ImageView
 			android:id="@+id/header_select_image"
-			android:src="@drawable/main_select_server_dark"
+			android:src="@drawable/main_select_server"
 			android:layout_gravity="center_vertical"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

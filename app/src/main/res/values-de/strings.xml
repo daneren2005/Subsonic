@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
+    <string name="common.appname">DSub2000</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Speichern</string>
     <string name="common.cancel">Abbrechen</string>
@@ -21,7 +21,7 @@
 	<string name="common.play_external">Video abspielen</string>
 	<string name="common.stream_external">Video streamen</string>
 	<string name="common.confirm">Bestätigen</string>
-	<string name="common.confirm_message">Wollen Sie %2$s %1$s?</string>
+	<string name="common.confirm_message">Möchten Sie %1$s: %2$s?</string>
 	<string name="common.confirm_message_cache">den Cache</string>
 	<string name="common.empty">Nicht gefunden</string>
 	<string name="common.warning">Warnung</string>
@@ -38,16 +38,16 @@
 	<string name="button_bar.downloading">Downloads</string>
 
     <string name="main.welcome_title">Willkommen!</string>
-    <string name="main.welcome_text">Willkommen zu DSub! Die App ist aktuell für den Subsonic-Demo-Server konfiguriert. Nachdem Sie Ihren eigenen Server
+    <string name="main.welcome_text">Willkommen zu DSub2000! Die App ist aktuell für den Subsonic-Demo-Server konfiguriert. Nachdem Sie Ihren eigenen Server
         aufgesetzt haben (verfügbar unter <b>subsonic.org</b>) könne Sie diesen unter <b>Einstellungen</b> konfigurieren.</string>
-	<string name="main.about_title">Über DSub</string>
+	<string name="main.about_title">Über DSub2000</string>
 	<string name="main.faq_title">FAQ</string>
         <string name="main.faq_text">
         <![CDATA[
                 <font color="red">Cache vs Permanenter Cache</font>:
-                <br/>Von DSub heruntergelade Titel im Cache können automatisch gelöscht werden, um Platz für neue Titel zu schaffen. Titel im permanenten Cache werden dagegen nie automatisch gelöscht.
+                <br/>Von DSub2000 heruntergelade Titel im Cache können automatisch gelöscht werden, um Platz für neue Titel zu schaffen. Titel im permanenten Cache werden dagegen nie automatisch gelöscht.
                 <p/><font color="red">ChromeCast funktioniert nicht</font>:
-		<br/>Versuchen Sie die Option Einstellungen -> Wiedergabe -> Nutze DSub als Proxy.  Dies ist eine provisorische Lösung, weil Chromecast keine selbstsignierten Zertifikate akzeptiert.
+		<br/>Versuchen Sie die Option Einstellungen -> Wiedergabe -> Nutze DSub2000 als Proxy.  Dies ist eine provisorische Lösung, weil Chromecast keine selbstsignierten Zertifikate akzeptiert.
 		<p/><font color="red">Erste Ebene in der Bibliothek sind Künstlergruppen</font>:
 		<br/>Im Optionsmenü deselektiere "Erste Ebene sind Künstler".  Dann wird die erste Verzeichnisebene wie Künstlergruppen anstelle von Künstler behandelt.
         ]]>
@@ -57,8 +57,8 @@
 	<string name="main.online">Gehe Online</string>
     <string name="main.settings">Einstellungen</string>
     <string name="main.albums_title">Album Liste</string>
-	<string name="main.albums_per_folder">Pro Ordner</string>
-    <string name="main.albums_newest">Neue Alben</string>
+    <string name="main.not_supported">Wird von diesem Server nicht unterstützt</string>
+    <string name="main.albums_newest">Zuletzt hinzugefügt</string>
     <string name="main.albums_recent">Vor kurzem gespielt</string>
     <string name="main.albums_frequent">Am meisten gespielt</string>
     <string name="main.albums_highest">Top bewertet</string>
@@ -68,6 +68,8 @@
 	<string name="main.albums_year">Jahrzehnt</string>
 	<string name="main.albums_alphabetical">Alphabetisch</string>
 	<string name="main.videos">Videos</string>
+    <string name="main.songs_random">@string/main.albums_random</string>
+    <string name="main.songs_starred">@string/main.albums_starred</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Zum beenden nochmal zurück drücken</string>
 	<string name="main.scan_complete">Durchsuchen des Server abgeschlossen</string>
@@ -85,7 +87,7 @@
 	<string name="menu.about">Über</string>
 	<string name="menu.add_playlist">Zur Wiedergabeliste hinzufügen</string>
 	<string name="menu.remove_playlist">Von Wiedergabeliste entfernen</string>
-	<string name="menu.deleted_playlist">Lösche Wiedergabeliste %s</string>
+	<string name="menu.deleted_playlist">Wiedergabeliste %s gelöscht</string>
 	<string name="menu.deleted_playlist_error">Löschen der Wiedergabeliste %s fehlgeschlagen</string>
 	<string name="menu.log">Sende Log</string>
 	<string name="menu.set_timer">Setze Timer</string>
@@ -109,7 +111,7 @@
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
-	<string name="playlist.updated_info">Aktualisiere Wiedergabeliste für %s</string>
+	<string name="playlist.updated_info">Wiedergabelisteninformationen für %s aktualisiert</string>
 	<string name="playlist.updated_info_error">Aktualisierung der Wiedergabeliste %s fehlgeschlagen</string>
 	<string name="playlist.overwrite">Wiedergabeliste überschreiben</string>
 	<string name="playlist.add_to">Zur Wiedergabeliste hinzu</string>
@@ -158,7 +160,7 @@
 	<string name="select_podcasts.server_delete">Lösche vom Server</string>
 	<string name="select_podcasts.downloading">Lade %s auf den Server herunter</string>
 	<string name="select_podcasts.refreshing">Der Server prüft auf neue Podcasts.</string>
-	<string name="select_podcasts.deleted">Lösche Podcast %s</string>
+	<string name="select_podcasts.deleted">Podcast %s gelöscht</string>
 	<string name="select_podcasts.deleted_error">Fehler beim löschen des Podcast %s</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Konnte Podcast nicht hinzufügen</string>
@@ -185,6 +187,7 @@
     <string name="download.playlist_saving">Sichere Wiedergabeliste \"%s\"...</string>
     <string name="download.playlist_done">Wiedergabeliste wurde erfolgreich gespeichert.</string>
     <string name="download.playlist_error">Fehler beim speichern der Wiedergabeliste, bitte später erneut probieren.</string>
+    <string name="download.playlist_name_in_used">Dieser Name ist bereits vergeben. Bitte wählen Sie einen anderen.</string>
     <string name="download.repeat_off">Keine Wiederholung</string>
     <string name="download.repeat_all">Wiederhole alle</string>
     <string name="download.repeat_single">Aktuelles Lied wiederholen</string>
@@ -203,7 +206,7 @@
 	<string name="download.downloading_summary_expanded">Aktuell: %1$s
 		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
-	<string name="download.restore_play_queue">Wiedergabe fortsetzen bei</string>
+	<string name="download.restore_play_queue">dort weiterhören, wo auf einem anderen gerät aufgehört wurde, stand</string>
 
 	<string name="sync.new_podcasts">Neuer Podcast verfügbar</string>
 	<string name="sync.new_playlists">Neu in Wiedergabeliste</string>
@@ -220,15 +223,10 @@
 	<string name="removed_playlist">%1$s entfernt aus \"%2$s\"</string>
 	
 	<string name="bookmark.delete">Lösche Lesezeichen</string>
-	<string name="bookmark.delete_title">Lösche Lesezeichen für</string>
+	<string name="bookmark.delete_title">Lesezeichen löschen</string>
 	<string name="bookmark.deleted">Lesezeichen für \"%s\" gelöscht</string>
 	<string name="bookmark.deleted_error">Löschen des Lesezeichen für \"%s\" ist fehlgeschlagen</string>
 	<string name="bookmark.details_title">Lesezeichendetails</string>
-	<string name="bookmark.details">Lied: %1$s
-		\nPosition: %2$s
-		\nErzeugt: %3$s
-		\nZuletzt aktualisiert: %4$s
-		\nKommentar: %5$s</string>
 	<string name="bookmark.resume_title">Wiedergabe fortsetzen?</string>
 	<string name="bookmark.resume">\'%1$s\' fortsetzen bei %2$s</string>
 	<string name="bookmark.action_resume">Fortsetzen</string>
@@ -248,7 +246,7 @@
 
     <string name="error.label">Fehler</string>
 
-    <string name="settings.title">DSub Einstellungen</string>
+    <string name="settings.title">DSub2000 Einstellungen</string>
     <string name="settings.test_connection_title">Teste Verbindung</string>
 	<string name="settings.servers_add">Server hinzufügen</string>
 	<string name="settings.servers_remove">Server entfernen</string>
@@ -270,7 +268,7 @@
     <string name="settings.cache_size">Größe des Cache (MB)</string>
     <string name="settings.cache_location">Position des Cache</string>
     <string name="settings.cache_location_error">Ungültiger Pfad zum Cache. Nutze Standard.</string>
-    <string name="settings.cache_location_reset">Der gesetzte Cachepfad ist nicht (mehr) beschreibbar. Durch die Aktualisierung des Telefon-OS auf KitKat 4.4 wurde der Zugriff auf die SD-Karte durch Apps eingeschränkt auf spezielle Pfade. Der von DSub verwendete Pfad wurde entsprechend korrigiert. Um den alten Cache zu löschen, müssen Sie die SD-Karte an einem Computer anschliessend und den Ordner manuell löschen.</string>
+    <string name="settings.cache_location_reset">Der gesetzte Cachepfad ist nicht (mehr) beschreibbar. Durch die Aktualisierung des Telefon-OS auf KitKat 4.4 wurde der Zugriff auf die SD-Karte durch Apps eingeschränkt auf spezielle Pfade. Der von DSub2000 verwendete Pfad wurde entsprechend korrigiert. Um den alten Cache zu löschen, müssen Sie die SD-Karte an einem Computer anschliessend und den Ordner manuell löschen.</string>
 	<string name="settings.cache_clear">Lösche Cache</string>
 	<string name="settings.cache_clear_complete">Cache wurde geleert</string>
     <string name="settings.testing_connection">Teste Verbindung...</string>
@@ -324,8 +322,6 @@
     <string name="settings.hide_media_title">Verstecke vor anderen</string>
     <string name="settings.hide_media_summary">Musikdateien vor anderen Apps verstecken.</string>
     <string name="settings.hide_media_toast">Wird aktiv bei der nächsten Mediensuche durch Android.</string>
-    <string name="settings.media_button_title">Medientasten</string>
-    <string name="settings.media_button_summary">Verwende Medientasten des Telefon, Freisprecheinrichtung und Bluetooth</string>
     <string name="settings.screen_lit_title">Bildschirm aktiv halten</string>
     <string name="settings.screen_lit_summary">Ein aktiver Bildschirm verbessert die Downloadgeschwindigkeit.</string>
 	<string name="settings.playlist_title">Wiedergeben</string>
@@ -335,7 +331,7 @@
 	<string name="settings.sleep_timer_off">Aus</string>
 	<string name="settings.sleep_timer_on">An</string>
 	<string name="settings.sleep_timer_always_on">Immer An</string>
-	<string name="settings.temp_loss_title">Verhalten bei Benachrichtigungen</string>
+	<string name="settings.temp_loss_title">Wenn eine andere App Audio wiedergibt</string>
 	<string name="settings.temp_loss_pause">Immer pausieren</string>
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
 	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
@@ -346,7 +342,7 @@
 	<string name="settings.persistent_title">Dauerhafte Benachrichtigung</string>
 	<string name="settings.persistent_summary">Zeige die Benachrichtigung auch nach pausieren der Wiedergabe.  Zum entfernen Stop auswählen.</string>
 	<string name="settings.gapless_playback">Lückenlose Wiedergabe</string>
-	<string name="settings.gapless_playback_summary">Das Galaxy S3 scheint Probleme seit der Einführung der lückenlosen Wiedergabe zu haben. Zur Behebung schalten Sie dies ab.</string>
+	<string name="settings.gapless_playback_summary">Startet das nächste Lied ohne Unterbrechung, sobald es heruntergeladen wurde. Bei seltsamen Fehlern während der Wiedergabe kann es helfen, dies abzuschalten.</string>
 	<string name="settings.chat_refresh">Chat Aktualisierungsrate (Sekunden)</string>
 	<string name="settings.chat_enabled">Chat aktiv</string>
 	<string name="settings.chat_enabled_summary">Chat im Seitenmenü anzeigen</string>
@@ -394,30 +390,28 @@
 	<string name="settings.menu_options.rate_summary">Zeige \"Bewerten\" im Menü</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
-	<string name="settings.disable_exit_prompt">DSub direkt verlassen</string>
-	<string name="settings.disable_exit_prompt_summary">DSub mit Zurück-Taste ohne zusätzliche Nachfrage sofort verlassen</string>
+	<string name="settings.disable_exit_prompt">DSub2000 direkt verlassen</string>
+	<string name="settings.disable_exit_prompt_summary">DSub2000 mit Zurück-Taste ohne zusätzliche Nachfrage sofort verlassen</string>
 	<string name="settings.override_system_language">In Englisch anzeigen</string>
-	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
+	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub2000. Benötigt einen Neustart der App.</string>
 	<string name="settings.drawer_items_title">Seitenmenü</string>
 	<string name="settings.large_album_art">Große Cover anzeigen</string>
 	<string name="settings.large_album_art_summary">Verwende große Cover zur Anzeige der Alben anstatt einer Liste</string>
 	<string name="settings.admin_enabled">Administration aktiviert</string>
 	<string name="settings.admin_enabled_summary">Administration im Seitenmenü anzeigen</string>
-	<string name="settings.replay_gain">Wiedergabeverstärkung</string>
-	<string name="settings.replay_gain_summary">Gibt an, ob die Wiedergabeverstärkung anhand von Tags erfolgen soll.</string>
+	<string name="settings.replay_gain">Replay Gain</string>
+	<string name="settings.replay_gain_summary">Verringert die Lautstärke gemäß den Replay-Gain-Tags von Titel und Album. Lieder werden nie lauter als die normale Maximallautstärke.</string>
 	<string name="settings.replay_gain_type">Anhand der Tags</string>
 	<string name="settings.replay_gain_type.smart">Automatische Erkennung</string>
 	<string name="settings.replay_gain_type.album">Album Tag</string>
 	<string name="settings.replay_gain_type.track">Track Tag</string>
-	<string name="settings.replay_gain_bump">Wiedergabevorverstärkung</string>
-	<string name="settings.replay_gain_untagged">Lieder ohne Wiedergabeverstärkung</string>
+	<string name="settings.replay_gain_bump">Replay-Gain-Vorverstärkung</string>
+	<string name="settings.replay_gain_untagged">Lieder ohne Replay-Gain-Tags</string>
 	<string name="settings.casting">Casting</string>
-	<string name="settings.casting_proxy">Nutze DSub als Proxy</string>
+	<string name="settings.casting_proxy">Nutze DSub2000 als Proxy</string>
 	<string name="settings.casting_proxy_summary">Sende alles über dieses Gerät als Proxy.  Dies umgeht Probleme mit selbstsignierten Zertifikaten.</string>
 	<string name="settings.rename_duplicates">Doppelte Medien umbenennen</string>
 	<string name="settings.rename_duplicates_summary">Für doppelte Medien den originalen Dateinamen verwenden, um diese auseinanderhalten zu können.</string>
-	<string name="settings.start_on_headphones">Starte bei Kopfhörer</string>
-	<string name="settings.start_on_headphones_summary">Starte automatisch, wenn ein Kopfhörer angeschlossen wird.</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
@@ -427,7 +421,7 @@
 
 	<string name="share.expires">Ablauf: %s</string>
 	<string name="share.expires_never">nie</string>
-	<string name="share.deleted">Lösche Freigabe %s</string>
+	<string name="share.deleted">Freigabe %s gelöscht</string>
 	<string name="share.deleted_error">Löschen der Freigabe %s fehlgeschlagen</string>
 	<string name="share.no_expiration">Kein Ablauf</string>
 	<string name="share.expiration">Ablauf:</string>
@@ -483,7 +477,7 @@
 
     <string name="service.connecting">Kontaktiere Server, bitte warten.</string>
 
-    <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung von DSub erforderlich.</string>
+    <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung von DSub2000 erforderlich.</string>
     <string name="parser.upgrade_server">Inkompatible Versionen. Aktualisierung des Subsonic Server erforderlich.</string>
     <string name="parser.not_authenticated">Benutzername oder/und Passwort falsch.</string>
     <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Einstellungen im Subsonic-Server.</string>
@@ -515,7 +509,7 @@
 
 	<string name="tasker.start_playing">Starte Wiedergabe</string>
 	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe</string>
-	<string name="tasker.start_playing_title">Tasker -> Starte DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Starte DSub2000</string>
 	<string name="tasker.edit_shuffle_mode">Starte im Zufallsmodus: </string>
 	<string name="tasker.edit_shuffle_start_year">Startjahr:</string>
 	<string name="tasker.edit_shuffle_end_year">Endjahr:</string>
@@ -580,10 +574,10 @@
 	<string name="settings.max_video_bitrate_500">500 Kbps</string>
 	<string name="settings.max_video_bitrate_5000">5000 Kbps</string>
 	<string name="settings.max_video_bitrate_700">700 Kbps</string>
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">DSub2000 (4x1)</string>
+	<string name="widget.4x2">DSub2000 (4x2)</string>
+	<string name="widget.4x3">DSub2000 (4x3)</string>
+	<string name="widget.4x4">DSub2000 (4x4)</string>
 	<string name="util.bytes_format.megabyte">0.00 MB</string>
 	<string name="util.bytes_format.kilobyte">0 KB</string>
 	<string name="util.bytes_format.gigabyte">0.00 GB</string>
@@ -604,7 +598,8 @@
 	<string name="details.title.song">Mediumdetails</string>
 	<string name="details.used_space">Genutzter Platz</string>
 	<string name="details.url">URL</string>
-	<string name="details.track">Medium</string>
+    <string name="details.disc">Medium</string>
+	<string name="details.track">Titelnummer</string>
 	<string name="details.year">Jahr</string>
 	<string name="details.version">Version</string>
 	<string name="playlist.mine">Meine Wiedergabelisten</string>
@@ -626,10 +621,17 @@
 	<string name="common.false">Nein</string>
 	<string name="settings.menu_options.play_now_summary">Zeige \"Jetzt wiedergeben\" im Menü</string>
 	<string name="settings.menu_options.play_shuffled_summary">Zeige \"Mischen\" im Menü</string>
+    <string name="settings.color_action_bar">Bedienleiste einfärben</string>
+    <string name="settings.color_action_bar.summary">Die Bedienleiste und die Statusleiste einfärben oder unverändert lassen</string>
+    <string name="settings.general_action_bar_color">Farbe allgemeine Bedienleiste</string>
+    <string name="settings.general_action_bar_color_summary">Wähle die Farbe für die allgemeine Bedienleiste</string>
+    <string name="settings.now_playing_action_bar_color">Farbe Bedienleiste „Aktuelle Wiedergabe“</string>
+    <string name="settings.now_playing_action_bar_color_summary">Wähle die Farbe der Bedienleiste im „Aktuelle Wiedergabe“-Bildschirm</string>
 	<string name="settings.shuffle_by_album.false">Alle Titel mischen</string>
 	<string name="settings.shuffle_by_album.true">Albenreihenfolge mischen</string>
 	<string name="settings.shuffle_by_album">Alben mischen</string>
 	<string name="common.never">Nie</string>
+    <string name="common.reset">Zurücksetzen</string>
 	<string name="details.starred">Favorit</string>
 	<string name="download.thumbs_up">Gefällt mir</string>
 	<string name="download.thumbs_down">Gefällt mir nicht</string>
@@ -649,5 +651,15 @@
 	<string name="menu.similar_artists.missing">Fehlende Künstler</string>
 	<string name="settings.casting_stream_original">Original streamen</string>
 	<string name="settings.casting_stream_original_summary">Zum streamen möglichst das Originalformat verwenden.</string>
-
+	<string name="settings.server_allowinsecure">Erlaube unsichere Verbindungen</string>
+	<string name="settings.server_allowinsecure_summary">Erlaube HTTP-Verbindungen und ignoriere Warnungen und Fehler bei HTTPS-Verbindungen (nicht empfohlen!)</string>
+	<string name="background_task.network_insecure_error">Die Verbindung zum Server ist unsicher. Unsichere Verbindungen sind in den Einstellungen nicht erlaubt worden.</string>
+	<string name="settings.tap_cover_for_playlist">Albumcover öffnet Wiedergabeliste</string>
+	<string name="settings.tap_cover_for_playlist_summary">Zeige die aktuelle Wiedergabeliste wenn auf das Albumcover getippt wird</string>
+	<string name="settings.combine_thumbs_up_down">Bewertungsknöpfe zusammenfassen</string>
+	<string name="settings.combine_thumbs_up_down_summary">Vereint die \"Daumen hoch\" und \"Daumen runter\" Knöpfe zu einem Knopf, welcher einen Bewertungsdialog öffnet</string>
+    <string name="color_picker.title">Wähle eine Farbe</string>
+    <string name="color_picker.hue">Farbton</string>
+    <string name="color_picker.saturation">Sättigung</string>
+    <string name="color_picker.lightness">Helligkeit</string>
 </resources>

@@ -5,11 +5,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1">
-			
-	<View
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="?attr/colorPrimary"/>
 
     <TextView
         android:id="@+id/download_empty"
@@ -24,7 +19,7 @@
         android:layout_height="0dip"
         android:layout_weight="1.0">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/download_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -32,7 +27,7 @@
             android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
             android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"/>
 
-        <github.daneren2005.dsub.view.FastScroller
+        <github.paroj.dsub2000.view.FastScroller
             android:id="@+id/download_fast_scroller"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"

@@ -14,7 +14,13 @@
 		android:id="@+id/menu_download_all"
 		android:title="@string/select_podcasts.server_download"/>
 
-	<item 
+	<item
 		android:id="@+id/menu_delete"
 		android:title="@string/menu.delete_cache"/>
+
+	<item
+		android:id="@+id/menu_reverse_sort"
+		android:title="@string/menu.reverse_sort"
+		android:checkable="true"
+		compat:showAsAction="never"/>
 </menu>

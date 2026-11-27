@@ -1,20 +1,21 @@
-package github.daneren2005.dsub.util.compat;
+package github.paroj.dsub2000.util.compat;
 
 import android.content.Context;
-import android.support.v7.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouter;
 import android.util.Log;
 
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
+import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import static com.google.android.gms.cast.CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID;
 
-import github.daneren2005.dsub.service.ChromeCastController;
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.RemoteController;
-import github.daneren2005.dsub.util.EnvironmentVariables;
+import github.paroj.dsub2000.service.ChromeCastController;
+import github.paroj.dsub2000.service.DownloadService;
+import github.paroj.dsub2000.service.RemoteController;
+import github.paroj.dsub2000.util.EnvironmentVariables;
 
 public final class GoogleCompat {
 
@@ -41,10 +42,15 @@ public final class GoogleCompat {
         }
     }
 
+    public static void initializeCast(Context context) {
+        CastContext.getSharedInstance(context);
+    }
+
     public static boolean castAvailable() {
         if (castApplicationId() == DEFAULT_MEDIA_RECEIVER_APPLICATION_ID)  {
             Log.i(TAG, "Using DEFAULT_MEDIA_RECEIVER_APPLICATION_ID for casting");
         }
+
         try {
             Class.forName("com.google.android.gms.cast.CastDevice");
         } catch (Exception ex) {
